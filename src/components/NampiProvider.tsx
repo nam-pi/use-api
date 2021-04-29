@@ -1,19 +1,9 @@
 import HydraClientFactory from "@hydra-cg/heracles.ts";
-import { callFacility } from "callFacility";
 import Keycloak from "keycloak-js";
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { Config, ContextState } from "types";
-
-export const NampiContext = createContext<ContextState>({
-  initialized: false,
-} as ContextState);
+import { ReactNode, useEffect, useMemo, useState } from "react";
+import { Config } from "types/types";
+import { callFacility } from "utils/callFacility";
+import { NampiContext } from "./NampiContext";
 
 export const NampiProvider = ({
   children,
@@ -59,5 +49,3 @@ export const NampiProvider = ({
     </NampiContext.Provider>
   );
 };
-
-export const useNampiContext = (): ContextState => useContext(NampiContext);

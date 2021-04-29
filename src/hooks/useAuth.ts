@@ -1,5 +1,5 @@
-import { useNampiContext } from "context";
-import { UseAuth } from "types";
+import { UseAuth } from "types/types";
+import { useNampiContext } from "./useNampiContext";
 
 export const useAuth = (): UseAuth => {
   const { initialized, keycloak } = useNampiContext();
