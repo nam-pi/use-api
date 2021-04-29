@@ -1,7 +1,8 @@
 import { NampiProvider } from "nampi-use-api/bundle";
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import "tailwindcss/tailwind.css";
+import { App } from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 const api = process.env.REACT_APP_API;

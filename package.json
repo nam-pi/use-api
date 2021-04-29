@@ -12,6 +12,16 @@
     "build": "rollup -c",
     "watch": "rollup -cw"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.3",
@@ -31,7 +41,9 @@
   },
   "dependencies": {
     "@hydra-cg/heracles.ts": "^0.5.1",
-    "keycloak-js": "^12.0.4"
+    "husky": "^6.0.0",
+    "keycloak-js": "^12.0.4",
+    "lint-staged": "^10.5.4"
   },
   "peerDependencies": {
     "react": "^17.0.2",
