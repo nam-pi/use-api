@@ -29,7 +29,8 @@
     "react-scripts": "4.0.3",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "typescript": "^4.1.2",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "jsonpath-plus": "link:../node_modules/jsonpath-plus"
   },
   "scripts": {
     "start": "BROWSER=none craco start",

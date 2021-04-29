@@ -5,12 +5,11 @@ import { LoadingPlaceholder } from "./components/LoadingPlaceholder";
 import { Login } from "./components/Login";
 import { Navbar } from "./components/Navbar";
 import { NoMatch } from "./components/NoMatch";
+import { Person } from "./components/Person";
 import { Persons } from "./components/Persons";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { Profile } from "./components/Profile";
 import { HISTORY } from "./constants";
-
-const PERSON_PATHS = ["/persons", "/person/:localId"];
 
 export const App = () => {
   const { initialized } = useAuth();
@@ -22,7 +21,8 @@ export const App = () => {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
-            <Route exact path={PERSON_PATHS} component={Persons} />
+            <Route exact path="/persons" component={Persons} />
+            <Route exact path="/person/:localId" component={Person} />
             <PrivateRoute exact path="/profile" component={Profile} />
             <Route path="*" component={NoMatch} />
           </Switch>

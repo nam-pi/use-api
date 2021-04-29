@@ -11,13 +11,38 @@ export interface ContextState {
   namespaces: Namespaces;
 }
 
+export interface Event extends Item {
+  date: EventDate;
+}
+
+export interface EventDate {
+  sort: Date;
+  exact?: Date;
+  earliest?: Date;
+  latest?: Date;
+}
+
+export type FetchFunction<T> = (path: <P>(path: string) => P) => Promise<T>;
+
 export interface FetchResult<T> {
   initialized: boolean;
   loading: boolean;
   data: undefined | T;
 }
 
+export interface Item {
+  id: string;
+  idLocal: string;
+  labels: MultilangText[];
+  types: string[];
+}
+
 export type JSONPathJson = Parameters<typeof JSONPath>[1];
+
+export interface MultilangText {
+  value: string;
+  language?: string;
+}
 
 export type Namespaces = ReturnType<typeof namespaces>;
 
@@ -26,6 +51,11 @@ export interface NampiConfig {
   auth: string;
   client: string;
   realm: string;
+}
+
+export interface Person extends Item {
+  bornIn?: Event[];
+  diesIn?: Event[];
 }
 
 export interface Profile {
