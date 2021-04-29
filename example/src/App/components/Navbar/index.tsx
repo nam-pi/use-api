@@ -1,12 +1,12 @@
 import { Menu } from "@headlessui/react";
-import { useAuth } from "nampi-use-api/bundle";
+import { useAuth, useProfile } from "nampi-use-api/bundle";
 import { Link } from "react-router-dom";
 import { LoadingPlaceholder } from "../LoadingPlaceholder";
 import { NampiLogo } from "../NampiLogo";
 
 export const Navbar = () => {
-  const { authenticated, initialized, logout } = useAuth();
-  console.log(authenticated, initialized);
+  const { logout } = useAuth();
+  const { initialized, loading, data } = useProfile();
   return (
     <nav className="relative flex items-center justify-between flex-wrap  bg-gray-400 p-3 text-white">
       <div className="space-x-3 text-white flex items-center">
@@ -16,11 +16,11 @@ export const Navbar = () => {
         <Link to="/persons">Persons</Link>
       </div>
       <div>
-        {initialized ? (
-          authenticated ? (
+        {initialized && !loading ? (
+          data ? (
             <Menu as="div" className="relative text-gray-800">
               <Menu.Button className="px-4 py-2 rounded bg-white text-sm">
-                User
+                {data.username}
               </Menu.Button>
               <Menu.Items className="absolute min-w-max mt-1 right-0 bg-white shadow-lg rounded flex flex-col p-2">
                 <Menu.Item>

@@ -1,4 +1,4 @@
-import { UseAuth } from "types/types";
+import { UseAuth } from "types";
 import { useNampiContext } from "./useNampiContext";
 
 export const useAuth = (): UseAuth => {

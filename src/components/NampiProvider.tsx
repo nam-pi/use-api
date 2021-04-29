@@ -1,8 +1,9 @@
 import HydraClientFactory from "@hydra-cg/heracles.ts";
 import Keycloak from "keycloak-js";
 import { ReactNode, useEffect, useMemo, useState } from "react";
-import { Config } from "types/types";
+import { NampiConfig } from "types";
 import { callFacility } from "utils/callFacility";
+import { namespaces } from "./namespaces";
 import { NampiContext } from "./NampiContext";
 
 export const NampiProvider = ({
@@ -11,7 +12,7 @@ export const NampiProvider = ({
   auth,
   client,
   realm,
-}: { children: ReactNode } & Config): JSX.Element => {
+}: { children: ReactNode } & NampiConfig): JSX.Element => {
   const [initialized, setInitialized] = useState<boolean>(false);
   const keycloak = useMemo(
     () =>
@@ -24,7 +25,10 @@ export const NampiProvider = ({
   );
   useEffect(() => {
     const initialize = async () => {
-      await keycloak.init({ checkLoginIframe: false });
+      await keycloak.init({
+        checkLoginIframe: false,
+        onLoad: "login-required",
+      });
       setInitialized(true);
     };
     initialize();
@@ -40,9 +44,11 @@ export const NampiProvider = ({
   return (
     <NampiContext.Provider
       value={{
+        apiUrl: api,
         hydra,
         initialized,
         keycloak,
+        namespaces: namespaces(api),
       }}
     >
       {children}
