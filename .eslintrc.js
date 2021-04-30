@@ -30,7 +30,7 @@ module.exports = {
     "@typescript-eslint/explicit-module-boundary-types": [
       "error",
       {
-        allowedNames: ["namespaces"],
+        allowedNames: ["namespaces", "useFetch"],
       },
     ],
   },

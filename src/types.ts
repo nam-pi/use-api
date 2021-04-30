@@ -1,7 +1,14 @@
-import { IHydraClient, IHypermediaContainer } from "@hydra-cg/heracles.ts";
+import { IHydraClient } from "@hydra-cg/heracles.ts";
 import { JSONPath } from "jsonpath-plus";
 import { KeycloakInstance } from "keycloak-js";
 import { namespaces } from "namespaces";
+
+export interface CollectionNav {
+  first?: undefined | (() => Promise<void>);
+  previous?: undefined | (() => Promise<void>);
+  next?: undefined | (() => Promise<void>);
+  last?: undefined | (() => Promise<void>);
+}
 
 export interface ContextState {
   apiUrl: string;
@@ -32,8 +39,17 @@ export interface FetchResult<T> {
   initialized: boolean;
   loading: boolean;
   data: undefined | T;
-  container: undefined | IHypermediaContainer;
 }
+
+export interface FetchCollectionResult<T> extends FetchResult<T[]> {
+  nav: CollectionNav;
+  total: undefined | number;
+}
+
+export type FetchMapper<T> = (
+  json: Record<string, unknown>,
+  namespaces: Namespaces
+) => T;
 
 export interface Item extends Entity {
   id: string;
@@ -42,11 +58,6 @@ export interface Item extends Entity {
 }
 
 export type JSONPathJson = Parameters<typeof JSONPath>[1];
-
-export interface List<T> {
-  members: T[];
-  total: number;
-}
 
 export interface MultilangText {
   value: string;
