@@ -1,12 +1,12 @@
 import { Menu } from "@headlessui/react";
-import { useAuth, useProfile } from "nampi-use-api/bundle";
+import { useAuth, useUser } from "nampi-use-api/bundle";
 import { Link } from "react-router-dom";
 import { LoadingPlaceholder } from "../LoadingPlaceholder";
 import { NampiLogo } from "../NampiLogo";
 
 export const Navbar = () => {
   const { logout } = useAuth();
-  const { initialized, loading, data } = useProfile();
+  const { initialized, loading, data } = useUser();
   return (
     <nav className="relative flex items-center justify-between flex-wrap  bg-gray-400 p-3 text-white">
       <div className="space-x-3 text-white flex items-center">

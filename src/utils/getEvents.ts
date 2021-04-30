@@ -49,7 +49,13 @@ export const getEvents = (
       : date.earliest
       ? date.earliest
       : new Date();
-    results.push({ id, idLocal: getLocalId(id) || "", types, labels, date });
+    results.push({
+      id,
+      idLocal: getLocalId(id),
+      types,
+      labels,
+      date,
+    });
   }
   return results.length === 0 ? undefined : results;
 };

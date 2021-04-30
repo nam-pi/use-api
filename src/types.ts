@@ -1,4 +1,4 @@
-import { IHydraClient } from "@hydra-cg/heracles.ts";
+import { IHydraClient, IHypermediaContainer } from "@hydra-cg/heracles.ts";
 import { namespaces } from "components/namespaces";
 import { JSONPath } from "jsonpath-plus";
 import { KeycloakInstance } from "keycloak-js";
@@ -9,6 +9,10 @@ export interface ContextState {
   initialized: boolean;
   keycloak: KeycloakInstance;
   namespaces: Namespaces;
+}
+
+export interface Entity {
+  idLocal: string;
 }
 
 export interface Event extends Item {
@@ -22,17 +26,17 @@ export interface EventDate {
   latest?: Date;
 }
 
-export type FetchFunction<T> = (path: <P>(path: string) => P) => Promise<T>;
+export type FetchFunction<T> = (json: JSONPathJson) => Promise<T>;
 
 export interface FetchResult<T> {
   initialized: boolean;
   loading: boolean;
   data: undefined | T;
+  container: undefined | IHypermediaContainer;
 }
 
-export interface Item {
+export interface Item extends Entity {
   id: string;
-  idLocal: string;
   labels: MultilangText[];
   types: string[];
 }
@@ -58,11 +62,10 @@ export interface Person extends Item {
   diesIn?: Event[];
 }
 
-export interface Profile {
+export interface User extends Entity {
   email: string;
   familyName: undefined | string;
   givenName: undefined | string;
-  idLocal: string;
   username: string;
   idAuthor: undefined | string;
   idAuthorLocal: undefined | string;
