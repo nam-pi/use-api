@@ -10,6 +10,16 @@ export interface CollectionNav {
   last?: undefined | (() => Promise<void>);
 }
 
+export interface CollectionMeta {
+  first: undefined | string;
+  last: undefined | string;
+  members: Record<string, unknown>[];
+  next: undefined | string;
+  previous: undefined | string;
+  total: undefined | number;
+  viewIri: string;
+}
+
 export interface ContextState {
   apiUrl: string;
   hydra: IHydraClient;

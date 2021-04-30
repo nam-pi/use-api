@@ -1,39 +1,15 @@
-import { hydra } from "@hydra-cg/heracles.ts";
+import { collectionMeta } from "mappers/collectionMeta";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   CollectionNav,
   FetchCollectionResult,
   FetchMapper,
   FetchResult,
-  JSONPathJson,
 } from "types";
 import { expandContainer } from "utils/expandContainer";
-import { jsonPath } from "utils/jsonPath";
 import { useNampiContext } from "./useNampiContext";
 
 type Search = Record<string, string>;
-
-const getCollectionMeta = (json: JSONPathJson) => ({
-  members: jsonPath<Record<string, unknown>[]>(json, `$[0]['${hydra.member}']`),
-  viewIri: jsonPath<string>(json, `$[0]['${hydra.view}'][0].id`),
-  first: jsonPath<undefined | string>(
-    json,
-    `$[0]['${hydra.view}'][0]['${hydra.first}'][0].id`
-  ),
-  previous: jsonPath<undefined | string>(
-    json,
-    `$[0]['${hydra.view}'][0]['${hydra.previous}'][0].id`
-  ),
-  next: jsonPath<undefined | string>(
-    json,
-    `$[0]['${hydra.view}'][0]['${hydra.next}'][0].id`
-  ),
-  last: jsonPath<undefined | string>(
-    json,
-    `$[0]['${hydra.view}'][0]['${hydra.last}'][0].id`
-  ),
-  total: jsonPath<number>(json, `$[0]['${hydra.totalItems}'][0].value`),
-});
 
 export function useFetch<T>(
   url: string,
@@ -72,7 +48,7 @@ export function useFetch<T>(
               previous,
               total,
               viewIri,
-            } = getCollectionMeta(json);
+            } = collectionMeta(json);
             setTotal(total);
             setNav({
               first:
