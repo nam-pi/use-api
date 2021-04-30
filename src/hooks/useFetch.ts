@@ -131,7 +131,6 @@ export function useFetch<T extends Entity>(
     if (serializedSearch === oldSearch.current) {
       return;
     }
-    console.log(serializedSearch);
     oldSearch.current = serializedSearch;
     if (searchTimeout.current) {
       clearTimeout(searchTimeout.current);
