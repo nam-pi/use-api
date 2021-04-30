@@ -7,7 +7,7 @@ export const Home = () => (
     <Heading>Home</Heading>
     <Paragraph>
       This is the example app for NAMPI useApi. Please go to{" "}
-      <Link to="">Persons</Link> to start.
+      <Link to="/persons">Persons</Link> to start.
     </Paragraph>
   </div>
 );

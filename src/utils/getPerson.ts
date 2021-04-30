@@ -9,7 +9,6 @@ export const getPerson = (
   json: JSONPathJson,
   namespaces: Namespaces
 ): Person => {
-  console.log(json);
   const id = jsonPath<string>(json, "$.id");
   const types = jsonPath<string[]>(json, "$.type");
   const labelsJson = jsonPath<JSONPathJson>(json, `$['${rdfs.label}']`);

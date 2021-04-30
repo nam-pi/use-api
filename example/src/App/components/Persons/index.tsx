@@ -1,5 +1,6 @@
 import { usePersons } from "nampi-use-api/bundle";
 import { Link } from "react-router-dom";
+import { serializeEventDates } from "../../utils/serializeEventDates";
 import { serializeLabels } from "../../utils/serializeLabels";
 import { Heading } from "../Heading";
 import { LoadingPlaceholder } from "../LoadingPlaceholder";
@@ -14,24 +15,12 @@ export const Persons = () => {
       ) : (
         <ul className="my-4">
           {data.members.map((m) => {
-            const dateLabel = (m.bornIn || [])
-              .map(({ date: d }) => {
-                const dString = d.exact
-                  ? d.exact.getFullYear()
-                  : d.earliest && d.latest
-                  ? `${d.earliest.getFullYear()} - ${d.latest.getFullYear()}`
-                  : d.earliest
-                  ? d.earliest.getFullYear()
-                  : d.latest
-                  ? d.latest.getFullYear()
-                  : "";
-                return dString ? ` (${dString})` : "";
-              })
-              .join(",");
+            const label = serializeLabels(m);
+            const born = serializeEventDates(m.bornIn, "Y");
             return (
-              <li>
+              <li key={m.idLocal}>
                 <Link to={"person/" + m.idLocal} className="text-gray-800">
-                  {serializeLabels(m) + dateLabel}
+                  {label + (born ? ` (${born})` : "")}
                 </Link>
               </li>
             );
