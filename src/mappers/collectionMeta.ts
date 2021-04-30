@@ -3,7 +3,10 @@ import { CollectionMeta, JSONPathJson } from "types";
 import { jsonPath } from "utils/jsonPath";
 
 export const collectionMeta = (json: JSONPathJson): CollectionMeta => ({
-  members: jsonPath<Record<string, unknown>[]>(json, `$[0]['${hydra.member}']`),
+  members: jsonPath<undefined | Record<string, unknown>[]>(
+    json,
+    `$[0]['${hydra.member}']`
+  ),
   viewIri: jsonPath<string>(json, `$[0]['${hydra.view}'][0].id`),
   first: jsonPath<undefined | string>(
     json,

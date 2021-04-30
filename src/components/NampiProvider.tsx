@@ -11,6 +11,7 @@ export const NampiProvider = ({
   api,
   auth,
   client,
+  searchTimeout = 200,
   realm,
 }: { children: ReactNode } & NampiConfig): JSX.Element => {
   const [initialized, setInitialized] = useState<boolean>(false);
@@ -45,6 +46,7 @@ export const NampiProvider = ({
     <NampiContext.Provider
       value={{
         apiUrl: api,
+        searchTimeout,
         hydra,
         initialized,
         keycloak,

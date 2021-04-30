@@ -28,6 +28,9 @@ export const ItemNav = ({
       onClick={nav.previous}
       icon={faBackward}
     />
+    <span className="w-3 inline-block text-center">
+      {nav.page !== undefined ? nav.page : ""}
+    </span>
     <IconButton
       disabled={disabled || !nav.next}
       onClick={nav.next}

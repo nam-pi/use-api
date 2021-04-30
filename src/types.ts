@@ -8,12 +8,13 @@ export interface CollectionNav {
   previous?: undefined | (() => Promise<void>);
   next?: undefined | (() => Promise<void>);
   last?: undefined | (() => Promise<void>);
+  page?: undefined | number;
 }
 
 export interface CollectionMeta {
   first: undefined | string;
   last: undefined | string;
-  members: Record<string, unknown>[];
+  members: undefined | Record<string, unknown>[];
   next: undefined | string;
   previous: undefined | string;
   total: undefined | number;
@@ -26,10 +27,13 @@ export interface ContextState {
   initialized: boolean;
   keycloak: KeycloakInstance;
   namespaces: Namespaces;
+  searchTimeout: number;
 }
 
 export interface Entity {
   idLocal?: string;
+  labels: MultilangText[];
+  types: string[];
 }
 
 export interface Event extends Item {
@@ -56,15 +60,10 @@ export interface FetchCollectionResult<T> extends FetchResult<T[]> {
   total: undefined | number;
 }
 
-export type FetchMapper<T> = (
-  json: Record<string, unknown>,
-  namespaces: Namespaces
-) => T;
+export type FetchMapper<T> = (json: JSONPathJson, namespaces: Namespaces) => T;
 
 export interface Item extends Entity {
   id: string;
-  labels: MultilangText[];
-  types: string[];
 }
 
 export type JSONPathJson = Parameters<typeof JSONPath>[1];
@@ -81,12 +80,21 @@ export interface NampiConfig {
   auth: string;
   client: string;
   realm: string;
+  searchTimeout?: number;
 }
 
 export interface Person extends Item {
   bornIn?: Event[];
   diesIn?: Event[];
 }
+
+export interface PersonQuery {
+  text?: string;
+}
+
+export type QueryParams = { [key: string]: unknown };
+
+export type Timeout = undefined | ReturnType<typeof setTimeout>;
 
 export interface User extends Entity {
   email: string;
