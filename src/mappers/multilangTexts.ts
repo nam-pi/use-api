@@ -1,7 +1,7 @@
 import { JSONPathJson, MultilangText } from "types";
-import { jsonPath } from "./jsonPath";
+import { jsonPath } from "../utils/jsonPath";
 
-export const getMultilangTexts = (json: JSONPathJson): MultilangText[] => {
+export const multilangTexts = (json: JSONPathJson): MultilangText[] => {
   const results: MultilangText[] = [];
   const data = Array.isArray(json) ? json : [json];
   for (let i = 0, length = data.length; i < length; i++) {

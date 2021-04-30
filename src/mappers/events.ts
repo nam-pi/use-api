@@ -1,10 +1,10 @@
 import { rdfs } from "@hydra-cg/heracles.ts";
 import { Event, EventDate, JSONPathJson, Namespaces } from "types";
-import { getLocalId } from "./getLocalId";
-import { getMultilangTexts } from "./getMultilangTexts";
-import { jsonPath } from "./jsonPath";
+import { jsonPath } from "utils/jsonPath";
+import { idLocal } from "./idLocal";
+import { multilangTexts } from "./multilangTexts";
 
-export const getEvents = (
+export const events = (
   json: JSONPathJson,
   { core }: Namespaces
 ): undefined | Event[] => {
@@ -13,7 +13,7 @@ export const getEvents = (
   for (let i = 0, length = data.length; i < length; i++) {
     const id = jsonPath<string>(data[i], "$.id");
     const types = jsonPath<string[]>(data[i], "$.type");
-    const labels = getMultilangTexts(jsonPath(data[i], `$['${rdfs.label}']`));
+    const labels = multilangTexts(jsonPath(data[i], `$['${rdfs.label}']`));
     const exact = jsonPath<undefined | string>(
       data[i],
       `$['${core.takesPlaceOn}'][0]['${core.hasXsdDateTime}'][0].value`
@@ -51,7 +51,7 @@ export const getEvents = (
       : new Date();
     results.push({
       id,
-      idLocal: getLocalId(id),
+      idLocal: idLocal(id),
       types,
       labels,
       date,

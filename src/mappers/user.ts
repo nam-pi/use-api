@@ -1,8 +1,8 @@
 import { JSONPathJson, Namespaces, User } from "types";
-import { getLocalId } from "./getLocalId";
-import { jsonPath } from "./jsonPath";
+import { jsonPath } from "../utils/jsonPath";
+import { idLocal as mapIdLocal } from "./idLocal";
 
-export const getUser = (json: JSONPathJson, namespaces: Namespaces): User => {
+export const user = (json: JSONPathJson, namespaces: Namespaces): User => {
   const email = jsonPath<string>(
     json,
     `$[0]['${namespaces.schema.email}'][0].value`
@@ -27,7 +27,7 @@ export const getUser = (json: JSONPathJson, namespaces: Namespaces): User => {
     json,
     `$[0]['${namespaces.schema.sameAs}'][0].id`
   );
-  const idAuthorLocal = idAuthor ? getLocalId(idAuthor) : undefined;
+  const idAuthorLocal = idAuthor ? mapIdLocal(idAuthor) : undefined;
   return {
     email,
     familyName,
