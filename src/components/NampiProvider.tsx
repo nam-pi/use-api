@@ -1,9 +1,9 @@
 import HydraClientFactory from "@hydra-cg/heracles.ts";
 import Keycloak from "keycloak-js";
+import { namespaces } from "namespaces";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { NampiConfig } from "types";
 import { callFacility } from "utils/callFacility";
-import { namespaces } from "./namespaces";
 import { NampiContext } from "./NampiContext";
 
 export const NampiProvider = ({

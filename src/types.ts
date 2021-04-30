@@ -1,7 +1,7 @@
 import { IHydraClient, IHypermediaContainer } from "@hydra-cg/heracles.ts";
-import { namespaces } from "components/namespaces";
 import { JSONPath } from "jsonpath-plus";
 import { KeycloakInstance } from "keycloak-js";
+import { namespaces } from "namespaces";
 
 export interface ContextState {
   apiUrl: string;
@@ -12,7 +12,7 @@ export interface ContextState {
 }
 
 export interface Entity {
-  idLocal: string;
+  idLocal?: string;
 }
 
 export interface Event extends Item {
@@ -42,6 +42,11 @@ export interface Item extends Entity {
 }
 
 export type JSONPathJson = Parameters<typeof JSONPath>[1];
+
+export interface List<T> {
+  members: T[];
+  total: number;
+}
 
 export interface MultilangText {
   value: string;
