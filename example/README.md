@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-A running instance of a NAMPI Api with Api and Auth endpoint is required. Please take a look at the [backend repository](https://github.com/nam-pi/backend) to learn how to achieve this.
+A running instance of a NAMPI Api with Api and Auth endpoint is required. Please take a look at the [backend repository](https://github.com/nam-pi/backend) to learn how to achieve this. The NAMPI useApi needs to be built in the `dist` folder. This can be done by using `yarn watch` in the root directory.
 
 ## Installation
 
