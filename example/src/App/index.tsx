@@ -30,6 +30,6 @@ export const App = () => {
       </div>
     </Router>
   ) : (
-    <LoadingPlaceholder delay />
+    <LoadingPlaceholder delay={1000} />
   );
 };

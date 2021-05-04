@@ -76,11 +76,35 @@ export interface MultilangText {
 export type Namespaces = ReturnType<typeof namespaces>;
 
 export interface NampiConfig {
+  /**
+   * The URL of the NAMPI API endpoint
+   * */
   api: string;
+  /**
+   * The URL of the NAMPI Keycloak auth endpoint
+   */
   auth: string;
+  /**
+   * The name of the Keycloak client to use
+   */
   client: string;
+  /**
+   * The name of the Keycloak realm
+   */
   realm: string;
+  /**
+   * The timeout in ms to bundle search box entries when live searching so the server doesn't get flooded. Defaults to 200ms
+   */
   searchTimeout?: number;
+  /**
+   * Whether or not to to keep users logged in over browser restarts
+   */
+  sso?: boolean;
+  /**
+   * Enables the silent sso check. If enabled, the url to a site on the NAMPI app with special content needs to be provided.
+   * The content is described in the Keycloak documentation: https://github.com/keycloak/keycloak-documentation/blob/master/securing_apps/topics/oidc/javascript-adapter.adoc
+   */
+  silentSsoUri?: string;
 }
 
 export interface Person extends Item {

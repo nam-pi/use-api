@@ -1,9 +1,10 @@
 import HydraClientFactory from "@hydra-cg/heracles.ts";
-import Keycloak from "keycloak-js";
+import Keycloak, { KeycloakInitOptions } from "keycloak-js";
 import { namespaces } from "namespaces";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { NampiConfig } from "types";
 import { callFacility } from "utils/callFacility";
+import { DEFAULT_SEARCH_TIMEOUT } from "../constants";
 import { NampiContext } from "./NampiContext";
 
 export const NampiProvider = ({
@@ -11,8 +12,10 @@ export const NampiProvider = ({
   api,
   auth,
   client,
-  searchTimeout = 200,
+  searchTimeout = DEFAULT_SEARCH_TIMEOUT,
   realm,
+  silentSsoUri,
+  sso,
 }: { children: ReactNode } & NampiConfig): JSX.Element => {
   const [initialized, setInitialized] = useState<boolean>(false);
   const keycloak = useMemo(
@@ -24,16 +27,6 @@ export const NampiProvider = ({
       }),
     [auth, client, realm]
   );
-  useEffect(() => {
-    const initialize = async () => {
-      await keycloak.init({
-        checkLoginIframe: false,
-        onLoad: "login-required",
-      });
-      setInitialized(true);
-    };
-    initialize();
-  }, [keycloak]);
   const hydra = useMemo(
     () =>
       HydraClientFactory.configure()
@@ -42,6 +35,20 @@ export const NampiProvider = ({
         .andCreate(),
     [keycloak]
   );
+  useEffect(() => {
+    const config: KeycloakInitOptions = { checkLoginIframe: true };
+    if (sso) {
+      config.onLoad = "check-sso";
+    }
+    if (silentSsoUri) {
+      config.silentCheckSsoRedirectUri = silentSsoUri;
+    }
+    const initialize = async () => {
+      await keycloak.init(config);
+      setInitialized(true);
+    };
+    initialize();
+  }, [keycloak, silentSsoUri, sso]);
   return (
     <NampiContext.Provider
       value={{
