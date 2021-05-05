@@ -12,7 +12,10 @@ import { LoadingPlaceholder } from "../LoadingPlaceholder";
 
 export const Persons = () => {
   const [text, setText] = useState<string>("");
-  const { initialized, loading, data, nav, total } = usePersons({ text });
+  const { initialized, loading, data, nav, total } = usePersons({
+    orderBy: "label",
+    text,
+  });
   return (
     <div>
       <Heading>Persons{total !== undefined ? ` (${total})` : ""}</Heading>

@@ -1,6 +1,5 @@
 import { hydra, ILink, ITemplatedLink } from "@hydra-cg/heracles.ts";
 import { collectionMeta } from "mappers/collectionMeta";
-import { namespaces } from "namespaces";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   CollectionNav,
@@ -10,6 +9,7 @@ import {
   FetchResult,
   JSONPathJson,
   QueryParams,
+  SortFunction,
   Timeout,
 } from "types";
 import { expandContainer } from "utils/expandContainer";
@@ -31,12 +31,14 @@ export function useFetch<T extends Entity>(
 export function useFetch<T extends Entity>(
   url: string,
   mapper: FetchMapper<T>,
-  search: QueryParams
+  search: QueryParams,
+  sorter?: SortFunction<T>
 ): FetchCollectionResult<T>;
 export function useFetch<T extends Entity>(
   url: string,
   mapper: FetchMapper<T>,
-  search?: QueryParams
+  search?: QueryParams,
+  sorter?: SortFunction<T>
 ) {
   const inflight = useRef<boolean>(false);
   const firstUrl = useRef<string>(url);
@@ -83,20 +85,8 @@ export function useFetch<T extends Entity>(
               collection.links.ofIri(hydra.search).first() as ITemplatedLink
             );
             setTotal(total);
-            const data = (members || []).map(mapper);
-            return search[namespaces.doc.personOrderByVariable] === "label"
-              ? data.sort((a, b) => {
-                  const labA = a.labels
-                    .map((l) => l.value)
-                    .join("")
-                    .toLocaleLowerCase();
-                  const labB = b.labels
-                    .map((l) => l.value)
-                    .join("")
-                    .toLocaleLowerCase();
-                  return labA < labB ? -1 : labA > labB ? 1 : 0;
-                })
-              : data;
+            const result = (members || []).map(mapper);
+            return sorter ? result.sort(sorter) : result;
           } else {
             return mapper((json as JSONPathJson[])[0]);
           }
@@ -114,7 +104,7 @@ export function useFetch<T extends Entity>(
           inflight.current = false;
         });
     },
-    [context.hydra, mapper, search]
+    [context.hydra, mapper, search, sorter]
   );
 
   useEffect(() => {

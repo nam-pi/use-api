@@ -29,11 +29,19 @@ export interface ContextState {
   searchTimeout: number;
 }
 
+export interface EventQuery {
+  text?: string;
+  orderBy?: "id" | "label" | "date";
+  participant?: string;
+}
+
 export interface Entity {
   idLocal?: string;
   labels: MultilangText[];
   types: string[];
 }
+
+export type SortFunction<T> = (a: T, b: T) => -1 | 0 | 1;
 
 export interface Event extends Item {
   date: EventDate;
@@ -113,6 +121,7 @@ export interface Person extends Item {
 
 export interface PersonQuery {
   text?: string;
+  orderBy?: "id" | "label";
 }
 
 export type QueryParams = { [key: string]: unknown };
