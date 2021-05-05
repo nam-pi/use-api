@@ -1,5 +1,6 @@
 import { person } from "mappers/person";
 import { user } from "mappers/user";
+import { namespaces } from "namespaces";
 import {
   FetchCollectionResult,
   FetchResult,
@@ -20,7 +21,7 @@ export const usePerson = (idLocal: string): FetchResult<Person> => {
 export const usePersons = (
   query: PersonQuery = {}
 ): FetchCollectionResult<Person> => {
-  const { apiUrl, namespaces } = useNampiContext();
+  const { apiUrl } = useNampiContext();
   const params = {
     [namespaces.doc.personOrderByVariable]: "label",
   } as QueryParams;

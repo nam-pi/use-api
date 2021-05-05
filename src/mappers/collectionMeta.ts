@@ -1,8 +1,8 @@
 import { hydra } from "@hydra-cg/heracles.ts";
-import { CollectionMeta, JSONPathJson } from "types";
+import { CollectionMeta, FetchMapper } from "types";
 import { jsonPath } from "utils/jsonPath";
 
-export const collectionMeta = (json: JSONPathJson): CollectionMeta => {
+export const collectionMeta: FetchMapper<CollectionMeta> = (json) => {
   return {
     members: jsonPath<undefined | Record<string, unknown>[]>(
       json,

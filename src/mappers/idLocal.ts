@@ -1,6 +1,8 @@
+import { FetchMapper } from "types";
+
 const LOCAL_ID_REGEX = /^.+\/(?<id>.+)$/;
 
-export const idLocal = (iri = ""): undefined | string => {
-  const match = iri.match(LOCAL_ID_REGEX);
+export const idLocal: FetchMapper<undefined | string> = (iri) => {
+  const match = (typeof iri === "string" ? iri : "").match(LOCAL_ID_REGEX);
   return match?.groups?.id;
 };

@@ -1,5 +1,6 @@
 import { hydra, ILink, ITemplatedLink } from "@hydra-cg/heracles.ts";
 import { collectionMeta } from "mappers/collectionMeta";
+import { namespaces } from "namespaces";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   CollectionNav,
@@ -82,11 +83,8 @@ export function useFetch<T extends Entity>(
               collection.links.ofIri(hydra.search).first() as ITemplatedLink
             );
             setTotal(total);
-            const data = (members || []).map((m) =>
-              mapper(m, context.namespaces)
-            );
-            return search[context.namespaces.doc.personOrderByVariable] ===
-              "label"
+            const data = (members || []).map(mapper);
+            return search[namespaces.doc.personOrderByVariable] === "label"
               ? data.sort((a, b) => {
                   const labA = a.labels
                     .map((l) => l.value)
@@ -100,7 +98,7 @@ export function useFetch<T extends Entity>(
                 })
               : data;
           } else {
-            return mapper((json as JSONPathJson[])[0], context.namespaces);
+            return mapper((json as JSONPathJson[])[0]);
           }
         })
         .then(setData)
@@ -116,7 +114,7 @@ export function useFetch<T extends Entity>(
           inflight.current = false;
         });
     },
-    [context.hydra, context.namespaces, mapper, search]
+    [context.hydra, mapper, search]
   );
 
   useEffect(() => {

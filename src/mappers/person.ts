@@ -1,25 +1,21 @@
 import { rdfs } from "@hydra-cg/heracles.ts";
-import { JSONPathJson, Namespaces, Person } from "types";
+import { namespaces } from "namespaces";
+import { FetchMapper, Person } from "types";
 import { jsonPath } from "../utils/jsonPath";
 import { events } from "./events";
 import { idLocal } from "./idLocal";
 import { multilangTexts } from "./multilangTexts";
 
-export const person = (json: JSONPathJson, namespaces: Namespaces): Person => {
+export const person: FetchMapper<Person> = (json) => {
+  const { core } = namespaces;
   const id = jsonPath<string>(json, "$.id");
   const types = jsonPath<string[]>(json, "$.type");
-  const labelsJson = jsonPath<JSONPathJson>(json, `$['${rdfs.label}']`);
-  const bornInJson = jsonPath<JSONPathJson>(
-    json,
-    `$['${namespaces.core.isBornIn}']`
-  );
-  const diesInJson = jsonPath<JSONPathJson>(
-    json,
-    `$['${namespaces.core.diesIn}']`
-  );
+  const labelsJson = jsonPath(json, `$['${rdfs.label}']`);
+  const bornInJson = jsonPath(json, `$['${core.isBornIn}']`);
+  const diesInJson = jsonPath(json, `$['${core.diesIn}']`);
   return {
-    bornIn: events(bornInJson, namespaces),
-    diesIn: events(diesInJson, namespaces),
+    bornIn: events(bornInJson),
+    diesIn: events(diesInJson),
     id,
     idLocal: idLocal(id),
     labels: multilangTexts(labelsJson),

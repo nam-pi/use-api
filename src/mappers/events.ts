@@ -1,13 +1,12 @@
 import { rdfs } from "@hydra-cg/heracles.ts";
-import { Event, EventDate, JSONPathJson, Namespaces } from "types";
+import { namespaces } from "namespaces";
+import { Event, EventDate, FetchMapper } from "types";
 import { jsonPath } from "utils/jsonPath";
 import { idLocal } from "./idLocal";
 import { multilangTexts } from "./multilangTexts";
 
-export const events = (
-  json: JSONPathJson,
-  { core }: Namespaces
-): undefined | Event[] => {
+export const events: FetchMapper<undefined | Event[]> = (json) => {
+  const { core } = namespaces;
   const results: Event[] = [];
   const data = Array.isArray(json) ? json : [json];
   for (let i = 0, length = data.length; i < length; i++) {

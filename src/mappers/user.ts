@@ -1,32 +1,25 @@
 import { rdfs } from "@hydra-cg/heracles.ts";
-import { JSONPathJson, Namespaces, User } from "types";
+import { namespaces } from "namespaces";
+import { FetchMapper, User } from "types";
 import { jsonPath } from "../utils/jsonPath";
 import { idLocal as mapIdLocal } from "./idLocal";
 import { multilangTexts } from "./multilangTexts";
 
-export const user = (json: JSONPathJson, namespaces: Namespaces): User => {
+export const user: FetchMapper<User> = (json) => {
+  const { schema } = namespaces;
   const labels = multilangTexts(jsonPath(json, `$['${rdfs.label}'][0]`));
   const types = jsonPath<string[]>(json, "$.type");
-  const email = jsonPath<string>(
-    json,
-    `$['${namespaces.schema.email}'][0].value`
-  );
+  const email = jsonPath<string>(json, `$['${schema.email}'][0].value`);
   const familyName = jsonPath<undefined | string>(
     json,
-    `$['${namespaces.schema.familyName}'][0].value`
+    `$['${schema.familyName}'][0].value`
   );
   const givenName = jsonPath<undefined | string>(
     json,
-    `$['${namespaces.schema.givenName}'][0].value`
+    `$['${schema.givenName}'][0].value`
   );
-  const idLocal = jsonPath<string>(
-    json,
-    `$['${namespaces.schema.identifier}'][0].value`
-  );
-  const username = jsonPath<string>(
-    json,
-    `$['${namespaces.schema.name}'][0].value`
-  );
+  const idLocal = jsonPath<string>(json, `$['${schema.identifier}'][0].value`);
+  const username = jsonPath<string>(json, `$['${schema.name}'][0].value`);
   const idAuthor = jsonPath<undefined | string>(
     json,
     `$['${namespaces.schema.sameAs}'][0].id`

@@ -26,7 +26,6 @@ export interface ContextState {
   hydra: IHydraClient;
   initialized: boolean;
   keycloak: KeycloakInstance;
-  namespaces: Namespaces;
   searchTimeout: number;
 }
 
@@ -60,7 +59,7 @@ export interface FetchCollectionResult<T> extends FetchResult<T[]> {
   total: undefined | number;
 }
 
-export type FetchMapper<T> = (json: JSONPathJson, namespaces: Namespaces) => T;
+export type FetchMapper<T> = (json: JSONPathJson) => T;
 
 export interface Item extends Entity {
   id: string;
@@ -73,7 +72,7 @@ export interface MultilangText {
   language?: string;
 }
 
-export type Namespaces = ReturnType<typeof namespaces>;
+export type Namespaces = typeof namespaces;
 
 export interface NampiConfig {
   /**
