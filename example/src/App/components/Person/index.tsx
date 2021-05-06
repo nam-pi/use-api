@@ -1,8 +1,8 @@
 import { useEvents, usePerson } from "nampi-use-api/bundle";
 import { useParams } from "react-router";
-import { serializeEventDates } from "../../utils/serializeEventDates";
 import { serializeLabels } from "../../utils/serializeLabels";
 import { Heading } from "../Heading";
+import { Pre } from "../Pre";
 
 interface Params {
   idLocal: string;
@@ -18,18 +18,14 @@ export const Person = () => {
   return data ? (
     <div>
       <Heading>{serializeLabels(data)}</Heading>
-      <div>
-        {events.data?.map((e) => {
-          const dateText = serializeEventDates([e]);
-          const labelsText = serializeLabels(e);
-          return (
-            <div key={e.idLocal}>
-              {dateText ? `${dateText}: ` : ""}
-              {labelsText}
-            </div>
-          );
-        })}
-      </div>
+      <Heading className="mt-4 mb-2" level={2}>
+        Person data
+      </Heading>
+      <Pre>{data}</Pre>
+      <Heading className="mt-4 mb-2" level={2}>
+        Events data
+      </Heading>
+      <Pre>{events.data}</Pre>
     </div>
   ) : (
     <></>

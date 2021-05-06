@@ -14,6 +14,7 @@ export const namespaces = {
 
   core: {
     diesIn: `${coreBase}dies_in`,
+    hasParticipant: `${coreBase}has_participant`,
     isBornIn: `${coreBase}is_born_in`,
     takesPlaceNotLaterThan: `${coreBase}takes_place_not_later_than`,
     takesPlaceNotEarlierThan: `${coreBase}takes_place_not_earlier_than`,

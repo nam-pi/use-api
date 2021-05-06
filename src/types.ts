@@ -131,8 +131,9 @@ export interface Person extends Item {
 }
 
 export interface PersonQuery extends CollectionQuery {
-  text?: string;
   orderBy?: "id" | "label";
+  text?: string;
+  type?: string;
 }
 
 export type SortFunction<T> = (a: T, b: T) => -1 | 0 | 1;
