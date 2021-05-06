@@ -99,17 +99,17 @@ export interface NampiConfig {
    * */
   api: string;
   /**
-   * The URL of the NAMPI Keycloak auth endpoint
+   * The URL of the NAMPI Keycloak auth endpoint.
    */
-  auth: string;
+  auth?: string;
   /**
-   * The name of the Keycloak client to use
+   * The name of the Keycloak client to use. If not present in combination with "realm", the login and logout auth functions will throw an error on use.
    */
-  client: string;
+  client?: string;
   /**
-   * The name of the Keycloak realm
+   * The name of the Keycloak realm. If not present in combination with "client", the login and logout auth functions will throw an error on use.
    */
-  realm: string;
+  realm?: string;
   /**
    * The timeout in ms to bundle search box entries when live searching so the server doesn't get flooded. Defaults to 200ms
    */

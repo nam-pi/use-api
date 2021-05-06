@@ -10,8 +10,8 @@ const auth = process.env.REACT_APP_AUTH;
 const client = process.env.REACT_APP_CLIENT;
 const realm = process.env.REACT_APP_REALM;
 
-if (!api || !auth || !client || !realm) {
-  throw new Error("Invalid environment");
+if (!api) {
+  throw new Error("No API url provided");
 }
 
 ReactDOM.render(
