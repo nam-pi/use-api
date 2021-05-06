@@ -13,8 +13,7 @@ import { LoadingPlaceholder } from "../LoadingPlaceholder";
 export const Persons = () => {
   const [text, setText] = useState<string>("");
   const { initialized, loading, data, nav, total } = usePersons({
-    orderBy: "label",
-    text,
+    query: { orderBy: "label", text },
   });
   return (
     <div>

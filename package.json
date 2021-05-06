@@ -40,7 +40,6 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "@hydra-cg/heracles.ts": "^0.5.1",
     "@types/jsonld": "^1.5.5",
     "husky": "^6.0.0",
     "jsonld": "^5.2.0",

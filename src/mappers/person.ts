@@ -1,4 +1,3 @@
-import { rdfs } from "@hydra-cg/heracles.ts";
 import { namespaces } from "namespaces";
 import { FetchMapper, Person } from "types";
 import { jsonPath } from "../utils/jsonPath";
@@ -7,7 +6,7 @@ import { idLocal } from "./idLocal";
 import { multilangTexts } from "./multilangTexts";
 
 export const person: FetchMapper<Person> = (json) => {
-  const { core } = namespaces;
+  const { core, rdfs } = namespaces;
   const id = jsonPath<string>(json, "$.id");
   const types = jsonPath<string[]>(json, "$.type");
   const labelsJson = jsonPath(json, `$['${rdfs.label}']`);

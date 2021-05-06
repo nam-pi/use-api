@@ -1,5 +1,7 @@
 const apiBase = "https://purl.org/nampi/owl/api#";
 const coreBase = "https://purl.org/nampi/owl/core#";
+const hydra = "http://www.w3.org/ns/hydra/core#";
+const rdfs = "http://www.w3.org/2000/01/rdf-schema#";
 const schemaOrgBase = "https://schema.org/";
 
 export const namespaces = {
@@ -18,6 +20,20 @@ export const namespaces = {
     takesPlaceOn: `${coreBase}takes_place_on`,
     hasSortingDate: `${coreBase}has_sorting_date`,
     hasXsdDateTime: `${coreBase}has_xsd_date_time`,
+  },
+
+  hydra: {
+    member: `${hydra}member`,
+    view: `${hydra}view`,
+    first: `${hydra}first`,
+    previous: `${hydra}previous`,
+    next: `${hydra}next`,
+    last: `${hydra}last`,
+    totalItems: `${hydra}totalItems`,
+  },
+
+  rdfs: {
+    label: `${rdfs}label`,
   },
 
   schema: {

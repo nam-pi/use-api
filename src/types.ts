@@ -1,13 +1,12 @@
-import { IHydraClient } from "@hydra-cg/heracles.ts";
 import { JSONPath } from "jsonpath-plus";
 import { KeycloakInstance } from "keycloak-js";
 import { namespaces } from "namespaces";
 
 export interface CollectionNav {
-  first?: undefined | (() => Promise<void>);
-  previous?: undefined | (() => Promise<void>);
-  next?: undefined | (() => Promise<void>);
-  last?: undefined | (() => Promise<void>);
+  first?: undefined | VoidFunction;
+  previous?: undefined | VoidFunction;
+  next?: undefined | VoidFunction;
+  last?: undefined | VoidFunction;
   page?: undefined | number;
 }
 
@@ -21,18 +20,18 @@ export interface CollectionMeta {
   viewIri: string;
 }
 
+export interface CollectionQuery {
+  limit?: number;
+  offset?: number;
+  page?: number;
+  [key: string]: undefined | number | string;
+}
+
 export interface ContextState {
   apiUrl: string;
-  hydra: IHydraClient;
   initialized: boolean;
   keycloak: KeycloakInstance;
   searchTimeout: number;
-}
-
-export interface EventQuery {
-  text?: string;
-  orderBy?: "id" | "label" | "date";
-  participant?: string;
 }
 
 export interface Entity {
@@ -41,7 +40,11 @@ export interface Entity {
   types: string[];
 }
 
-export type SortFunction<T> = (a: T, b: T) => -1 | 0 | 1;
+export interface EventsQuery extends CollectionQuery {
+  text?: string;
+  orderBy?: "id" | "label" | "date";
+  participant?: string;
+}
 
 export interface Event extends Item {
   date: EventDate;
@@ -54,7 +57,15 @@ export interface EventDate {
   latest?: Date;
 }
 
-export type FetchFunction<T> = (json: JSONPathJson) => Promise<T>;
+export type FetchCollectionHook<T, Q> = (config: {
+  paused?: boolean;
+  query: Q;
+}) => FetchCollectionResult<T>;
+
+export type FetchHook<T> = (config: {
+  idLocal: string;
+  paused?: boolean;
+}) => FetchResult<T>;
 
 export interface FetchResult<T> {
   initialized: boolean;
@@ -119,12 +130,12 @@ export interface Person extends Item {
   diesIn?: Event[];
 }
 
-export interface PersonQuery {
+export interface PersonQuery extends CollectionQuery {
   text?: string;
   orderBy?: "id" | "label";
 }
 
-export type QueryParams = { [key: string]: unknown };
+export type SortFunction<T> = (a: T, b: T) => -1 | 0 | 1;
 
 export type Timeout = undefined | ReturnType<typeof setTimeout>;
 

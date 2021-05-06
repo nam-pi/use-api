@@ -1,8 +1,6 @@
-import HydraClientFactory from "@hydra-cg/heracles.ts";
 import Keycloak, { KeycloakInitOptions } from "keycloak-js";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { NampiConfig } from "types";
-import { callFacility } from "utils/callFacility";
 import { DEFAULT_SEARCH_TIMEOUT } from "../constants";
 import { NampiContext } from "./NampiContext";
 
@@ -26,14 +24,6 @@ export const NampiProvider = ({
       }),
     [auth, client, realm]
   );
-  const hydra = useMemo(
-    () =>
-      HydraClientFactory.configure()
-        .withDefaults()
-        .with(callFacility(keycloak))
-        .andCreate(),
-    [keycloak]
-  );
   useEffect(() => {
     const config: KeycloakInitOptions = { checkLoginIframe: true };
     if (sso) {
@@ -53,7 +43,6 @@ export const NampiProvider = ({
       value={{
         apiUrl: api,
         searchTimeout,
-        hydra,
         initialized,
         keycloak,
       }}

@@ -5,13 +5,16 @@ import { serializeLabels } from "../../utils/serializeLabels";
 import { Heading } from "../Heading";
 
 interface Params {
-  localId: string;
+  idLocal: string;
 }
 
 export const Person = () => {
-  const { localId } = useParams<Params>();
-  const { data } = usePerson(localId);
-  const events = useEvents({ orderBy: "date", participant: data?.id });
+  const { idLocal } = useParams<Params>();
+  const { data } = usePerson({ idLocal });
+  const events = useEvents({
+    paused: !data,
+    query: { orderBy: "date", participant: data?.id },
+  });
   return data ? (
     <div>
       <Heading>{serializeLabels(data)}</Heading>
