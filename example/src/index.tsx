@@ -16,7 +16,15 @@ if (!api || !auth || !client || !realm) {
 
 ReactDOM.render(
   <React.StrictMode>
-    <NampiProvider api={api} auth={auth} client={client} realm={realm}>
+    <NampiProvider
+      api={api}
+      auth={auth}
+      client={client}
+      realm={realm}
+      searchTimeout={200}
+      silentSsoUri={window.location.origin + "/silent-check-sso.html"}
+      sso={true}
+    >
       <App />
     </NampiProvider>
   </React.StrictMode>,

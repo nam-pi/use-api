@@ -22,7 +22,7 @@ export const App = () => {
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/persons" component={Persons} />
-            <Route exact path="/person/:localId" component={Person} />
+            <Route exact path="/person/:idLocal" component={Person} />
             <PrivateRoute exact path="/profile" component={Profile} />
             <Route path="*" component={NoMatch} />
           </Switch>
@@ -30,6 +30,6 @@ export const App = () => {
       </div>
     </Router>
   ) : (
-    <LoadingPlaceholder delay />
+    <LoadingPlaceholder delay={1000} />
   );
 };

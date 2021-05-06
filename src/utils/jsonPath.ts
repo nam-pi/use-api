@@ -1,7 +1,7 @@
 import { JSONPath } from "jsonpath-plus";
 import { JSONPathJson } from "types";
 
-export const jsonPath = <T extends unknown>(
+export const jsonPath = <T extends undefined | JSONPathJson = JSONPathJson>(
   json: JSONPathJson,
   path: string
-): T => JSONPath({ path, json, wrap: false });
+): T => JSONPath<T>({ path, json, wrap: false });

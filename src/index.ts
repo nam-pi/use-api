@@ -1,9 +1,14 @@
 export { NampiProvider } from "components/NampiProvider";
+export {
+  useEvent,
+  useEvents,
+  usePerson,
+  usePersons,
+  useUser,
+} from "hooks/dataHooks";
 export { useAuth } from "hooks/useAuth";
-export { usePerson } from "hooks/usePerson";
-export { usePersons } from "hooks/usePersons";
-export { useUser } from "hooks/useUser";
 export type {
+  CollectionNav,
   Entity,
   Event,
   EventDate,

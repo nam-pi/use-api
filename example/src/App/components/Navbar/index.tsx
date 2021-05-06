@@ -5,7 +5,7 @@ import { LoadingPlaceholder } from "../LoadingPlaceholder";
 import { NampiLogo } from "../NampiLogo";
 
 export const Navbar = () => {
-  const { logout } = useAuth();
+  const { authenticated, logout } = useAuth();
   const { initialized, loading, data } = useUser();
   return (
     <nav className="relative flex items-center justify-between flex-wrap  bg-gray-400 p-3 text-white">
@@ -17,7 +17,7 @@ export const Navbar = () => {
       </div>
       <div>
         {initialized && !loading ? (
-          data ? (
+          authenticated && data ? (
             <Menu as="div" className="relative text-gray-800">
               <Menu.Button className="px-4 py-2 rounded bg-white text-sm">
                 {data.username}
