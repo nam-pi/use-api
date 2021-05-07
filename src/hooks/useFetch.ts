@@ -1,14 +1,14 @@
 import { expand } from "jsonld";
-import { collectionMeta } from "mappers/collectionMeta";
+import { namespaces } from "namespaces";
+import { normalize } from "normalize";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  Collection,
   CollectionNav,
   CollectionQuery,
   Entity,
   FetchCollectionResult,
-  FetchMapper,
   FetchResult,
-  JSONPathJson,
   SortFunction,
   Timeout,
 } from "types";
@@ -22,8 +22,6 @@ const getPage = (url: string) => {
   const offset = Number(url.match(OFFSET_REGEX)?.groups?.offset || 0);
   return Math.floor(offset / limit + 1);
 };
-
-const REPLACE_REGEX = /@(id|type|language|value)/g;
 
 const DEFAULT_CONFIG: RequestInit = {
   headers: {
@@ -65,19 +63,16 @@ function toUrlSearchParams<Query extends CollectionQuery>(
 
 export function useFetch<T extends Entity>(
   baseUrl: string,
-  mapper: FetchMapper<T>,
   paused?: boolean
 ): FetchResult<T>;
 export function useFetch<T extends Entity, Query extends CollectionQuery>(
   baseUrl: string,
-  mapper: FetchMapper<T>,
   query: Query,
   sorter?: SortFunction<T>,
   paused?: boolean
 ): FetchCollectionResult<T>;
 export function useFetch<T extends Entity, Query extends CollectionQuery>(
   baseUrl: string,
-  mapper: FetchMapper<T>,
   query?: Query,
   sorter?: SortFunction<T>,
   paused = false
@@ -129,26 +124,24 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
         .catch(() => fetch(fullUrl, DEFAULT_CONFIG))
         .then((response) => response.json())
         .then(expand)
-        .then((expanded) =>
-          JSON.parse(JSON.stringify(expanded).replace(REPLACE_REGEX, "$1"))
-        )
-        .then<State<T>>((json: JSONPathJson) => {
-          if (searchParams) {
+        .then(normalize)
+        .then((v) => {
+          if (v?.types.includes(namespaces.hydra.Collection)) {
+            // Map collection data
             const {
+              members,
               first,
               last,
-              members,
+              id,
               next,
               previous,
               total,
-              viewIri,
-            } = collectionMeta(json);
-            const result = (members || []).map(mapper);
+            } = (v as unknown) as Collection<T>;
             return {
-              data: sorter ? result.sort(sorter) : result,
+              data: sorter ? members.sort(sorter) : members,
               nav: {
                 first:
-                  first && viewIri !== first
+                  first && id !== first
                     ? () => mergeSearchParams(first)
                     : undefined,
                 previous: previous
@@ -156,30 +149,31 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
                   : undefined,
                 next: next ? () => mergeSearchParams(next) : undefined,
                 last:
-                  last && viewIri !== last
+                  last && id !== last
                     ? () => mergeSearchParams(last)
                     : undefined,
-                page: getPage(viewIri),
+                page: getPage(id),
               },
               total,
             };
           } else {
-            return { data: mapper((json as JSONPathJson[])[0]) };
+            // Map single class data
+            return { data: (v as unknown) as T };
           }
         })
         .then(setState)
         .catch((e) => {
           if (e.message === "Remote server responded with a status of 401") {
-            console.log("User not logged in");
+            console.info("User not logged in");
           } else {
-            console.log(e);
+            console.warn(e);
           }
         })
         .finally(() => {
           setLoading(false);
         });
     },
-    [keycloak, mapper, mergeSearchParams, searchParams, sorter]
+    [keycloak, mergeSearchParams, searchParams, sorter]
   );
 
   useEffect(() => {

@@ -11,7 +11,6 @@ export type {
   CollectionNav,
   Entity,
   Event,
-  EventDate,
   Item,
   MultilangText,
   Person,

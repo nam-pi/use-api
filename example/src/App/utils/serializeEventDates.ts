@@ -8,15 +8,18 @@ export const serializeEventDates = (
 ): string => {
   const dates: string[] = [];
   for (let i = 0, length = events.length; i < length; i++) {
-    const d = events[i].date;
-    const dString = d.exact
-      ? fmt(d.exact, format)
-      : d.earliest && d.latest
-      ? `${fmt(d.earliest, format)} - ${fmt(d.latest, format)}`
-      : d.earliest
-      ? fmt(d.earliest, format)
-      : d.latest
-      ? fmt(d.latest, format)
+    const event = events[i];
+    const dString = event.exact
+      ? fmt(new Date(event.exact), format)
+      : event.earliest && event.latest
+      ? `${fmt(new Date(event.earliest), format)} - ${fmt(
+          new Date(event.latest),
+          format
+        )}`
+      : event.earliest
+      ? fmt(new Date(event.earliest), format)
+      : event.latest
+      ? fmt(new Date(event.latest), format)
       : "";
     if (dString) {
       dates.push(dString);

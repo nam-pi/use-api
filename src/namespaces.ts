@@ -1,28 +1,35 @@
-const apiBase = "https://purl.org/nampi/owl/api#";
-const coreBase = "https://purl.org/nampi/owl/core#";
+const api = "https://purl.org/nampi/owl/api#";
+const core = "https://purl.org/nampi/owl/core#";
 const hydra = "http://www.w3.org/ns/hydra/core#";
 const rdfs = "http://www.w3.org/2000/01/rdf-schema#";
-const schemaOrgBase = "https://schema.org/";
+const schemaOrg = "https://schema.org/";
 
 export const namespaces = {
   api: {
-    eventOrderByVariable: `${apiBase}eventOrderByVariable`,
-    eventParticipantVariable: `${apiBase}eventParticipantVariable`,
-    personOrderByVariable: `${apiBase}personOrderByVariable`,
-    textVariable: `${apiBase}textVariable`,
+    eventOrderByVariable: `${api}eventOrderByVariable`,
+    eventParticipantVariable: `${api}eventParticipantVariable`,
+    personOrderByVariable: `${api}personOrderByVariable`,
+    textVariable: `${api}textVariable`,
+    user: `${api}user`,
   },
 
   core: {
-    diesIn: `${coreBase}dies_in`,
-    isBornIn: `${coreBase}is_born_in`,
-    takesPlaceNotLaterThan: `${coreBase}takes_place_not_later_than`,
-    takesPlaceNotEarlierThan: `${coreBase}takes_place_not_earlier_than`,
-    takesPlaceOn: `${coreBase}takes_place_on`,
-    hasSortingDate: `${coreBase}has_sorting_date`,
-    hasXsdDateTime: `${coreBase}has_xsd_date_time`,
+    author: `${core}author`,
+    date: `${core}date`,
+    diesIn: `${core}dies_in`,
+    event: `${core}event`,
+    hasParticipant: `${core}has_participant`,
+    hasSortingDate: `${core}has_sorting_date`,
+    hasXsdDateTime: `${core}has_xsd_date_time`,
+    isBornIn: `${core}is_born_in`,
+    person: `${core}person`,
+    takesPlaceNotEarlierThan: `${core}takes_place_not_earlier_than`,
+    takesPlaceNotLaterThan: `${core}takes_place_not_later_than`,
+    takesPlaceOn: `${core}takes_place_on`,
   },
 
   hydra: {
+    Collection: `${hydra}Collection`,
     member: `${hydra}member`,
     view: `${hydra}view`,
     first: `${hydra}first`,
@@ -37,11 +44,11 @@ export const namespaces = {
   },
 
   schema: {
-    email: `${schemaOrgBase}email`,
-    name: `${schemaOrgBase}name`,
-    givenName: `${schemaOrgBase}givenName`,
-    familyName: `${schemaOrgBase}familyName`,
-    identifier: `${schemaOrgBase}identifier`,
-    sameAs: `${schemaOrgBase}sameAs`,
+    email: `${schemaOrg}email`,
+    name: `${schemaOrg}name`,
+    givenName: `${schemaOrg}givenName`,
+    familyName: `${schemaOrg}familyName`,
+    identifier: `${schemaOrg}identifier`,
+    sameAs: `${schemaOrg}sameAs`,
   },
 };
