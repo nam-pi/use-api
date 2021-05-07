@@ -1,6 +1,6 @@
-import { event } from "mappers/event";
-import { person } from "mappers/person";
-import { user } from "mappers/user";
+import { sortByEventDate } from "sorters/sortByEventDate";
+import { sortById } from "sorters/sortById";
+import { sortByLabel } from "sorters/sortByLabel";
 import {
   Event,
   EventsQuery,
@@ -13,15 +13,12 @@ import {
   User,
 } from "types";
 import { buildPath } from "utils/buildPath";
-import { sortByEventDate } from "utils/sortByEventDate";
-import { sortById } from "utils/sortById";
-import { sortByLabel } from "utils/sortByLabel";
 import { useFetch } from "./useFetch";
 import { useNampiContext } from "./useNampiContext";
 
 export const useEvent: FetchHook<Event> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "event", idLocal), event, paused);
+  return useFetch(buildPath(apiUrl, "event", idLocal), paused);
 };
 
 export const useEvents: FetchCollectionHook<Event, EventsQuery> = ({
@@ -38,12 +35,12 @@ export const useEvents: FetchCollectionHook<Event, EventsQuery> = ({
       sorter = sortByLabel;
       break;
   }
-  return useFetch(buildPath(apiUrl, "events"), event, query, sorter, paused);
+  return useFetch(buildPath(apiUrl, "events"), query, sorter, paused);
 };
 
 export const usePerson: FetchHook<Person> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "person", idLocal), person, paused);
+  return useFetch(buildPath(apiUrl, "person", idLocal), paused);
 };
 
 export const usePersons: FetchCollectionHook<Person, PersonQuery> = ({
@@ -60,10 +57,10 @@ export const usePersons: FetchCollectionHook<Person, PersonQuery> = ({
       sorter = sortByLabel;
       break;
   }
-  return useFetch(buildPath(apiUrl, "persons"), person, query, sorter, paused);
+  return useFetch(buildPath(apiUrl, "persons"), query, sorter, paused);
 };
 
 export const useUser = (): FetchResult<User> => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "user"), user);
+  return useFetch(buildPath(apiUrl, "user"));
 };
