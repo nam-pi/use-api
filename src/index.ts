@@ -1,5 +1,7 @@
 export { NampiProvider } from "components/NampiProvider";
 export {
+  useAspect,
+  useAspects,
   useEvent,
   useEvents,
   usePerson,
@@ -9,11 +11,15 @@ export {
 export { useAuth } from "hooks/useAuth";
 export { namespaces } from "namespaces";
 export type {
+  Aspect,
+  AspectsQuery,
   CollectionNav,
   Entity,
   Event,
+  EventsQuery,
   Item,
   MultilangText,
   Person,
+  PersonsQuery,
   User,
 } from "types";

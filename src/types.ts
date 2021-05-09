@@ -10,6 +10,13 @@ export interface Aspect extends Item {
   sameAs?: string[];
 }
 
+export interface AspectsQuery extends CollectionQuery {
+  /** What to order the aspects by */
+  orderBy?: "id" | "label";
+  /** Filter by participants of events the aspect is used in */
+  participant?: string;
+}
+
 /** An entity collection */
 export interface Collection<T extends Entity> extends Item {
   /** The url to the first page of partial collection results */
@@ -182,7 +189,7 @@ export interface Person extends Item {
 }
 
 /** Query parameters to fetch a partial persons collection */
-export interface PersonQuery extends CollectionQuery {
+export interface PersonsQuery extends CollectionQuery {
   /** What to order the persons by */
   orderBy?: "id" | "label";
   /** Filter by text content. Can by any text or regular expression */

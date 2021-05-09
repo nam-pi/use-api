@@ -2,10 +2,13 @@ import { format as fmt } from "date-fns";
 import { Event } from "nampi-use-api/bundle";
 
 export const serializeEventDates = (
-  events: undefined | Event[] = [],
+  events: undefined | Event | Event[] = [],
   format = "yyyy-MM-dd",
   separator = ", "
 ): string => {
+  if (events && !Array.isArray(events)) {
+    events = [events];
+  }
   const dates: string[] = [];
   for (let i = 0, length = events.length; i < length; i++) {
     const event = events[i];

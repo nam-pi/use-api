@@ -2,13 +2,15 @@ import { sortByEventDate } from "sorters/sortByEventDate";
 import { sortById } from "sorters/sortById";
 import { sortByLabel } from "sorters/sortByLabel";
 import {
+  Aspect,
+  AspectsQuery,
   Event,
   EventsQuery,
   FetchCollectionHook,
   FetchHook,
   FetchResult,
   Person,
-  PersonQuery,
+  PersonsQuery,
   SortFunction,
   User,
 } from "types";
@@ -16,6 +18,28 @@ import { buildPath } from "utils/buildPath";
 import { getDateString } from "utils/getDateString";
 import { useFetch } from "./useFetch";
 import { useNampiContext } from "./useNampiContext";
+
+export const useAspects: FetchCollectionHook<Aspect, AspectsQuery> = ({
+  paused,
+  query,
+}) => {
+  const { apiUrl } = useNampiContext();
+  let sorter: undefined | SortFunction<any> = sortById; // eslint-disable-line @typescript-eslint/no-explicit-any
+  switch (query.orderBy) {
+    case "id":
+      sorter = sortById;
+      break;
+    case "label":
+      sorter = sortByLabel;
+      break;
+  }
+  return useFetch(buildPath(apiUrl, "aspects"), query, sorter, paused);
+};
+
+export const useAspect: FetchHook<Aspect> = ({ idLocal, paused }) => {
+  const { apiUrl } = useNampiContext();
+  return useFetch(buildPath(apiUrl, "aspect", idLocal), paused);
+};
 
 export const useEvent: FetchHook<Event> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
@@ -31,6 +55,9 @@ export const useEvents: FetchCollectionHook<Event, EventsQuery> = ({
   switch (query.orderBy) {
     case "date":
       sorter = sortByEventDate;
+      break;
+    case "id":
+      sorter = sortById;
       break;
     case "label":
       sorter = sortByLabel;
@@ -52,7 +79,7 @@ export const usePerson: FetchHook<Person> = ({ idLocal, paused }) => {
   return useFetch(buildPath(apiUrl, "person", idLocal), paused);
 };
 
-export const usePersons: FetchCollectionHook<Person, PersonQuery> = ({
+export const usePersons: FetchCollectionHook<Person, PersonsQuery> = ({
   paused,
   query,
 }) => {
