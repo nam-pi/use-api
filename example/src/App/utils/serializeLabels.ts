@@ -1,7 +1,9 @@
 import { MultilangText } from "nampi-use-api/bundle";
 
 export const serializeLabels = <
-  T extends { labels: MultilangText[] } = { labels: MultilangText[] }
+  T extends { labels?: undefined | MultilangText[] } = {
+    labels?: undefined | MultilangText[];
+  }
 >(
-  data: T
-): string => data.labels.map((l) => l.value).join(", ");
+  data: undefined | T
+): string => (data?.labels ? data.labels.map((l) => l.value).join(", ") : "");

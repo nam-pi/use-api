@@ -2,6 +2,7 @@ export { NampiProvider } from "components/NampiProvider";
 export {
   useAspect,
   useAspects,
+  useClasses,
   useEvent,
   useEvents,
   usePerson,
@@ -13,6 +14,8 @@ export { namespaces } from "namespaces";
 export type {
   Aspect,
   AspectsQuery,
+  Class,
+  ClassesQuery,
   CollectionNav,
   Entity,
   Event,

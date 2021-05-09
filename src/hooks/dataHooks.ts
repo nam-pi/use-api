@@ -4,6 +4,8 @@ import { sortByLabel } from "sorters/sortByLabel";
 import {
   Aspect,
   AspectsQuery,
+  Class,
+  ClassesQuery,
   Event,
   EventsQuery,
   FetchCollectionHook,
@@ -39,6 +41,23 @@ export const useAspects: FetchCollectionHook<Aspect, AspectsQuery> = ({
 export const useAspect: FetchHook<Aspect> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
   return useFetch(buildPath(apiUrl, "aspect", idLocal), paused);
+};
+
+export const useClasses: FetchCollectionHook<Class, ClassesQuery> = ({
+  paused,
+  query,
+}) => {
+  const { apiUrl } = useNampiContext();
+  let sorter: undefined | SortFunction<any> = sortById; // eslint-disable-line @typescript-eslint/no-explicit-any
+  switch (query.orderBy) {
+    case "id":
+      sorter = sortById;
+      break;
+    case "label":
+      sorter = sortByLabel;
+      break;
+  }
+  return useFetch(buildPath(apiUrl, "classes"), query, sorter, paused);
 };
 
 export const useEvent: FetchHook<Event> = ({ idLocal, paused }) => {

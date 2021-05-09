@@ -17,6 +17,15 @@ export interface AspectsQuery extends CollectionQuery {
   participant?: string;
 }
 
+export type Class = Item;
+
+export interface ClassesQuery extends CollectionQuery {
+  /** What to order the classes by */
+  orderBy?: "id" | "label";
+  /** Filter by parent of all *rdfs:subClassOf* relations the class has */
+  parent?: string;
+}
+
 /** An entity collection */
 export interface Collection<T extends Entity> extends Item {
   /** The url to the first page of partial collection results */
@@ -47,6 +56,8 @@ export interface CollectionNav {
 
 /** Query parameters to fetch a partial collection */
 export interface CollectionQuery extends Record<string, unknown> {
+  /** Filter by type */
+  type?: string;
   /** Limits the number of returned results to the given number */
   limit?: number;
   /** Starts to return results from the given offset */
@@ -68,7 +79,7 @@ export interface Entity {
   /** The local part of the id. Example: "12345" of "http://example.com/data/12345" */
   idLocal: string;
   /** The labels of the entity */
-  labels: MultilangText[];
+  labels?: MultilangText[];
   /** The RDF type iris */
   types: string[];
 }
