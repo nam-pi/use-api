@@ -3,7 +3,7 @@ import { MaybeNodes, Normalizer } from "types";
 import { addLinks } from "../helpers/addLinks";
 import { normalizeNode } from "../helpers/normalizeNode";
 
-const { core } = namespaces;
+const { core, schema } = namespaces;
 
 export const normalizePerson: Normalizer = (
   node,
@@ -32,5 +32,16 @@ export const normalizePerson: Normalizer = (
       }
     }
     addLinks(normalized, "diesIn", deaths, blanks);
+  }
+  const sameAsNodes = node[schema.sameAs] as MaybeNodes;
+  const sameAs: string[] = [];
+  if (sameAsNodes) {
+    const sameAsArray = Array.isArray(sameAsNodes)
+      ? sameAsNodes
+      : [sameAsNodes];
+    for (let i = 0, length = sameAsArray.length; i < length; i++) {
+      sameAs.push(sameAsNodes[0]["@id"] as string);
+    }
+    normalized.sameAs = sameAs;
   }
 };

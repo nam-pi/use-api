@@ -9,6 +9,7 @@ import {
   Entity,
   FetchCollectionResult,
   FetchResult,
+  NormalizeResult,
   SortFunction,
   Timeout,
 } from "types";
@@ -107,6 +108,44 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
     });
   }, []);
 
+  const mapResult = useCallback(
+    (result: undefined | NormalizeResult) => {
+      if (result?.types.includes(namespaces.hydra.Collection)) {
+        // Map collection data
+        const {
+          members,
+          first,
+          last,
+          id,
+          next,
+          previous,
+          total,
+        } = (result as unknown) as Collection<T>;
+        return {
+          data: sorter && total > 0 ? members.sort(sorter) : members,
+          nav: {
+            first:
+              first && id !== first
+                ? () => mergeSearchParams(first)
+                : undefined,
+            previous: previous ? () => mergeSearchParams(previous) : undefined,
+            next: next ? () => mergeSearchParams(next) : undefined,
+            last:
+              last && id !== last ? () => mergeSearchParams(last) : undefined,
+          },
+          page: getPage(id),
+          total,
+        } as FetchCollectionResult<T>;
+      } else {
+        // Map single class data
+        return {
+          data: (result as unknown) as T,
+        } as Partial<FetchResult<T>>;
+      }
+    },
+    [mergeSearchParams, sorter]
+  );
+
   const doFetch = useCallback(
     async (url: string) => {
       const config: RequestInit = { ...DEFAULT_CONFIG };
@@ -125,42 +164,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
         .then((response) => response.json())
         .then(expand)
         .then(normalize)
-        .then((v) => {
-          if (v?.types.includes(namespaces.hydra.Collection)) {
-            // Map collection data
-            const {
-              members,
-              first,
-              last,
-              id,
-              next,
-              previous,
-              total,
-            } = (v as unknown) as Collection<T>;
-            return {
-              data: sorter ? members.sort(sorter) : members,
-              nav: {
-                first:
-                  first && id !== first
-                    ? () => mergeSearchParams(first)
-                    : undefined,
-                previous: previous
-                  ? () => mergeSearchParams(previous)
-                  : undefined,
-                next: next ? () => mergeSearchParams(next) : undefined,
-                last:
-                  last && id !== last
-                    ? () => mergeSearchParams(last)
-                    : undefined,
-                page: getPage(id),
-              },
-              total,
-            };
-          } else {
-            // Map single class data
-            return { data: (v as unknown) as T };
-          }
-        })
+        .then(mapResult)
         .then(setState)
         .catch((e) => {
           if (e.message === "Remote server responded with a status of 401") {
@@ -173,14 +177,8 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
           setLoading(false);
         });
     },
-    [keycloak, mergeSearchParams, searchParams, sorter]
+    [keycloak, mapResult, searchParams]
   );
-
-  useEffect(() => {
-    if (initialized && !query && !paused) {
-      doFetch(baseUrl);
-    }
-  }, [baseUrl, doFetch, initialized, paused, query]);
 
   // Update the search params state when receiving new search params after a timeout
   useEffect(() => {
@@ -199,6 +197,13 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
       }
     }, searchTimeout);
   }, [initialized, paused, query, searchTimeout]);
+
+  // Fetch result for non-query uses
+  useEffect(() => {
+    if (initialized && !query && !paused) {
+      doFetch(baseUrl);
+    }
+  }, [baseUrl, doFetch, initialized, paused, query]);
 
   // Fetch a new state when dirty
   useEffect(() => {

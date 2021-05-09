@@ -13,6 +13,7 @@ import {
   User,
 } from "types";
 import { buildPath } from "utils/buildPath";
+import { getDateString } from "utils/getDateString";
 import { useFetch } from "./useFetch";
 import { useNampiContext } from "./useNampiContext";
 
@@ -34,6 +35,14 @@ export const useEvents: FetchCollectionHook<Event, EventsQuery> = ({
     case "label":
       sorter = sortByLabel;
       break;
+  }
+  if (query.startDate || query.endDate) {
+    const dates = `${getDateString(query.startDate)}-${getDateString(
+      query.endDate
+    )}`;
+    delete query.startDate;
+    delete query.endDate;
+    query.dates = dates;
   }
   return useFetch(buildPath(apiUrl, "events"), query, sorter, paused);
 };

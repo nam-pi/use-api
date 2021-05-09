@@ -7,6 +7,7 @@ export {
   useUser,
 } from "hooks/dataHooks";
 export { useAuth } from "hooks/useAuth";
+export { namespaces } from "namespaces";
 export type {
   CollectionNav,
   Entity,

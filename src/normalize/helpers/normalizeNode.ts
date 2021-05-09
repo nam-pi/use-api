@@ -1,5 +1,6 @@
 import { NodeObject } from "jsonld";
 import { namespaces } from "namespaces";
+import { normalizeAspect } from "normalize/normalizers/normalizeAspect";
 import { normalizeCollection } from "normalize/normalizers/normalizeCollection";
 import { normalizeDate } from "normalize/normalizers/normalizeDate";
 import { normalizeEvent } from "normalize/normalizers/normalizeEvent";
@@ -12,6 +13,8 @@ const { api, core, hydra } = namespaces;
 
 const mapNormalizer = (type: undefined | string): Normalizer => {
   switch (type) {
+    case core.aspect:
+      return normalizeAspect;
     case hydra.Collection:
       return normalizeCollection;
     case core.person:
