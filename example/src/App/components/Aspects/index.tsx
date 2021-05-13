@@ -1,8 +1,7 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { usePersons } from "nampi-use-api/bundle";
+import { useAspects } from "nampi-use-api/bundle";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { serializeEventDates } from "../../utils/serializeEventDates";
 import { serializeLabels } from "../../utils/serializeLabels";
 import { Heading } from "../Heading";
 import { Icon } from "../Icon";
@@ -10,14 +9,14 @@ import { Input } from "../Input";
 import { ItemNav } from "../ItemNav";
 import { LoadingPlaceholder } from "../LoadingPlaceholder";
 
-export const Persons = () => {
+export const Aspects = () => {
   const [text, setText] = useState<string>("");
-  const { initialized, loading, data, nav, page, total } = usePersons({
+  const { initialized, loading, data, nav, page, total } = useAspects({
     query: { orderBy: "label", text },
   });
   return (
     <div>
-      <Heading>Persons{total !== undefined ? ` (${total})` : ""}</Heading>
+      <Heading>Aspects{total !== undefined ? ` (${total})` : ""}</Heading>
       <div className="my-4">
         <Icon icon={faSearch} />
         <Input
@@ -38,18 +37,17 @@ export const Persons = () => {
         <ul>
           {data.map((person) => {
             const label = serializeLabels(person);
-            const born = serializeEventDates(person.bornIn, "Y");
             return (
               <li key={person.idLocal}>
-                <Link to={"person/" + person.idLocal} className="text-gray-800">
-                  {label + (born ? ` (${born})` : "")}
+                <Link to={"aspect/" + person.idLocal} className="text-gray-800">
+                  {label}
                 </Link>
               </li>
             );
           })}
         </ul>
       ) : (
-        "No persons found"
+        "No aspects found"
       )}
     </div>
   );

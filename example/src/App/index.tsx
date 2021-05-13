@@ -1,5 +1,9 @@
 import { useAuth } from "nampi-use-api/bundle";
 import { Route, Router, Switch } from "react-router";
+import { Aspect } from "./components/Aspect";
+import { Aspects } from "./components/Aspects";
+import { Event } from "./components/Event";
+import { Events } from "./components/Events";
 import { Home } from "./components/Home";
 import { LoadingPlaceholder } from "./components/LoadingPlaceholder";
 import { Login } from "./components/Login";
@@ -23,6 +27,10 @@ export const App = () => {
             <Route exact path="/login" component={Login} />
             <Route exact path="/persons" component={Persons} />
             <Route exact path="/person/:idLocal" component={Person} />
+            <Route exact path="/events" component={Events} />
+            <Route exact path="/event/:idLocal" component={Event} />
+            <Route exact path="/aspects" component={Aspects} />
+            <Route exact path="/aspect/:idLocal" component={Aspect} />
             <PrivateRoute exact path="/profile" component={Profile} />
             <Route path="*" component={NoMatch} />
           </Switch>

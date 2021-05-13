@@ -2,6 +2,9 @@ import { Entity, SortFunction } from "types";
 
 const getLabel = (e: Entity): string => {
   let str = "";
+  if (!e.labels) {
+    return e.idLocal;
+  }
   for (let i = 0, length = e.labels.length; i < length; i++) {
     str += e.labels[i].value;
   }

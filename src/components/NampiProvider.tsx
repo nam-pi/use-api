@@ -1,6 +1,6 @@
 import Keycloak, { KeycloakInitOptions } from "keycloak-js";
 import { ReactNode, useEffect, useMemo, useState } from "react";
-import { NampiConfig } from "types";
+import { ProviderConfig } from "types";
 import { DEFAULT_SEARCH_TIMEOUT } from "../constants";
 import { NampiContext } from "./NampiContext";
 
@@ -13,7 +13,7 @@ export const NampiProvider = ({
   realm,
   silentSsoUri,
   sso,
-}: { children: ReactNode } & NampiConfig): JSX.Element => {
+}: { children: ReactNode } & ProviderConfig): JSX.Element => {
   const [initialized, setInitialized] = useState<boolean>(false);
   const keycloak = useMemo(
     () => Keycloak({ url: auth, realm: realm || "", clientId: client || "" }),

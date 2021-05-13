@@ -14,6 +14,7 @@ export const namespaces = {
   },
 
   core: {
+    aspect: `${core}aspect`,
     author: `${core}author`,
     date: `${core}date`,
     diesIn: `${core}dies_in`,
@@ -21,11 +22,13 @@ export const namespaces = {
     hasParticipant: `${core}has_participant`,
     hasSortingDate: `${core}has_sorting_date`,
     hasXsdDateTime: `${core}has_xsd_date_time`,
+    hasXsdString: `${core}has_xsd_string`,
     isBornIn: `${core}is_born_in`,
     person: `${core}person`,
     takesPlaceNotEarlierThan: `${core}takes_place_not_earlier_than`,
     takesPlaceNotLaterThan: `${core}takes_place_not_later_than`,
     takesPlaceOn: `${core}takes_place_on`,
+    usesAspect: `${core}uses_aspect`,
   },
 
   hydra: {

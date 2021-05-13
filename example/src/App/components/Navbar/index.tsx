@@ -13,6 +13,8 @@ export const Navbar = () => {
         <Link to="/" className="font-semibold text-2xl">
           <NampiLogo className="h-10 bg-white p-1 rounded" />
         </Link>
+        <Link to="/aspects">Aspects</Link>
+        <Link to="/events">Events</Link>
         <Link to="/persons">Persons</Link>
       </div>
       <div>
