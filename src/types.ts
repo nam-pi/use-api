@@ -23,7 +23,7 @@ export interface ClassesQuery extends CollectionQuery {
   /** What to order the classes by */
   orderBy?: "id" | "label";
   /** Filter by parent of all *rdfs:subClassOf* relations the class has */
-  parent?: string;
+  ancestor?: string;
 }
 
 /** An entity collection */

@@ -23,19 +23,19 @@ export const normalizeCollection: Normalizer = (
   if (view) {
     const first = view[0][hydra.first] as MaybeNodes;
     if (first) {
-      normalized.first = first[0]?.["@value"];
+      normalized.first = first[0]?.["@id"];
     }
     const previous = view[0][hydra.previous] as MaybeNodes;
     if (previous) {
-      normalized.previous = previous[0]?.["@value"];
+      normalized.previous = previous[0]?.["@id"];
     }
     const next = view[0][hydra.next] as MaybeNodes;
     if (next) {
-      normalized.next = next[0]?.["@value"];
+      normalized.next = next[0]?.["@id"];
     }
     const last = view[0][hydra.last] as MaybeNodes;
     if (last) {
-      normalized.last = last[0]?.["@value"];
+      normalized.last = last[0]?.["@id"];
     }
   }
   const total = node[hydra.totalItems] as MaybeNodes;

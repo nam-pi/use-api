@@ -121,6 +121,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
           previous,
           total,
         } = (result as unknown) as Collection<T>;
+        console.log(first, last, next, previous);
         return {
           data: sorter && total > 0 ? members.sort(sorter) : members,
           nav: {

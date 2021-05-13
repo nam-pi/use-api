@@ -20,7 +20,7 @@ export const AspectParentSelect = ({ onChange = () => {} }: Props) => {
     query: {
       limit: 1000,
       orderBy: "label",
-      parent: "https://purl.org/nampi/owl/core#aspect",
+      ancestor: "https://purl.org/nampi/owl/core#aspect",
     },
   });
 
