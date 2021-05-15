@@ -1,20 +1,18 @@
 import { namespaces } from "namespaces";
 import { MaybeNodes, Normalizer } from "types";
 
-const { core, schema } = namespaces;
+const { core } = namespaces;
 
 export const normalizeAspect: Normalizer = (node, normalized) => {
-  const value = (node[core.hasXsdString] as MaybeNodes)?.[0]?.["@value"];
+  const value = (node[core.hasText] as MaybeNodes)?.[0]?.["@value"];
   if (value) {
-    const language = (node[core.hasXsdString] as MaybeNodes)?.[0]?.[
-      "@language"
-    ];
+    const language = (node[core.hasText] as MaybeNodes)?.[0]?.["@language"];
     normalized.text = {
       value,
       language,
     };
   }
-  const sameAsNodes = node[schema.sameAs] as MaybeNodes;
+  const sameAsNodes = node[core.sameAs] as MaybeNodes;
   const sameAs: string[] = [];
   if (sameAsNodes) {
     const sameAsArray = Array.isArray(sameAsNodes)
