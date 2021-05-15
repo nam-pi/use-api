@@ -3,7 +3,7 @@ import { MaybeNodes, Normalizer } from "types";
 import { addValue } from "../helpers/addValue";
 import { getIdLocal } from "../helpers/getIdLocal";
 
-const { schema } = namespaces;
+const { core, schema } = namespaces;
 
 export const normalizeUser: Normalizer = (node, normalized) => {
   addValue(node, normalized, schema.email, "email");
@@ -11,7 +11,7 @@ export const normalizeUser: Normalizer = (node, normalized) => {
   addValue(node, normalized, schema.givenName, "givenName");
   addValue(node, normalized, schema.identifier, "identifier");
   addValue(node, normalized, schema.name, "username");
-  const authorNode = node[schema.sameAs] as MaybeNodes;
+  const authorNode = node[core.sameAs] as MaybeNodes;
   if (authorNode) {
     const idAuthor = authorNode[0]["@id"] as string;
     normalized.idAuthor = idAuthor;
