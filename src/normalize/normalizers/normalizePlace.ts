@@ -3,7 +3,7 @@ import { MaybeNodes, Normalizer } from "types";
 
 const { core } = namespaces;
 
-export const normalizeAspect: Normalizer = (node, normalized) => {
+export const normalizePlace: Normalizer = (node, normalized) => {
   const value = (node[core.hasText.iri] as MaybeNodes)?.[0]?.["@value"];
   if (value) {
     const language = (node[core.hasText.iri] as MaybeNodes)?.[0]?.["@language"];

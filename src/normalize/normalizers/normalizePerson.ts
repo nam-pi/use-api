@@ -11,7 +11,7 @@ export const normalizePerson: Normalizer = (
   cache,
   blanks
 ) => {
-  const isBornInNodes = node[core.isBornIn] as MaybeNodes;
+  const isBornInNodes = node[core.isBornIn.iri] as MaybeNodes;
   if (Array.isArray(isBornInNodes)) {
     const births: string[] = [];
     for (let i = 0, length = isBornInNodes.length; i < length; i++) {
@@ -22,7 +22,7 @@ export const normalizePerson: Normalizer = (
     }
     addLinks(normalized, "bornIn", births, blanks);
   }
-  const deathNodes = node[core.diesIn] as MaybeNodes;
+  const deathNodes = node[core.diesIn.iri] as MaybeNodes;
   if (Array.isArray(deathNodes)) {
     const deaths: string[] = [];
     for (let i = 0, length = deathNodes.length; i < length; i++) {
@@ -33,7 +33,7 @@ export const normalizePerson: Normalizer = (
     }
     addLinks(normalized, "diesIn", deaths, blanks);
   }
-  const sameAsNodes = node[core.sameAs] as MaybeNodes;
+  const sameAsNodes = node[core.sameAs.iri] as MaybeNodes;
   const sameAs: string[] = [];
   if (sameAsNodes) {
     const sameAsArray = Array.isArray(sameAsNodes)

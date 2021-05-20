@@ -110,7 +110,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
 
   const mapResult = useCallback(
     (result: undefined | NormalizeResult) => {
-      if (result?.types.includes(namespaces.hydra.Collection)) {
+      if (result?.types.includes(namespaces.hydra.Collection.iri)) {
         // Map collection data
         const {
           members,
@@ -121,7 +121,6 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
           previous,
           total,
         } = (result as unknown) as Collection<T>;
-        console.log(first, last, next, previous);
         return {
           data: sorter && total > 0 ? members.sort(sorter) : members,
           nav: {

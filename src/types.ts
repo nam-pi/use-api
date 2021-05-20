@@ -90,14 +90,16 @@ export interface Event extends Item {
   sort?: string;
   /** The exact date the event happened */
   exact?: string;
-  /** The earliest possible date an event could have happened */
+  /** The earliest possible date the event could have happened */
   earliest?: string;
-  /** The latest possible date an event could have happened */
+  /** The latest possible date the event could have happened */
   latest?: string;
   /** All participants of the event */
   participants: Person[];
   /** All aspects of the event */
   aspects: Aspect[];
+  /** The place where the event took place */
+  place?: Place;
 }
 
 /** Query parameters to fetch a partial events collection */
@@ -163,22 +165,21 @@ export interface MultilangText {
   language?: string;
 }
 
-/** The NAMPI Provider configuration */
-export interface ProviderConfig {
-  /** * The URL of the NAMPI API endpoint * */
-  api: string;
-  /** * The URL of the NAMPI Keycloak auth endpoint.  */
-  auth?: string;
-  /** * The name of the Keycloak client to use. If not present in combination with "realm", the login and logout auth functions will throw an error on use.  */
-  client?: string;
-  /** * The name of the Keycloak realm. If not present in combination with "client", the login and logout auth functions will throw an error on use.  */
-  realm?: string;
-  /** * The timeout in ms to bundle search box entries when live searching so the server doesn't get flooded. Defaults to 200ms */
-  searchTimeout?: number;
-  /** * Whether or not to to keep users logged in over browser restarts */
-  sso?: boolean;
-  /** * Enables the silent sso check. If enabled, the url to a site on the NAMPI app with special content needs to be provided.  * The content is described in the Keycloak documentation: https://github.com/keycloak/keycloak-documentation/blob/master/securing_apps/topics/oidc/javascript-adapter.adoc */
-  silentSsoUri?: string;
+/** A place */
+export interface Place extends Item {
+  /** Items, possibly in other databases, that are the same as this place. */
+  sameAs?: string[];
+}
+
+export interface RDFResource {
+  equals: (value: string) => boolean;
+  iri: string;
+  localName: string;
+}
+
+export interface Namespace {
+  iri: string;
+  resource: (localName: string) => RDFResource;
 }
 
 export interface NormalizeResult extends Record<string, unknown> {
@@ -207,6 +208,24 @@ export interface PersonsQuery extends CollectionQuery {
   text?: string;
   /** Filter by person type. Can be any subtype of *https://purl.org/nampi/owl/core#person* that is part of the connected ontologies */
   type?: string;
+}
+
+/** The NAMPI Provider configuration */
+export interface ProviderConfig {
+  /** * The URL of the NAMPI API endpoint * */
+  api: string;
+  /** * The URL of the NAMPI Keycloak auth endpoint.  */
+  auth?: string;
+  /** * The name of the Keycloak client to use. If not present in combination with "realm", the login and logout auth functions will throw an error on use.  */
+  client?: string;
+  /** * The name of the Keycloak realm. If not present in combination with "client", the login and logout auth functions will throw an error on use.  */
+  realm?: string;
+  /** * The timeout in ms to bundle search box entries when live searching so the server doesn't get flooded. Defaults to 200ms */
+  searchTimeout?: number;
+  /** * Whether or not to to keep users logged in over browser restarts */
+  sso?: boolean;
+  /** * Enables the silent sso check. If enabled, the url to a site on the NAMPI app with special content needs to be provided.  * The content is described in the Keycloak documentation: https://github.com/keycloak/keycloak-documentation/blob/master/securing_apps/topics/oidc/javascript-adapter.adoc */
+  silentSsoUri?: string;
 }
 
 export interface UseAuth
