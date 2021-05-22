@@ -1,7 +1,8 @@
 import Keycloak, { KeycloakInitOptions } from "keycloak-js";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { ProviderConfig } from "types";
-import { DEFAULT_SEARCH_TIMEOUT } from "../constants";
+import { deepMerge } from "utils/deepMerge";
+import { DEFAULT_PROPERTY_MAP, DEFAULT_SEARCH_TIMEOUT } from "../constants";
 import { NampiContext } from "./NampiContext";
 
 export const NampiProvider = ({
@@ -9,6 +10,7 @@ export const NampiProvider = ({
   api,
   auth,
   client,
+  propertyMap,
   searchTimeout = DEFAULT_SEARCH_TIMEOUT,
   realm,
   silentSsoUri,
@@ -48,6 +50,7 @@ export const NampiProvider = ({
     <NampiContext.Provider
       value={{
         apiUrl: api,
+        propertyMap: deepMerge(propertyMap || {}, DEFAULT_PROPERTY_MAP),
         searchTimeout,
         initialized,
         keycloak,

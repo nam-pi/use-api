@@ -1,4 +1,3 @@
-import { DEFAULT_PROPERTY_MAP } from "constants";
 import { expand } from "jsonld";
 import { namespaces } from "namespaces";
 import { normalize } from "normalize";
@@ -73,7 +72,12 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
   const dirty = useRef<boolean>(false);
   const inputTimeout = useRef<Timeout>();
   const oldQuery = useRef<string>("");
-  const { initialized, keycloak, searchTimeout } = useNampiContext();
+  const {
+    initialized,
+    keycloak,
+    propertyMap,
+    searchTimeout,
+  } = useNampiContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [state, setState] = useState<State<T>>({});
   const [searchParams, setSearchParams] = useState<undefined | URLSearchParams>(
@@ -156,7 +160,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
         .catch(() => fetch(fullUrl, DEFAULT_CONFIG))
         .then((response) => response.json())
         .then(expand)
-        .then((json) => normalize(json, DEFAULT_PROPERTY_MAP))
+        .then((json) => normalize(json, propertyMap))
         .then(mapResult)
         .then(setState)
         .catch((e) => {
@@ -170,7 +174,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
           setLoading(false);
         });
     },
-    [keycloak, mapResult, searchParams]
+    [keycloak, mapResult, propertyMap, searchParams]
   );
 
   // Update the search params state when receiving new search params after a timeout

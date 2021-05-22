@@ -77,6 +77,7 @@ export interface ContextState {
   apiUrl: string;
   initialized: boolean;
   keycloak: KeycloakInstance;
+  propertyMap: PropertyMap;
   searchTimeout: number;
 }
 
@@ -264,6 +265,8 @@ export interface ProviderConfig {
   auth?: string;
   /** * The name of the Keycloak client to use. If not present in combination with "realm", the login and logout auth functions will throw an error on use.  */
   client?: string;
+  /** An optional custom property map to use when normalizing responses */
+  propertyMap?: PropertyMap;
   /** * The name of the Keycloak realm. If not present in combination with "client", the login and logout auth functions will throw an error on use.  */
   realm?: string;
   /** * The timeout in ms to bundle search box entries when live searching so the server doesn't get flooded. Defaults to 200ms */
