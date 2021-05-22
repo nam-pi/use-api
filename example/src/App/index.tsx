@@ -11,6 +11,8 @@ import { Navbar } from "./components/Navbar";
 import { NoMatch } from "./components/NoMatch";
 import { Person } from "./components/Person";
 import { Persons } from "./components/Persons";
+import { Place } from "./components/Place";
+import { Places } from "./components/Places";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { Profile } from "./components/Profile";
 import { HISTORY } from "./constants";
@@ -31,6 +33,8 @@ export const App = () => {
             <Route exact path="/event/:idLocal" component={Event} />
             <Route exact path="/aspects" component={Aspects} />
             <Route exact path="/aspect/:idLocal" component={Aspect} />
+            <Route exact path="/places" component={Places} />
+            <Route exact path="/place/:idLocal" component={Place} />
             <PrivateRoute exact path="/profile" component={Profile} />
             <Route path="*" component={NoMatch} />
           </Switch>

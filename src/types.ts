@@ -145,7 +145,7 @@ export type FetchCollectionHook<T, Q> = <
 }) => FetchCollectionResult<T & ExtendedType>;
 
 /** The result of an Entity collection fetch query */
-export interface FetchCollectionResult<T> extends FetchResult<T[]> {
+export interface FetchCollectionResult<T = Item> extends FetchResult<T[]> {
   /** Navigation to different parts of the collection */
   nav: CollectionNav;
   /** The current page of the collection */
@@ -161,7 +161,7 @@ export type FetchHook<T> = <
 }) => FetchResult<T & ExtendedType>;
 
 /** The result of a single item fetch query */
-export interface FetchResult<T> {
+export interface FetchResult<T = Item> {
   /** Whether or not the API connection is already initialized */
   initialized: boolean;
   /** Whether or not the result is currently being fetched */
@@ -253,6 +253,16 @@ export interface PersonsQuery extends CollectionQuery {
 export interface Place extends Item {
   /** Items, possibly in other databases, that are the same as this place. */
   sameAs?: string[];
+}
+
+/** Query parameters to fetch a partial places collection */
+export interface PlacesQuery extends CollectionQuery {
+  /** What to order the places by */
+  orderBy?: "id" | "label";
+  /** Filter by text content. Can by any text or regular expression */
+  text?: string;
+  /** Filter by place type. Can be any subtype of *https://purl.org/nampi/owl/core#place* that is part of the connected ontologies */
+  type?: string;
 }
 
 /** A map that gives property keys that should replace the actual item rdf property iris when normalize JSON-LD responses. */

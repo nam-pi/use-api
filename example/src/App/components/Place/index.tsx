@@ -1,4 +1,4 @@
-import { useEvent } from "nampi-use-api/bundle";
+import { usePlace } from "nampi-use-api/bundle";
 import { useParams } from "react-router";
 import { ItemPage } from "../ItemPage";
 
@@ -6,8 +6,8 @@ interface Params {
   idLocal: string;
 }
 
-export const Event = () => {
+export const Place = () => {
   const { idLocal } = useParams<Params>();
-  const { data } = useEvent({ idLocal });
-  return <ItemPage data={data} title="Event" />;
+  const { data } = usePlace({ idLocal });
+  return <ItemPage data={data} title="Place" />;
 };

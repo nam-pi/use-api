@@ -7,6 +7,8 @@ export {
   useEvents,
   usePerson,
   usePersons,
+  usePlace,
+  usePlaces,
   useUser,
 } from "hooks/dataHooks";
 export { useAuth } from "hooks/useAuth";
@@ -20,6 +22,8 @@ export type {
   Entity,
   Event,
   EventsQuery,
+  FetchCollectionResult,
+  FetchResult,
   Item,
   Literal,
   LiteralDateTime,
@@ -27,5 +31,7 @@ export type {
   LiteralString,
   Person,
   PersonsQuery,
+  Place,
+  PlacesQuery,
   User,
 } from "types";

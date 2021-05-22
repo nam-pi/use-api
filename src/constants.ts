@@ -43,6 +43,9 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [hydra.member.iri]: "members",
     [hydra.totalItems.iri]: "total",
   },
+  [rdfs.Class.iri]: {
+    [rdfs.label.iri]: "labels",
+  },
 };
 
 export const DEFAULT_SEARCH_TIMEOUT = 200;

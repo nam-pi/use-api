@@ -89,6 +89,7 @@ export const namespaces = {
   },
 
   rdfs: {
+    Class: rdfs.resource("Class"),
     label: rdfs.resource("label"),
   },
 

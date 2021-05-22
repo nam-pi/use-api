@@ -16,6 +16,7 @@ export const Navbar = () => {
         <Link to="/aspects">Aspects</Link>
         <Link to="/events">Events</Link>
         <Link to="/persons">Persons</Link>
+        <Link to="/places">Places</Link>
       </div>
       <div>
         {initialized && !loading ? (

@@ -13,6 +13,7 @@ import {
   FetchResult,
   Person,
   PersonsQuery,
+  Place,
   SortFunction,
   User,
 } from "types";
@@ -113,6 +114,28 @@ export const usePersons: FetchCollectionHook<Person, PersonsQuery> = ({
       break;
   }
   return useFetch(buildPath(apiUrl, "persons"), query, sorter, paused);
+};
+
+export const usePlace: FetchHook<Place> = ({ idLocal, paused }) => {
+  const { apiUrl } = useNampiContext();
+  return useFetch(buildPath(apiUrl, "place", idLocal), paused);
+};
+
+export const usePlaces: FetchCollectionHook<Place, PersonsQuery> = ({
+  paused,
+  query,
+}) => {
+  const { apiUrl } = useNampiContext();
+  let sorter: undefined | SortFunction<any> = sortById; // eslint-disable-line @typescript-eslint/no-explicit-any
+  switch (query.orderBy) {
+    case "id":
+      sorter = sortById;
+      break;
+    case "label":
+      sorter = sortByLabel;
+      break;
+  }
+  return useFetch(buildPath(apiUrl, "places"), query, sorter, paused);
 };
 
 export const useUser = (): FetchResult<User> => {
