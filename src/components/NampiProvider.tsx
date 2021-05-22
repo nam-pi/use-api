@@ -4,7 +4,6 @@ import { ProviderConfig } from "types";
 import { deepMerge } from "utils/deepMerge";
 import { DEFAULT_PROPERTY_MAP, DEFAULT_SEARCH_TIMEOUT } from "../constants";
 import { NampiContext } from "./NampiContext";
-
 export const NampiProvider = ({
   children,
   api,

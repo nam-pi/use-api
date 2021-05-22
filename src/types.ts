@@ -137,10 +137,12 @@ export interface EventsQuery extends CollectionQuery {
   text?: string;
 }
 
-export type FetchCollectionHook<T, Q> = (config: {
+export type FetchCollectionHook<T, Q> = <
+  ExtendedType extends Record<string, unknown> = Record<string, never>
+>(config: {
   paused?: boolean;
   query: Q;
-}) => FetchCollectionResult<T>;
+}) => FetchCollectionResult<T & ExtendedType>;
 
 /** The result of an Entity collection fetch query */
 export interface FetchCollectionResult<T> extends FetchResult<T[]> {
@@ -151,11 +153,12 @@ export interface FetchCollectionResult<T> extends FetchResult<T[]> {
   /** The total number of results (members) of the collection */
   total: undefined | number;
 }
-
-export type FetchHook<T> = (config: {
+export type FetchHook<T> = <
+  ExtendedType extends Record<string, unknown> = Record<string, never>
+>(config: {
   idLocal: string;
-  paused?: boolean;
-}) => FetchResult<T>;
+  paused?: boolean | undefined;
+}) => FetchResult<T & ExtendedType>;
 
 /** The result of a single item fetch query */
 export interface FetchResult<T> {
