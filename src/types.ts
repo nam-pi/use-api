@@ -5,7 +5,7 @@ import { namespaces } from "namespaces";
 /** An aspect */
 export interface Aspect extends Item {
   /** The text content of the aspect */
-  text?: MultilangText;
+  text?: LiteralString;
   /** Items, possibly in other databases, that are the same as this aspect. */
   sameAs?: string[];
 }
@@ -16,6 +16,10 @@ export interface AspectsQuery extends CollectionQuery {
   /** Filter by participants of events the aspect is used in */
   participant?: string;
 }
+
+export type Blanks = Record<string, string>;
+
+export type Cache = Record<string, Normalized>;
 
 export type Class = Item;
 
@@ -36,6 +40,8 @@ export interface Collection<T extends Entity> extends Item {
   members: T[];
   /** The url to the next page of partial collection results */
   next: undefined | string;
+  /** The current page */
+  page: number;
   /** The url to the previous page of partial collection results */
   previous: undefined | string;
   /** The total number of results */
@@ -79,7 +85,7 @@ export interface Entity {
   /** The local part of the id. Example: "12345" of "http://example.com/data/12345" */
   idLocal: string;
   /** The labels of the entity */
-  labels?: MultilangText[];
+  labels?: LiteralString[];
   /** The RDF type iris */
   types: string[];
 }
@@ -87,13 +93,15 @@ export interface Entity {
 /** An event */
 export interface Event extends Item {
   /** The sorting date for the event, to be used when sorting the event as part of a list */
-  sort?: string;
+  sort?: Date;
   /** The exact date the event happened */
-  exact?: string;
+  exact?: Date;
   /** The earliest possible date the event could have happened */
-  earliest?: string;
+  earliest?: Date;
   /** The latest possible date the event could have happened */
-  latest?: string;
+  latest?: Date;
+  /** The main participant of the event */
+  mainParticipant: Person;
   /** All participants of the event */
   participants: Person[];
   /** All aspects of the event */
@@ -128,6 +136,11 @@ export interface EventsQuery extends CollectionQuery {
   text?: string;
 }
 
+export type FetchCollectionHook<T, Q> = (config: {
+  paused?: boolean;
+  query: Q;
+}) => FetchCollectionResult<T>;
+
 /** The result of an Entity collection fetch query */
 export interface FetchCollectionResult<T> extends FetchResult<T[]> {
   /** Navigation to different parts of the collection */
@@ -137,6 +150,11 @@ export interface FetchCollectionResult<T> extends FetchResult<T[]> {
   /** The total number of results (members) of the collection */
   total: undefined | number;
 }
+
+export type FetchHook<T> = (config: {
+  idLocal: string;
+  paused?: boolean;
+}) => FetchResult<T>;
 
 /** The result of a single item fetch query */
 export interface FetchResult<T> {
@@ -159,38 +177,55 @@ export interface Links {
   [property: string]: string | string[];
 }
 
-/** A text with the possibility to have a language specified.  */
-export interface MultilangText {
+/** A simplified RDF literal */
+export interface Literal {
+  /** The value */
+  value: number | string | Date;
+}
+
+/** A simplified XSD DateTime literal */
+export interface LiteralDateTime extends Literal {
+  value: Date;
+}
+
+/** A simplified XSD number literal */
+export interface LiteralNumber extends Literal {
+  value: number;
+}
+
+/** A simplified RDF language string literal */
+export interface LiteralString extends Literal {
   value: string;
-  language?: string;
+  /** The language string */
+  language?: undefined | string;
 }
 
-/** A place */
-export interface Place extends Item {
-  /** Items, possibly in other databases, that are the same as this place. */
-  sameAs?: string[];
-}
-
-export interface RDFResource {
-  equals: (value: string) => boolean;
-  iri: string;
-  localName: string;
-}
+export type MaybeNodes = undefined | NodeObject[];
 
 export interface Namespace {
   iri: string;
   resource: (localName: string) => RDFResource;
 }
 
-export interface NormalizeResult extends Record<string, unknown> {
-  id: string;
-  idLocal: string;
-  labels?: MultilangText[];
-  types: string[];
-}
+export type Namespaces = typeof namespaces;
 
 export interface Normalized extends NormalizeResult {
   links: Links;
+}
+
+export type Normalizer = (
+  node: NodeObject,
+  normalized: Normalized,
+  cache: Cache,
+  blanks: Blanks,
+  propertyMap: PropertyMap
+) => void;
+
+export interface NormalizeResult extends Record<string, unknown> {
+  id: string;
+  idLocal: string;
+  labels?: LiteralString[];
+  types: string[];
 }
 
 /** A person */
@@ -208,6 +243,17 @@ export interface PersonsQuery extends CollectionQuery {
   text?: string;
   /** Filter by person type. Can be any subtype of *https://purl.org/nampi/owl/core#person* that is part of the connected ontologies */
   type?: string;
+}
+
+/** A place */
+export interface Place extends Item {
+  /** Items, possibly in other databases, that are the same as this place. */
+  sameAs?: string[];
+}
+
+/** A map that gives property keys that should replace the actual item rdf property iris when normalize JSON-LD responses. */
+export interface PropertyMap {
+  [itemType: string]: { [propertyKey: string]: string };
 }
 
 /** The NAMPI Provider configuration */
@@ -228,6 +274,17 @@ export interface ProviderConfig {
   silentSsoUri?: string;
 }
 
+export interface RDFResource {
+  equals: (value: string) => boolean;
+  iri: string;
+  localName: string;
+}
+
+/** A function to sort a partial collection fetch result */
+export type SortFunction<T> = (a: T, b: T) => -1 | 0 | 1;
+
+export type Timeout = undefined | ReturnType<typeof setTimeout>;
+
 export interface UseAuth
   extends Pick<KeycloakInstance, "authenticated" | "login" | "logout"> {
   /** Whether or not the authentication connection is initialized */
@@ -236,6 +293,11 @@ export interface UseAuth
 
 /** A user */
 export interface User extends Entity {
+  /** A connected author entity */
+  author?: {
+    id: string;
+    idLocal: string;
+  };
   /** The email */
   email: string;
   /** The family name */
@@ -244,40 +306,6 @@ export interface User extends Entity {
   givenName: undefined | string;
   /** The NAMPI username */
   username: string;
-  /** The id of an connected author entity*/
-  idAuthor?: undefined | string;
-  /** The localized part of the author id */
-  idAuthorLocal?: undefined | string;
   /** The user identifier */
   identifier: string;
 }
-
-export type Blanks = Record<string, string>;
-
-export type Cache = Record<string, Normalized>;
-
-export type FetchCollectionHook<T, Q> = (config: {
-  paused?: boolean;
-  query: Q;
-}) => FetchCollectionResult<T>;
-
-export type FetchHook<T> = (config: {
-  idLocal: string;
-  paused?: boolean;
-}) => FetchResult<T>;
-
-export type MaybeNodes = undefined | NodeObject[];
-
-export type Namespaces = typeof namespaces;
-
-export type Normalizer = (
-  node: NodeObject,
-  normalized: Normalized,
-  cache: Cache,
-  blanks: Blanks
-) => void;
-
-/** A function to sort a partial collection fetch result */
-export type SortFunction<T> = (a: T, b: T) => -1 | 0 | 1;
-
-export type Timeout = undefined | ReturnType<typeof setTimeout>;

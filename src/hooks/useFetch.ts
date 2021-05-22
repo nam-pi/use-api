@@ -1,3 +1,4 @@
+import { DEFAULT_PROPERTY_MAP } from "constants";
 import { expand } from "jsonld";
 import { namespaces } from "namespaces";
 import { normalize } from "normalize";
@@ -14,15 +15,6 @@ import {
   Timeout,
 } from "types";
 import { useNampiContext } from "./useNampiContext";
-
-const LIMIT_REGEX = /(?:limit=(?<limit>\d*))/;
-const OFFSET_REGEX = /(?:offset=(?<offset>\d*))/;
-
-const getPage = (url: string) => {
-  const limit = Number(url.match(LIMIT_REGEX)?.groups?.limit || 1);
-  const offset = Number(url.match(OFFSET_REGEX)?.groups?.offset || 0);
-  return Math.floor(offset / limit + 1);
-};
 
 const DEFAULT_CONFIG: RequestInit = {
   headers: {
@@ -118,6 +110,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
           last,
           id,
           next,
+          page,
           previous,
           total,
         } = (result as unknown) as Collection<T>;
@@ -133,7 +126,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
             last:
               last && id !== last ? () => mergeSearchParams(last) : undefined,
           },
-          page: getPage(id),
+          page,
           total,
         } as FetchCollectionResult<T>;
       } else {
@@ -163,7 +156,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
         .catch(() => fetch(fullUrl, DEFAULT_CONFIG))
         .then((response) => response.json())
         .then(expand)
-        .then(normalize)
+        .then((json) => normalize(json, DEFAULT_PROPERTY_MAP))
         .then(mapResult)
         .then(setState)
         .catch((e) => {

@@ -1,20 +1,20 @@
 import { namespaces } from "namespaces";
-import { MaybeNodes, Normalizer } from "types";
-import { addValue } from "../helpers/addValue";
-import { getIdLocal } from "../helpers/getIdLocal";
+import { makeSingle } from "normalize/helpers/transforms";
+import { MaybeNodes, Normalizer, RDFResource } from "types";
 
-const { core, schema } = namespaces;
+const { schema } = namespaces;
 
 export const normalizeUser: Normalizer = (node, normalized) => {
-  addValue(node, normalized, schema.email.iri, "email");
-  addValue(node, normalized, schema.familyName.iri, "familyName");
-  addValue(node, normalized, schema.givenName.iri, "givenName");
-  addValue(node, normalized, schema.identifier.iri, "identifier");
-  addValue(node, normalized, schema.name.iri, "username");
-  const authorNode = node[core.sameAs.iri] as MaybeNodes;
-  if (authorNode) {
-    const idAuthor = authorNode[0]["@id"] as string;
-    normalized.idAuthor = idAuthor;
-    normalized.idAuthorLocal = getIdLocal(idAuthor);
-  }
+  const addValue = (property: RDFResource, name: string): void => {
+    const value = (node[property.iri] as MaybeNodes)?.[0]?.["@value"];
+    if (value) {
+      normalized[name] = value;
+    }
+  };
+  addValue(schema.email, "email");
+  addValue(schema.familyName, "familyName");
+  addValue(schema.givenName, "givenName");
+  addValue(schema.identifier, "identifier");
+  addValue(schema.name, "username");
+  makeSingle(normalized, "author");
 };

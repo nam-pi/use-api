@@ -1,10 +1,11 @@
 import { Namespace, RDFResource } from "types";
 
-const API_IRI = "https://purl.org/nampi/owl/api#";
-const CORE_IRI = "https://purl.org/nampi/owl/core#";
-const HYDRA_IRI = "http://www.w3.org/ns/hydra/core#";
-const RDFS_IRI = "http://www.w3.org/2000/01/rdf-schema#";
-const SCHEMA_IRI = "https://schema.org/";
+export const API_IRI = "https://purl.org/nampi/owl/api#";
+export const CORE_IRI = "https://purl.org/nampi/owl/core#";
+export const HYDRA_IRI = "http://www.w3.org/ns/hydra/core#";
+export const RDFS_IRI = "http://www.w3.org/2000/01/rdf-schema#";
+export const SCHEMA_IRI = "https://schema.org/";
+export const XSD_IRI = "http://www.w3.org/2001/XMLSchema#";
 
 const resource = (namespace: string, localName: string): RDFResource => {
   const iri = namespace + localName;
@@ -38,6 +39,11 @@ const rdfs: Namespace = {
 const schema: Namespace = {
   iri: SCHEMA_IRI,
   resource: (localName) => resource(SCHEMA_IRI, localName),
+};
+
+const xsd: Namespace = {
+  iri: XSD_IRI,
+  resource: (localName) => resource(XSD_IRI, localName),
 };
 
 export const namespaces = {
@@ -92,5 +98,10 @@ export const namespaces = {
     givenName: schema.resource("givenName"),
     familyName: schema.resource("familyName"),
     identifier: schema.resource("identifier"),
+  },
+  xsd: {
+    dateTime: xsd.resource("dateTime"),
+    integer: xsd.resource("integer"),
+    string: xsd.resource("string"),
   },
 };
