@@ -12,6 +12,7 @@ export {
   useUser,
 } from "hooks/dataHooks";
 export { useAuth } from "hooks/useAuth";
+export { usePropertyIris } from "hooks/usePropertyIris";
 export { namespaces } from "namespaces";
 export type {
   Aspect,

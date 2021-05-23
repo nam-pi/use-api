@@ -76,6 +76,7 @@ export interface CollectionQuery extends Record<string, unknown> {
 export interface ContextState {
   apiUrl: string;
   initialized: boolean;
+  inversePropertyMap: InversePropertyMap;
   keycloak: KeycloakInstance;
   propertyMap: PropertyMap;
   searchTimeout: number;
@@ -168,6 +169,11 @@ export interface FetchResult<T = Item> {
   loading: boolean;
   /** The resulting data */
   data: undefined | T;
+}
+
+/** An inverted version of a property map where the property iris and short keys are switched to simplify reverse iri lookups */
+export interface InversePropertyMap {
+  [itemIri: string]: { [shortKey: string]: string };
 }
 
 /** An item */
