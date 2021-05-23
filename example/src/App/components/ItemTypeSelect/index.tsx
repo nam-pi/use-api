@@ -30,7 +30,6 @@ export const ItemTypeSelect = ({ baseClass, onChange = () => {} }: Props) => {
     if (!data) {
       return results;
     }
-    console.log(data);
     for (let i = 0, length = data.length; i < length; i++) {
       results.push({ id: data[i].id, value: serializeLabels(data[i]) });
     }
