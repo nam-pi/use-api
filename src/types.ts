@@ -1,4 +1,5 @@
 import { NodeObject } from "jsonld";
+import { JsonLdArray } from "jsonld/jsonld-spec";
 import { KeycloakInstance } from "keycloak-js";
 import { namespaces } from "namespaces";
 
@@ -213,6 +214,8 @@ export interface Item extends Entity {
   comments?: LiteralString[];
   /** The id (iri) */
   id: string;
+  /** The original item response in the form of an expanded JSON-LD array */
+  response: JsonLdArray;
 }
 
 /** A set of links in the normalized query cache */

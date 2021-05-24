@@ -1,4 +1,5 @@
 import { expand } from "jsonld";
+import { JsonLdArray } from "jsonld/jsonld-spec";
 import { namespaces } from "namespaces";
 import { normalize } from "normalize";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -9,7 +10,6 @@ import {
   Entity,
   FetchCollectionResult,
   FetchResult,
-  NormalizeResult,
   SortFunction,
   Timeout,
 } from "types";
@@ -105,8 +105,9 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
   }, []);
 
   const mapResult = useCallback(
-    (result: undefined | NormalizeResult) => {
-      if (result?.types.includes(namespaces.hydra.Collection.iri)) {
+    (expanded: JsonLdArray) => {
+      const normalized = normalize(expanded, propertyMap);
+      if (normalized?.types.includes(namespaces.hydra.Collection.iri)) {
         // Map collection data
         const {
           members,
@@ -117,7 +118,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
           page,
           previous,
           total,
-        } = (result as unknown) as Collection<T>;
+        } = (normalized as unknown) as Collection<T>;
         return {
           data: sorter && total > 0 ? members.sort(sorter) : members,
           nav: {
@@ -136,11 +137,12 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
       } else {
         // Map single class data
         return {
-          data: (result as unknown) as T,
+          data: (normalized as unknown) as T,
+          response: expanded,
         } as Partial<FetchResult<T>>;
       }
     },
-    [mergeSearchParams, sorter]
+    [mergeSearchParams, propertyMap, sorter]
   );
 
   const doFetch = useCallback(
@@ -160,7 +162,6 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
         .catch(() => fetch(fullUrl, DEFAULT_CONFIG))
         .then((response) => response.json())
         .then(expand)
-        .then((json) => normalize(json, propertyMap))
         .then(mapResult)
         .then(setState)
         .catch((e) => {
@@ -174,7 +175,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
           setLoading(false);
         });
     },
-    [keycloak, mapResult, propertyMap, searchParams]
+    [keycloak, mapResult, searchParams]
   );
 
   // Update the search params state when receiving new search params after a timeout
