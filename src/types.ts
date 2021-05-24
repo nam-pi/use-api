@@ -2,20 +2,40 @@ import { NodeObject } from "jsonld";
 import { KeycloakInstance } from "keycloak-js";
 import { namespaces } from "namespaces";
 
+/** A document interpretation act */
+export interface Act extends Item {
+  /** The interpretation of the document interpretation act */
+  interpretation: Event;
+  /** The authors of the document interpretation act */
+  authors: Author[];
+  /** The date the document interpretation act was created */
+  date: Date;
+  /** The source location for the document interpretation act */
+  sourceLocation: SourceLocation;
+}
+
+export interface ActsQuery extends CollectionQuery {
+  /** Filter by author of the document interpretation act */
+  author?: string;
+  /** Filter by source of the document interpretation act */
+  source?: string;
+}
+
 /** An aspect */
 export interface Aspect extends Item {
-  /** The text content of the aspect */
-  text?: LiteralString;
   /** Items, possibly in other databases, that are the same as this aspect. */
   sameAs?: string[];
 }
 
 export interface AspectsQuery extends CollectionQuery {
-  /** What to order the aspects by */
-  orderBy?: "id" | "label";
   /** Filter by participants of events the aspect is used in */
   participant?: string;
 }
+
+/** An author */
+export type Author = Item;
+
+export type AuthorsQuery = CollectionQuery;
 
 export type Blanks = Record<string, string>;
 
@@ -24,8 +44,6 @@ export type Cache = Record<string, Normalized>;
 export type Class = Item;
 
 export interface ClassesQuery extends CollectionQuery {
-  /** What to order the classes by */
-  orderBy?: "id" | "label";
   /** Filter by parent of all *rdfs:subClassOf* relations the class has */
   ancestor?: string;
 }
@@ -62,14 +80,18 @@ export interface CollectionNav {
 
 /** Query parameters to fetch a partial collection */
 export interface CollectionQuery extends Record<string, unknown> {
-  /** Filter by type */
-  type?: string;
   /** Limits the number of returned results to the given number */
   limit?: number;
   /** Starts to return results from the given offset */
   offset?: number;
+  /** What to order the items by */
+  orderBy?: string;
   /** Returns the given page of results */
   page?: number;
+  /** The text content to filter the items by */
+  text?: string;
+  /** Filter by type. This can be any ancestor of the collection item as defined in any connected ontology */
+  type?: string;
 }
 
 /** The internal state of the use-NAMPI context */
@@ -81,6 +103,8 @@ export interface ContextState {
   propertyMap: PropertyMap;
   searchTimeout: number;
 }
+
+type DefaultOrderBy = "id" | "label";
 
 /** A data entity */
 export interface Entity {
@@ -123,7 +147,7 @@ export interface EventsQuery extends CollectionQuery {
   /** Filter events by end date. All events that have dates (exact, earliest, latest, sort), *at* or *before* this date will be included */
   endDate?: Date;
   /** What to order the events by */
-  orderBy?: "id" | "label" | "date";
+  orderBy?: DefaultOrderBy | "date";
   /** Filter by event participant. Can be the iri of any agent individual */
   participant?: string;
   /** Filter by type of participant. Can by the iri of any subclass of *https://purl.org/nampi/owl/core#agent* that is part of the connected ontologies */
@@ -134,11 +158,9 @@ export interface EventsQuery extends CollectionQuery {
   place?: string;
   /** Filter events by start date. All events that have dates (exact, earliest, latest, sort), *at* or *after* this date will be included */
   startDate?: Date;
-  /** Filter by text content. Can by any text or regular expression */
-  text?: string;
 }
 
-export type FetchCollectionHook<T, Q> = <
+export type FetchCollectionHook<T, Q extends CollectionQuery> = <
   ExtendedType extends Record<string, unknown> = Record<string, never>
 >(config: {
   paused?: boolean;
@@ -171,6 +193,15 @@ export interface FetchResult<T = Item> {
   data: undefined | T;
 }
 
+/** A group */
+export interface Group extends Item {
+  /** Items, possibly in other databases, that are the same as this group. */
+  sameAs?: string[];
+}
+
+/** Query parameters to fetch a partial groups collection */
+export type GroupsQuery = CollectionQuery;
+
 /** An inverted version of a property map where the property iris and short keys are switched to simplify reverse iri lookups */
 export interface InversePropertyMap {
   [itemIri: string]: { [shortKey: string]: string };
@@ -178,6 +209,8 @@ export interface InversePropertyMap {
 
 /** An item */
 export interface Item extends Entity {
+  /** The comments of the item */
+  comments?: LiteralString[];
   /** The id (iri) */
   id: string;
 }
@@ -240,20 +273,16 @@ export interface NormalizeResult extends Record<string, unknown> {
 
 /** A person */
 export interface Person extends Item {
+  /** All events the person is declared as born in */
   bornIn?: Event[];
+  /** All events the person is declared as having died in */
   diesIn?: Event[];
+  /** Items, possibly in other databases, that are the same as this person. */
   sameAs?: string[];
 }
 
 /** Query parameters to fetch a partial persons collection */
-export interface PersonsQuery extends CollectionQuery {
-  /** What to order the persons by */
-  orderBy?: "id" | "label";
-  /** Filter by text content. Can by any text or regular expression */
-  text?: string;
-  /** Filter by person type. Can be any subtype of *https://purl.org/nampi/owl/core#person* that is part of the connected ontologies */
-  type?: string;
-}
+export type PersonsQuery = CollectionQuery;
 
 /** A place */
 export interface Place extends Item {
@@ -262,14 +291,7 @@ export interface Place extends Item {
 }
 
 /** Query parameters to fetch a partial places collection */
-export interface PlacesQuery extends CollectionQuery {
-  /** What to order the places by */
-  orderBy?: "id" | "label";
-  /** Filter by text content. Can by any text or regular expression */
-  text?: string;
-  /** Filter by place type. Can be any subtype of *https://purl.org/nampi/owl/core#place* that is part of the connected ontologies */
-  type?: string;
-}
+export type PlacesQuery = CollectionQuery;
 
 /** A map that gives property keys that should replace the actual item rdf property iris when normalize JSON-LD responses. */
 export interface PropertyMap {
@@ -304,6 +326,23 @@ export interface RDFResource {
 
 /** A function to sort a partial collection fetch result */
 export type SortFunction<T> = (a: T, b: T) => -1 | 0 | 1;
+
+/** A source location */
+export interface SourceLocation extends Item {
+  /** The location text, usually the page, url or other textual content that specifies the actual location */
+  text: string;
+  /** The source for the source location */
+  source: Source;
+}
+
+/** A source */
+export interface Source extends Item {
+  /** Items, possibly in other databases, that are the same as this source. */
+  sameAs?: string[];
+}
+
+/** Query parameters to fetch a partial sources collection */
+export type SourcesQuery = CollectionQuery;
 
 export type Timeout = undefined | ReturnType<typeof setTimeout>;
 
