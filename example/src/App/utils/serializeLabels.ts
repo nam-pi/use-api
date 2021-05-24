@@ -1,8 +1,8 @@
-import { MultilangText } from "nampi-use-api/bundle";
+import { LiteralString } from "nampi-use-api/bundle";
 
 export const serializeLabels = <
-  T extends { labels?: undefined | MultilangText[] } = {
-    labels?: undefined | MultilangText[];
+  T extends { labels?: undefined | LiteralString[] } = {
+    labels?: undefined | LiteralString[];
   }
 >(
   data: undefined | T

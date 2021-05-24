@@ -1,18 +1,18 @@
-import { useEvents } from "nampi-use-api/bundle";
+import { useAuthors } from "nampi-use-api/bundle";
 import React, { useState } from "react";
 import { ItemListPage } from "../ItemListPage";
 
-export const Events = () => {
+export const Authors = () => {
   const [text, setText] = useState<string>("");
-  const itemData = useEvents({
-    query: { orderBy: "date", text },
+  const itemData = useAuthors({
+    query: { orderBy: "label", text },
   });
   return (
     <ItemListPage
       itemData={itemData}
-      title="Events"
       onTextChange={setText}
-      urlPart="event"
+      title="Authors"
+      urlPart="author"
     />
   );
 };

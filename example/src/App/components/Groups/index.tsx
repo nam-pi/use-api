@@ -1,21 +1,21 @@
-import { useAspects } from "nampi-use-api/bundle";
+import { useGroups } from "nampi-use-api/bundle";
 import React, { useState } from "react";
 import { ItemListPage } from "../ItemListPage";
 
-export const Aspects = () => {
+export const Groups = () => {
   const [text, setText] = useState<string>("");
   const [type, setType] = useState<string>("");
-  const itemData = useAspects({
+  const itemData = useGroups({
     query: { orderBy: "label", text, type },
   });
   return (
     <ItemListPage
-      baseClass="https://purl.org/nampi/owl/core#aspect"
+      baseClass="https://purl.org/nampi/owl/core#group"
       itemData={itemData}
+      title="Groups"
       onClassChange={setType}
       onTextChange={setText}
-      title="Aspects"
-      urlPart="aspect"
+      urlPart="group"
     />
   );
 };

@@ -13,16 +13,13 @@ export const serializeEventDates = (
   for (let i = 0, length = events.length; i < length; i++) {
     const event = events[i];
     const dString = event.exact
-      ? fmt(new Date(event.exact), format)
+      ? fmt(event.exact, format)
       : event.earliest && event.latest
-      ? `${fmt(new Date(event.earliest), format)} - ${fmt(
-          new Date(event.latest),
-          format
-        )}`
+      ? `${fmt(event.earliest, format)} - ${fmt(event.latest, format)}`
       : event.earliest
-      ? fmt(new Date(event.earliest), format)
+      ? fmt(event.earliest, format)
       : event.latest
-      ? fmt(new Date(event.latest), format)
+      ? fmt(event.latest, format)
       : "";
     if (dString) {
       dates.push(dString);

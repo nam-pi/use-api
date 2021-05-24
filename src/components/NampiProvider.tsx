@@ -1,14 +1,30 @@
 import Keycloak, { KeycloakInitOptions } from "keycloak-js";
 import { ReactNode, useEffect, useMemo, useState } from "react";
-import { ProviderConfig } from "types";
-import { DEFAULT_SEARCH_TIMEOUT } from "../constants";
+import { InversePropertyMap, PropertyMap, ProviderConfig } from "types";
+import { deepMerge } from "utils/deepMerge";
+import { DEFAULT_PROPERTY_MAP, DEFAULT_SEARCH_TIMEOUT } from "../constants";
 import { NampiContext } from "./NampiContext";
+
+const invertPropertyMap = (propertyMap: PropertyMap): InversePropertyMap => {
+  const inverse: InversePropertyMap = {};
+  for (const itemIri in propertyMap) {
+    const properties = propertyMap[itemIri];
+    const itemData: { [shortKey: string]: string } = {};
+    for (const propertyIri in properties) {
+      const shortKey = properties[propertyIri];
+      itemData[shortKey] = propertyIri;
+    }
+    inverse[itemIri] = itemData;
+  }
+  return inverse;
+};
 
 export const NampiProvider = ({
   children,
   api,
   auth,
   client,
+  propertyMap,
   searchTimeout = DEFAULT_SEARCH_TIMEOUT,
   realm,
   silentSsoUri,
@@ -44,13 +60,16 @@ export const NampiProvider = ({
     };
     initialize();
   }, [auth, client, keycloak, realm, silentSsoUri, sso]);
+  const fullPropertyMap = deepMerge(propertyMap || {}, DEFAULT_PROPERTY_MAP);
   return (
     <NampiContext.Provider
       value={{
         apiUrl: api,
-        searchTimeout,
         initialized,
+        inversePropertyMap: invertPropertyMap(fullPropertyMap),
         keycloak,
+        propertyMap: fullPropertyMap,
+        searchTimeout,
       }}
     >
       {children}

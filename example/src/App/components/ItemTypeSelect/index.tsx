@@ -6,7 +6,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { serializeLabels } from "../../utils/serializeLabels";
 import { Icon } from "../Icon";
 
-interface Props {
+export interface Props {
+  baseClass: string;
   onChange?: (id: string, value: string) => void;
 }
 
@@ -15,12 +16,12 @@ interface Type {
   value: string;
 }
 
-export const AspectParentSelect = ({ onChange = () => {} }: Props) => {
+export const ItemTypeSelect = ({ baseClass, onChange = () => {} }: Props) => {
   const { data, initialized, loading } = useClasses({
     query: {
       limit: 1000,
       orderBy: "label",
-      ancestor: "https://purl.org/nampi/owl/core#aspect",
+      ancestor: baseClass,
     },
   });
 

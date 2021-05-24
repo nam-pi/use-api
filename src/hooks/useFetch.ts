@@ -1,4 +1,5 @@
 import { expand } from "jsonld";
+import { JsonLdArray } from "jsonld/jsonld-spec";
 import { namespaces } from "namespaces";
 import { normalize } from "normalize";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -9,20 +10,10 @@ import {
   Entity,
   FetchCollectionResult,
   FetchResult,
-  NormalizeResult,
   SortFunction,
   Timeout,
 } from "types";
 import { useNampiContext } from "./useNampiContext";
-
-const LIMIT_REGEX = /(?:limit=(?<limit>\d*))/;
-const OFFSET_REGEX = /(?:offset=(?<offset>\d*))/;
-
-const getPage = (url: string) => {
-  const limit = Number(url.match(LIMIT_REGEX)?.groups?.limit || 1);
-  const offset = Number(url.match(OFFSET_REGEX)?.groups?.offset || 0);
-  return Math.floor(offset / limit + 1);
-};
 
 const DEFAULT_CONFIG: RequestInit = {
   headers: {
@@ -81,7 +72,12 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
   const dirty = useRef<boolean>(false);
   const inputTimeout = useRef<Timeout>();
   const oldQuery = useRef<string>("");
-  const { initialized, keycloak, searchTimeout } = useNampiContext();
+  const {
+    initialized,
+    keycloak,
+    propertyMap,
+    searchTimeout,
+  } = useNampiContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [state, setState] = useState<State<T>>({});
   const [searchParams, setSearchParams] = useState<undefined | URLSearchParams>(
@@ -109,8 +105,9 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
   }, []);
 
   const mapResult = useCallback(
-    (result: undefined | NormalizeResult) => {
-      if (result?.types.includes(namespaces.hydra.Collection)) {
+    (expanded: JsonLdArray) => {
+      const normalized = normalize(expanded, propertyMap);
+      if (normalized?.types.includes(namespaces.hydra.Collection.iri)) {
         // Map collection data
         const {
           members,
@@ -118,10 +115,10 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
           last,
           id,
           next,
+          page,
           previous,
           total,
-        } = (result as unknown) as Collection<T>;
-        console.log(first, last, next, previous);
+        } = (normalized as unknown) as Collection<T>;
         return {
           data: sorter && total > 0 ? members.sort(sorter) : members,
           nav: {
@@ -134,17 +131,18 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
             last:
               last && id !== last ? () => mergeSearchParams(last) : undefined,
           },
-          page: getPage(id),
+          page,
           total,
         } as FetchCollectionResult<T>;
       } else {
         // Map single class data
         return {
-          data: (result as unknown) as T,
+          data: (normalized as unknown) as T,
+          response: expanded,
         } as Partial<FetchResult<T>>;
       }
     },
-    [mergeSearchParams, sorter]
+    [mergeSearchParams, propertyMap, sorter]
   );
 
   const doFetch = useCallback(
@@ -164,7 +162,6 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
         .catch(() => fetch(fullUrl, DEFAULT_CONFIG))
         .then((response) => response.json())
         .then(expand)
-        .then(normalize)
         .then(mapResult)
         .then(setState)
         .catch((e) => {

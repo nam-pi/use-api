@@ -1,27 +1,50 @@
 import { NodeObject } from "jsonld";
+import { JsonLdArray } from "jsonld/jsonld-spec";
 import { KeycloakInstance } from "keycloak-js";
 import { namespaces } from "namespaces";
 
+/** A document interpretation act */
+export interface Act extends Item {
+  /** The interpretation of the document interpretation act */
+  interpretation: Event;
+  /** The authors of the document interpretation act */
+  authors: Author[];
+  /** The date the document interpretation act was created */
+  date: Date;
+  /** The source location for the document interpretation act */
+  sourceLocation: SourceLocation;
+}
+
+export interface ActsQuery extends CollectionQuery {
+  /** Filter by author of the document interpretation act */
+  author?: string;
+  /** Filter by source of the document interpretation act */
+  source?: string;
+}
+
 /** An aspect */
 export interface Aspect extends Item {
-  /** The text content of the aspect */
-  text?: MultilangText;
   /** Items, possibly in other databases, that are the same as this aspect. */
   sameAs?: string[];
 }
 
 export interface AspectsQuery extends CollectionQuery {
-  /** What to order the aspects by */
-  orderBy?: "id" | "label";
   /** Filter by participants of events the aspect is used in */
   participant?: string;
 }
 
+/** An author */
+export type Author = Item;
+
+export type AuthorsQuery = CollectionQuery;
+
+export type Blanks = Record<string, string>;
+
+export type Cache = Record<string, Normalized>;
+
 export type Class = Item;
 
 export interface ClassesQuery extends CollectionQuery {
-  /** What to order the classes by */
-  orderBy?: "id" | "label";
   /** Filter by parent of all *rdfs:subClassOf* relations the class has */
   ancestor?: string;
 }
@@ -36,6 +59,8 @@ export interface Collection<T extends Entity> extends Item {
   members: T[];
   /** The url to the next page of partial collection results */
   next: undefined | string;
+  /** The current page */
+  page: number;
   /** The url to the previous page of partial collection results */
   previous: undefined | string;
   /** The total number of results */
@@ -56,30 +81,38 @@ export interface CollectionNav {
 
 /** Query parameters to fetch a partial collection */
 export interface CollectionQuery extends Record<string, unknown> {
-  /** Filter by type */
-  type?: string;
   /** Limits the number of returned results to the given number */
   limit?: number;
   /** Starts to return results from the given offset */
   offset?: number;
+  /** What to order the items by */
+  orderBy?: string;
   /** Returns the given page of results */
   page?: number;
+  /** The text content to filter the items by */
+  text?: string;
+  /** Filter by type. This can be any ancestor of the collection item as defined in any connected ontology */
+  type?: string;
 }
 
 /** The internal state of the use-NAMPI context */
 export interface ContextState {
   apiUrl: string;
   initialized: boolean;
+  inversePropertyMap: InversePropertyMap;
   keycloak: KeycloakInstance;
+  propertyMap: PropertyMap;
   searchTimeout: number;
 }
+
+type DefaultOrderBy = "id" | "label";
 
 /** A data entity */
 export interface Entity {
   /** The local part of the id. Example: "12345" of "http://example.com/data/12345" */
   idLocal: string;
   /** The labels of the entity */
-  labels?: MultilangText[];
+  labels?: LiteralString[];
   /** The RDF type iris */
   types: string[];
 }
@@ -87,17 +120,21 @@ export interface Entity {
 /** An event */
 export interface Event extends Item {
   /** The sorting date for the event, to be used when sorting the event as part of a list */
-  sort?: string;
+  sort?: Date;
   /** The exact date the event happened */
-  exact?: string;
-  /** The earliest possible date an event could have happened */
-  earliest?: string;
-  /** The latest possible date an event could have happened */
-  latest?: string;
+  exact?: Date;
+  /** The earliest possible date the event could have happened */
+  earliest?: Date;
+  /** The latest possible date the event could have happened */
+  latest?: Date;
+  /** The main participant of the event */
+  mainParticipant: Person;
   /** All participants of the event */
   participants: Person[];
   /** All aspects of the event */
   aspects: Aspect[];
+  /** The place where the event took place */
+  place?: Place;
 }
 
 /** Query parameters to fetch a partial events collection */
@@ -111,7 +148,7 @@ export interface EventsQuery extends CollectionQuery {
   /** Filter events by end date. All events that have dates (exact, earliest, latest, sort), *at* or *before* this date will be included */
   endDate?: Date;
   /** What to order the events by */
-  orderBy?: "id" | "label" | "date";
+  orderBy?: DefaultOrderBy | "date";
   /** Filter by event participant. Can be the iri of any agent individual */
   participant?: string;
   /** Filter by type of participant. Can by the iri of any subclass of *https://purl.org/nampi/owl/core#agent* that is part of the connected ontologies */
@@ -122,12 +159,17 @@ export interface EventsQuery extends CollectionQuery {
   place?: string;
   /** Filter events by start date. All events that have dates (exact, earliest, latest, sort), *at* or *after* this date will be included */
   startDate?: Date;
-  /** Filter by text content. Can by any text or regular expression */
-  text?: string;
 }
 
+export type FetchCollectionHook<T, Q extends CollectionQuery> = <
+  ExtendedType extends Record<string, unknown> = Record<string, never>
+>(config: {
+  paused?: boolean;
+  query: Q;
+}) => FetchCollectionResult<T & ExtendedType>;
+
 /** The result of an Entity collection fetch query */
-export interface FetchCollectionResult<T> extends FetchResult<T[]> {
+export interface FetchCollectionResult<T = Item> extends FetchResult<T[]> {
   /** Navigation to different parts of the collection */
   nav: CollectionNav;
   /** The current page of the collection */
@@ -135,9 +177,15 @@ export interface FetchCollectionResult<T> extends FetchResult<T[]> {
   /** The total number of results (members) of the collection */
   total: undefined | number;
 }
+export type FetchHook<T> = <
+  ExtendedType extends Record<string, unknown> = Record<string, never>
+>(config: {
+  idLocal: string;
+  paused?: boolean | undefined;
+}) => FetchResult<T & ExtendedType>;
 
 /** The result of a single item fetch query */
-export interface FetchResult<T> {
+export interface FetchResult<T = Item> {
   /** Whether or not the API connection is already initialized */
   initialized: boolean;
   /** Whether or not the result is currently being fetched */
@@ -146,10 +194,28 @@ export interface FetchResult<T> {
   data: undefined | T;
 }
 
+/** A group */
+export interface Group extends Item {
+  /** Items, possibly in other databases, that are the same as this group. */
+  sameAs?: string[];
+}
+
+/** Query parameters to fetch a partial groups collection */
+export type GroupsQuery = CollectionQuery;
+
+/** An inverted version of a property map where the property iris and short keys are switched to simplify reverse iri lookups */
+export interface InversePropertyMap {
+  [itemIri: string]: { [shortKey: string]: string };
+}
+
 /** An item */
 export interface Item extends Entity {
+  /** The comments of the item */
+  comments?: LiteralString[];
   /** The id (iri) */
   id: string;
+  /** The original item response in the form of an expanded JSON-LD array */
+  response: JsonLdArray;
 }
 
 /** A set of links in the normalized query cache */
@@ -157,10 +223,82 @@ export interface Links {
   [property: string]: string | string[];
 }
 
-/** A text with the possibility to have a language specified.  */
-export interface MultilangText {
+/** A simplified RDF literal */
+export interface Literal {
+  /** The value */
+  value: number | string | Date;
+}
+
+/** A simplified XSD DateTime literal */
+export interface LiteralDateTime extends Literal {
+  value: Date;
+}
+
+/** A simplified XSD number literal */
+export interface LiteralNumber extends Literal {
+  value: number;
+}
+
+/** A simplified RDF language string literal */
+export interface LiteralString extends Literal {
   value: string;
-  language?: string;
+  /** The language string */
+  language?: undefined | string;
+}
+
+export type MaybeNodes = undefined | NodeObject[];
+
+export interface Namespace {
+  iri: string;
+  resource: (localName: string) => RDFResource;
+}
+
+export type Namespaces = typeof namespaces;
+
+export interface Normalized extends NormalizeResult {
+  links: Links;
+}
+
+export type Normalizer = (
+  node: NodeObject,
+  normalized: Normalized,
+  cache: Cache,
+  blanks: Blanks,
+  propertyMap: PropertyMap
+) => void;
+
+export interface NormalizeResult extends Record<string, unknown> {
+  id: string;
+  idLocal: string;
+  labels?: LiteralString[];
+  types: string[];
+}
+
+/** A person */
+export interface Person extends Item {
+  /** All events the person is declared as born in */
+  bornIn?: Event[];
+  /** All events the person is declared as having died in */
+  diesIn?: Event[];
+  /** Items, possibly in other databases, that are the same as this person. */
+  sameAs?: string[];
+}
+
+/** Query parameters to fetch a partial persons collection */
+export type PersonsQuery = CollectionQuery;
+
+/** A place */
+export interface Place extends Item {
+  /** Items, possibly in other databases, that are the same as this place. */
+  sameAs?: string[];
+}
+
+/** Query parameters to fetch a partial places collection */
+export type PlacesQuery = CollectionQuery;
+
+/** A map that gives property keys that should replace the actual item rdf property iris when normalize JSON-LD responses. */
+export interface PropertyMap {
+  [itemType: string]: { [propertyKey: string]: string };
 }
 
 /** The NAMPI Provider configuration */
@@ -171,6 +309,8 @@ export interface ProviderConfig {
   auth?: string;
   /** * The name of the Keycloak client to use. If not present in combination with "realm", the login and logout auth functions will throw an error on use.  */
   client?: string;
+  /** An optional custom property map to use when normalizing responses */
+  propertyMap?: PropertyMap;
   /** * The name of the Keycloak realm. If not present in combination with "client", the login and logout auth functions will throw an error on use.  */
   realm?: string;
   /** * The timeout in ms to bundle search box entries when live searching so the server doesn't get flooded. Defaults to 200ms */
@@ -181,33 +321,33 @@ export interface ProviderConfig {
   silentSsoUri?: string;
 }
 
-export interface NormalizeResult extends Record<string, unknown> {
-  id: string;
-  idLocal: string;
-  labels?: MultilangText[];
-  types: string[];
+export interface RDFResource {
+  equals: (value: string) => boolean;
+  iri: string;
+  localName: string;
 }
 
-export interface Normalized extends NormalizeResult {
-  links: Links;
+/** A function to sort a partial collection fetch result */
+export type SortFunction<T> = (a: T, b: T) => -1 | 0 | 1;
+
+/** A source location */
+export interface SourceLocation extends Item {
+  /** The location text, usually the page, url or other textual content that specifies the actual location */
+  text: string;
+  /** The source for the source location */
+  source: Source;
 }
 
-/** A person */
-export interface Person extends Item {
-  bornIn?: Event[];
-  diesIn?: Event[];
+/** A source */
+export interface Source extends Item {
+  /** Items, possibly in other databases, that are the same as this source. */
   sameAs?: string[];
 }
 
-/** Query parameters to fetch a partial persons collection */
-export interface PersonsQuery extends CollectionQuery {
-  /** What to order the persons by */
-  orderBy?: "id" | "label";
-  /** Filter by text content. Can by any text or regular expression */
-  text?: string;
-  /** Filter by person type. Can be any subtype of *https://purl.org/nampi/owl/core#person* that is part of the connected ontologies */
-  type?: string;
-}
+/** Query parameters to fetch a partial sources collection */
+export type SourcesQuery = CollectionQuery;
+
+export type Timeout = undefined | ReturnType<typeof setTimeout>;
 
 export interface UseAuth
   extends Pick<KeycloakInstance, "authenticated" | "login" | "logout"> {
@@ -217,6 +357,11 @@ export interface UseAuth
 
 /** A user */
 export interface User extends Entity {
+  /** A connected author entity */
+  author?: {
+    id: string;
+    idLocal: string;
+  };
   /** The email */
   email: string;
   /** The family name */
@@ -225,40 +370,6 @@ export interface User extends Entity {
   givenName: undefined | string;
   /** The NAMPI username */
   username: string;
-  /** The id of an connected author entity*/
-  idAuthor?: undefined | string;
-  /** The localized part of the author id */
-  idAuthorLocal?: undefined | string;
   /** The user identifier */
   identifier: string;
 }
-
-export type Blanks = Record<string, string>;
-
-export type Cache = Record<string, Normalized>;
-
-export type FetchCollectionHook<T, Q> = (config: {
-  paused?: boolean;
-  query: Q;
-}) => FetchCollectionResult<T>;
-
-export type FetchHook<T> = (config: {
-  idLocal: string;
-  paused?: boolean;
-}) => FetchResult<T>;
-
-export type MaybeNodes = undefined | NodeObject[];
-
-export type Namespaces = typeof namespaces;
-
-export type Normalizer = (
-  node: NodeObject,
-  normalized: Normalized,
-  cache: Cache,
-  blanks: Blanks
-) => void;
-
-/** A function to sort a partial collection fetch result */
-export type SortFunction<T> = (a: T, b: T) => -1 | 0 | 1;
-
-export type Timeout = undefined | ReturnType<typeof setTimeout>;

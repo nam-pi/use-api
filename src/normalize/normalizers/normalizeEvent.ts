@@ -1,57 +1,36 @@
 import { namespaces } from "namespaces";
-import { addLinks } from "normalize/helpers/addLinks";
+import { makeSingle } from "normalize/helpers/transforms";
 import { MaybeNodes, Normalizer } from "types";
-import { addLink } from "../helpers/addLink";
-import { normalizeNode } from "../helpers/normalizeNode";
 
 const { core } = namespaces;
 
-export const normalizeEvent: Normalizer = (node, normalized, cache, blanks) => {
-  const exactNode = (node[core.takesPlaceOn] as MaybeNodes)?.[0];
-  let exact;
-  if (exactNode) {
-    exact = normalizeNode(exactNode, cache, blanks);
-    addLink(normalized, "exact", exact?.idLocal, blanks);
+export const normalizeEvent: Normalizer = (node, normalized, cache) => {
+  const exact = cache[normalized.links?.exact?.[0] || ""];
+  if (exact) {
+    const value = (exact[core.hasDateTime.iri] as MaybeNodes)?.[0]?.value;
+    normalized.exact = value;
+    delete normalized.links.exact;
   }
-  const earliestNode = (node[core.takesPlaceNotEarlierThan] as MaybeNodes)?.[0];
-  let earliest;
-  if (earliestNode) {
-    earliest = normalizeNode(earliestNode, cache, blanks);
-    addLink(normalized, "earliest", earliest?.idLocal, blanks);
+  const earliest = cache[normalized.links?.earliest?.[0] || ""];
+  if (earliest) {
+    const value = (earliest[core.hasDateTime.iri] as MaybeNodes)?.[0]?.value;
+    normalized.earliest = value;
+    delete normalized.links.earliest;
   }
-  let latest;
-  const latestNode = (node[core.takesPlaceNotLaterThan] as MaybeNodes)?.[0];
-  if (latestNode) {
-    latest = normalizeNode(latestNode, cache, blanks);
-    addLink(normalized, "latest", latest?.idLocal, blanks);
+  const latest = cache[normalized.links?.latest?.[0] || ""];
+  if (latest) {
+    const value = (latest[core.hasDateTime.iri] as MaybeNodes)?.[0]?.value;
+    normalized.latest = value;
+    delete normalized.links.latest;
   }
-  const sortNode = (node[core.hasSortingDate] as MaybeNodes)?.[0];
-  if (sortNode) {
-    const sort = normalizeNode(sortNode, cache, blanks);
-    addLink(normalized, "sort", sort?.idLocal, blanks);
-  } else if (exact || latest || earliest) {
-    addLink(normalized, "sort", (exact || latest || earliest)?.idLocal, blanks);
+  const sort = cache[normalized.links?.sort?.[0] || ""];
+  if (sort) {
+    const value = (sort[core.hasDateTime.iri] as MaybeNodes)?.[0]?.value;
+    normalized.sort = value;
+    delete normalized.links.sort;
+  } else {
+    normalized.sort =
+      normalized.exact || normalized.latest || normalized.earliest;
   }
-  const participantsNode = node[core.hasParticipant] as MaybeNodes;
-  if (Array.isArray(participantsNode)) {
-    const participants: string[] = [];
-    for (let i = 0, length = participantsNode.length; i < length; i++) {
-      const participant = normalizeNode(participantsNode[i], cache, blanks);
-      if (participant) {
-        participants.push(participant.idLocal);
-      }
-    }
-    addLinks(normalized, "participants", participants, blanks);
-  }
-  const aspectsNode = node[core.usesAspect] as MaybeNodes;
-  if (Array.isArray(aspectsNode)) {
-    const aspects: string[] = [];
-    for (let i = 0, length = aspectsNode.length; i < length; i++) {
-      const aspect = normalizeNode(aspectsNode[i], cache, blanks);
-      if (aspect) {
-        aspects.push(aspect.idLocal);
-      }
-    }
-    addLinks(normalized, "aspects", aspects, blanks);
-  }
+  makeSingle(normalized, "place");
 };
