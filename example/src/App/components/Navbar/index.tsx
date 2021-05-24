@@ -13,10 +13,14 @@ export const Navbar = () => {
         <Link to="/" className="font-semibold text-2xl">
           <NampiLogo className="h-10 bg-white p-1 rounded" />
         </Link>
+        <Link to="/acts">Acts</Link>
         <Link to="/aspects">Aspects</Link>
+        <Link to="/authors">Authors</Link>
         <Link to="/events">Events</Link>
+        <Link to="/groups">Groups</Link>
         <Link to="/persons">Persons</Link>
         <Link to="/places">Places</Link>
+        <Link to="/sources">Sources</Link>
       </div>
       <div>
         {initialized && !loading ? (

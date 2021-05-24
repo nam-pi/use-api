@@ -17,16 +17,22 @@ import { v4 as uuidv4 } from "uuid";
 import { getIdLocal } from "./helpers/getIdLocal";
 import { isBlank } from "./helpers/isBlank";
 import { addLinks } from "./helpers/transforms";
+import { normalizeActs } from "./normalizers/normalizeActs";
 import { normalizeCollection } from "./normalizers/normalizeCollection";
+import { normalizeSourceLocation } from "./normalizers/normalizeSourceLocation";
 
 const { api, core, hydra, xsd } = namespaces;
 
 const findNormalizer = (type: undefined | string): Normalizer => {
   switch (type) {
+    case core.act.iri:
+      return normalizeActs;
     case hydra.Collection.iri:
       return normalizeCollection;
     case core.event.iri:
       return normalizeEvent;
+    case core.sourceLocation.iri:
+      return normalizeSourceLocation;
     case api.user.iri:
       return normalizeUser;
     default:

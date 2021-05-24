@@ -56,20 +56,29 @@ export const namespaces = {
   },
 
   core: {
+    act: core.resource("act"),
     aspect: core.resource("aspect"),
     author: core.resource("author"),
     date: core.resource("date"),
     diesIn: core.resource("dies_in"),
     event: core.resource("event"),
+    group: core.resource("group"),
     hasDateTime: core.resource("has_date_time"),
+    hasInterpretation: core.resource("has_interpretation"),
     hasMainParticipant: core.resource("has_main_participant"),
     hasParticipant: core.resource("has_participant"),
     hasSortingDate: core.resource("has_sorting_date"),
+    hasSource: core.resource("has_source"),
+    hasSourceLocation: core.resource("has_source_location"),
     hasText: core.resource("has_text"),
+    isAuthoredBy: core.resource("is_authored_by"),
+    isAuthoredOn: core.resource("is_authored_on"),
     isBornIn: core.resource("is_born_in"),
     person: core.resource("person"),
     place: core.resource("place"),
     sameAs: core.resource("same_as"),
+    source: core.resource("source"),
+    sourceLocation: core.resource("source_location"),
     takesPlaceAt: core.resource("takes_place_at"),
     takesPlaceNotEarlierThan: core.resource("takes_place_not_earlier_than"),
     takesPlaceNotLaterThan: core.resource("takes_place_not_later_than"),
@@ -90,6 +99,7 @@ export const namespaces = {
 
   rdfs: {
     Class: rdfs.resource("Class"),
+    comment: rdfs.resource("comment"),
     label: rdfs.resource("label"),
   },
 

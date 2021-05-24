@@ -11,11 +11,25 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [schema.givenName.iri]: "givenName",
     [schema.identifier.iri]: "identifier",
     [schema.name.iri]: "username",
+    [rdfs.comment.iri]: "comments",
+    [rdfs.label.iri]: "labels",
+  },
+  [core.act.iri]: {
+    [core.hasInterpretation.iri]: "interpretation",
+    [core.hasSourceLocation.iri]: "sourceLocation",
+    [core.isAuthoredBy.iri]: "authors",
+    [core.isAuthoredOn.iri]: "date",
+    [rdfs.comment.iri]: "comment",
     [rdfs.label.iri]: "labels",
   },
   [core.aspect.iri]: {
     [core.hasText.iri]: "text",
     [core.sameAs.iri]: "sameAs",
+    [rdfs.comment.iri]: "comments",
+    [rdfs.label.iri]: "labels",
+  },
+  [core.author.iri]: {
+    [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",
   },
   [core.event.iri]: {
@@ -27,16 +41,35 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [core.takesPlaceNotLaterThan.iri]: "latest",
     [core.takesPlaceOn.iri]: "exact",
     [core.usesAspect.iri]: "aspects",
+    [rdfs.comment.iri]: "comments",
+    [rdfs.label.iri]: "labels",
+  },
+  [core.group.iri]: {
+    [core.sameAs.iri]: "sameAs",
+    [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",
   },
   [core.place.iri]: {
     [core.sameAs.iri]: "sameAs",
+    [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",
   },
   [core.person.iri]: {
     [core.diesIn.iri]: "diesIn",
     [core.isBornIn.iri]: "bornIn",
     [core.sameAs.iri]: "sameAs",
+    [rdfs.comment.iri]: "comments",
+    [rdfs.label.iri]: "labels",
+  },
+  [core.source.iri]: {
+    [core.sameAs.iri]: "sameAs",
+    [rdfs.comment.iri]: "comments",
+    [rdfs.label.iri]: "labels",
+  },
+  [core.sourceLocation.iri]: {
+    [core.hasSource.iri]: "source",
+    [core.hasText.iri]: "text",
+    [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",
   },
   [hydra.Collection.iri]: {
@@ -44,6 +77,7 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [hydra.totalItems.iri]: "total",
   },
   [rdfs.Class.iri]: {
+    [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",
   },
 };
