@@ -33,4 +33,5 @@ export const normalizeEvent: Normalizer = (node, normalized, cache) => {
       normalized.exact || normalized.latest || normalized.earliest;
   }
   makeSingle(normalized, "place");
+  makeSingle(normalized, "act");
 };

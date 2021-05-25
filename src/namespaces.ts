@@ -74,6 +74,7 @@ export const namespaces = {
     isAuthoredBy: core.resource("is_authored_by"),
     isAuthoredOn: core.resource("is_authored_on"),
     isBornIn: core.resource("is_born_in"),
+    isInterpretationOf: core.resource("is_interpretation_of"),
     person: core.resource("person"),
     place: core.resource("place"),
     sameAs: core.resource("same_as"),

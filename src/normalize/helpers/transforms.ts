@@ -27,7 +27,7 @@ export const addLinks = (
 
 export const flattenLiteral = (normalized: Normalized, key: string): void => {
   const literal = (normalized[key] as MaybeNodes)?.[0] as undefined | Literal;
-  if (literal && literal.value) {
+  if (literal && literal.value !== undefined) {
     normalized[key] = literal.value;
   }
 };
