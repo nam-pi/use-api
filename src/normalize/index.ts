@@ -85,7 +85,7 @@ const initNormalized = (
         const property = normalizeNode(resource[i], cache, blanks, propertyMap);
         if (!property) {
           continue;
-        } else if (property.value) {
+        } else if (property.value !== undefined) {
           literals.push(property as Literal);
         } else {
           properties.push(property as Normalized);
