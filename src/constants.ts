@@ -36,6 +36,7 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [core.hasMainParticipant.iri]: "mainParticipant",
     [core.hasParticipant.iri]: "participants",
     [core.hasSortingDate.iri]: "sort",
+    [core.isInterpretationOf.iri]: "act",
     [core.takesPlaceAt.iri]: "place",
     [core.takesPlaceNotEarlierThan.iri]: "earliest",
     [core.takesPlaceNotLaterThan.iri]: "latest",

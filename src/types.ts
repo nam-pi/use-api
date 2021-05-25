@@ -119,6 +119,8 @@ export interface Entity {
 
 /** An event */
 export interface Event extends Item {
+  /** The document interpretation act this event is used */
+  act: Act;
   /** The sorting date for the event, to be used when sorting the event as part of a list */
   sort?: Date;
   /** The exact date the event happened */
@@ -145,6 +147,8 @@ export interface EventsQuery extends CollectionQuery {
   aspectType?: string;
   /** Filter by the type of aspect use. Can be any subclass of *https://purl.org/nampi/owl/core#uses_aspect* that is part of the connected ontologies */
   aspectUseType?: string;
+  /** Filter by the author of the connected document interpretation act. Can be the iri of any author individual */
+  author?: string;
   /** Filter events by end date. All events that have dates (exact, earliest, latest, sort), *at* or *before* this date will be included */
   endDate?: Date;
   /** What to order the events by */
