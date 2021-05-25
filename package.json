@@ -1,6 +1,6 @@
 {
   "name": "nampi-use-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Daniel Jeller <djeller@nettek.at>",
   "repository": {
     "type": "git",
@@ -20,8 +20,7 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -cw",
-    "prepublish": "yarn build",
-    "publish": "yarn publish"
+    "prepublish": "yarn build"
   },
   "husky": {
     "hooks": {
