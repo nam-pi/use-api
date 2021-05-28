@@ -32,6 +32,7 @@ export type {
   Class,
   ClassesQuery,
   CollectionNav,
+  CollectionQuery,
   Entity,
   Event,
   EventsQuery,
