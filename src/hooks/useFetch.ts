@@ -147,6 +147,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
 
   const doFetch = useCallback(
     async (url: string) => {
+      setLoading(true);
       const config: RequestInit = { ...DEFAULT_CONFIG };
       if (keycloak.token) {
         config.headers = {
