@@ -1,13 +1,13 @@
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { Listbox } from "@headlessui/react";
 import clsx from "clsx";
-import { useClasses } from "nampi-use-api/bundle";
+import { useTypes } from "nampi-use-api/bundle";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { serializeLabels } from "../../utils/serializeLabels";
 import { Icon } from "../Icon";
 
 export interface Props {
-  baseClass: string;
+  baseType: string;
   onChange?: (id: string, value: string) => void;
 }
 
@@ -16,12 +16,12 @@ interface Type {
   value: string;
 }
 
-export const ItemTypeSelect = ({ baseClass, onChange = () => {} }: Props) => {
-  const { data, initialized, loading } = useClasses({
+export const ItemTypeSelect = ({ baseType, onChange = () => {} }: Props) => {
+  const { data, initialized, loading } = useTypes({
     query: {
       limit: 1000,
       orderBy: "label",
-      ancestor: baseClass,
+      type: baseType,
     },
   });
 

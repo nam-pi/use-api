@@ -99,9 +99,9 @@ export const namespaces = {
   },
 
   rdfs: {
-    Class: rdfs.resource("Class"),
     comment: rdfs.resource("comment"),
     label: rdfs.resource("label"),
+    Resource: rdfs.resource("Resource"),
   },
 
   schema: {

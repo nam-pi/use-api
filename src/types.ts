@@ -42,13 +42,6 @@ export type Blanks = Record<string, string>;
 
 export type Cache = Record<string, Normalized>;
 
-export type Class = Item;
-
-export interface ClassesQuery extends CollectionQuery {
-  /** Filter by parent of all *rdfs:subClassOf* relations the class has */
-  ancestor?: string;
-}
-
 /** An entity collection */
 export interface Collection<T extends Entity> extends Item {
   /** The url to the first page of partial collection results */
@@ -352,6 +345,12 @@ export interface Source extends Item {
 export type SourcesQuery = CollectionQuery;
 
 export type Timeout = undefined | ReturnType<typeof setTimeout>;
+
+export type Type = Item;
+
+export interface TypesQuery extends Omit<CollectionQuery, "text"> {
+  type: string;
+}
 
 export interface UseAuth
   extends Pick<KeycloakInstance, "authenticated" | "login" | "logout"> {

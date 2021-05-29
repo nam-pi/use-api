@@ -8,8 +8,6 @@ import {
   AspectsQuery,
   Author,
   AuthorsQuery,
-  Class,
-  ClassesQuery,
   CollectionQuery,
   Event,
   EventsQuery,
@@ -24,6 +22,8 @@ import {
   SortFunction,
   Source,
   SourcesQuery,
+  Type,
+  TypesQuery,
   User,
 } from "types";
 import { buildPath } from "utils/buildPath";
@@ -84,13 +84,13 @@ export const useAuthor: FetchHook<Author> = ({ idLocal, paused }) => {
   return useFetch(buildPath(apiUrl, "author", idLocal), paused);
 };
 
-export const useClasses: FetchCollectionHook<Class, ClassesQuery> = ({
+export const useTypes: FetchCollectionHook<Type, TypesQuery> = ({
   paused,
   query,
 }) => {
   const { apiUrl } = useNampiContext();
   const sorter = getDefaultSorter(query);
-  return useFetch(buildPath(apiUrl, "classes"), query, sorter, paused);
+  return useFetch(buildPath(apiUrl, "types"), query, sorter, paused);
 };
 
 export const useEvent: FetchHook<Event> = ({ idLocal, paused }) => {
