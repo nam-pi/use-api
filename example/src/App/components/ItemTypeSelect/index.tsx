@@ -63,7 +63,7 @@ export const ItemTypeSelect = ({ baseType, onChange = () => {} }: Props) => {
           {aspectTypes.map((type) => (
             <Listbox.Option key={type.id} value={type}>
               {({ active, selected }) => (
-                <li
+                <div
                   className={clsx(
                     "px-2",
                     "py-1",
@@ -77,7 +77,7 @@ export const ItemTypeSelect = ({ baseType, onChange = () => {} }: Props) => {
                   )}
                 >
                   {type.value}
-                </li>
+                </div>
               )}
             </Listbox.Option>
           ))}

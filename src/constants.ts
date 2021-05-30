@@ -3,6 +3,8 @@ import { PropertyMap } from "types";
 
 const { api, core, hydra, rdfs, schema } = namespaces;
 
+export const DEFAULT_LIMIT = 20;
+
 export const DEFAULT_PROPERTY_MAP: PropertyMap = {
   [api.user.iri]: {
     [core.sameAs.iri]: "author",

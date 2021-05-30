@@ -20,6 +20,7 @@ ReactDOM.render(
       api={api}
       auth={auth}
       client={client}
+      defaultLimit={15}
       realm={realm}
       searchTimeout={200}
       silentSsoUri={window.location.origin + "/silent-check-sso.html"}

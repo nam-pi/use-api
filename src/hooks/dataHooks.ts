@@ -84,15 +84,6 @@ export const useAuthor: FetchHook<Author> = ({ idLocal, paused }) => {
   return useFetch(buildPath(apiUrl, "author", idLocal), paused);
 };
 
-export const useTypes: FetchCollectionHook<Type, TypesQuery> = ({
-  paused,
-  query,
-}) => {
-  const { apiUrl } = useNampiContext();
-  const sorter = getDefaultSorter(query);
-  return useFetch(buildPath(apiUrl, "types"), query, sorter, paused);
-};
-
 export const useEvent: FetchHook<Event> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
   return useFetch(buildPath(apiUrl, "event", idLocal), paused);
@@ -176,6 +167,15 @@ export const useSources: FetchCollectionHook<Source, SourcesQuery> = ({
   const { apiUrl } = useNampiContext();
   const sorter = getDefaultSorter(query);
   return useFetch(buildPath(apiUrl, "sources"), query, sorter, paused);
+};
+
+export const useTypes: FetchCollectionHook<Type, TypesQuery> = ({
+  paused,
+  query,
+}) => {
+  const { apiUrl } = useNampiContext();
+  const sorter = getDefaultSorter(query);
+  return useFetch(buildPath(apiUrl, "types"), query, sorter, paused);
 };
 
 export const useUser = (): FetchResult<User> => {

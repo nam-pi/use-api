@@ -2,7 +2,11 @@ import Keycloak, { KeycloakInitOptions } from "keycloak-js";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { InversePropertyMap, PropertyMap, ProviderConfig } from "types";
 import { deepMerge } from "utils/deepMerge";
-import { DEFAULT_PROPERTY_MAP, DEFAULT_SEARCH_TIMEOUT } from "../constants";
+import {
+  DEFAULT_LIMIT,
+  DEFAULT_PROPERTY_MAP,
+  DEFAULT_SEARCH_TIMEOUT,
+} from "../constants";
 import { NampiContext } from "./NampiContext";
 
 const invertPropertyMap = (propertyMap: PropertyMap): InversePropertyMap => {
@@ -24,6 +28,7 @@ export const NampiProvider = ({
   api,
   auth,
   client,
+  defaultLimit = DEFAULT_LIMIT,
   propertyMap,
   searchTimeout = DEFAULT_SEARCH_TIMEOUT,
   realm,
@@ -65,6 +70,7 @@ export const NampiProvider = ({
     <NampiContext.Provider
       value={{
         apiUrl: api,
+        defaultLimit,
         initialized,
         inversePropertyMap: invertPropertyMap(fullPropertyMap),
         keycloak,

@@ -2,7 +2,7 @@ import { expand } from "jsonld";
 import { JsonLdArray } from "jsonld/jsonld-spec";
 import { namespaces } from "namespaces";
 import { normalize } from "normalize";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Collection,
   CollectionNav,
@@ -65,7 +65,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
 ): FetchCollectionResult<T>;
 export function useFetch<T extends Entity, Query extends CollectionQuery>(
   baseUrl: string,
-  query?: Query,
+  externalQuery?: Query,
   sorter?: SortFunction<T>,
   paused = false
 ) {
@@ -73,6 +73,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
   const inputTimeout = useRef<Timeout>();
   const oldQuery = useRef<string>("");
   const {
+    defaultLimit,
     initialized,
     keycloak,
     propertyMap,
@@ -80,6 +81,16 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
   } = useNampiContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [state, setState] = useState<State<T>>({});
+
+  const query = useMemo(() => {
+    if (externalQuery && externalQuery.limit === undefined) {
+      const query = { ...externalQuery };
+      query.limit = defaultLimit;
+      return query;
+    }
+    return externalQuery;
+  }, [defaultLimit, externalQuery]);
+
   const [searchParams, setSearchParams] = useState<undefined | URLSearchParams>(
     () => (query ? toUrlSearchParams(query) : undefined)
   );
