@@ -2,6 +2,7 @@ import { NodeObject } from "jsonld";
 import { JsonLdArray } from "jsonld/jsonld-spec";
 import { namespaces } from "namespaces";
 import { normalizeEvent } from "normalize/normalizers/normalizeEvent";
+import { normalizeHierarchy } from "normalize/normalizers/normalizeHierarchy";
 import { normalizeUser } from "normalize/normalizers/normalizeUser";
 import {
   Blanks,
@@ -16,6 +17,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { getIdLocal } from "./helpers/getIdLocal";
 import { isBlank } from "./helpers/isBlank";
+import { mapKey } from "./helpers/mapKey";
 import { addLinks } from "./helpers/transforms";
 import { normalizeActs } from "./normalizers/normalizeActs";
 import { normalizeCollection } from "./normalizers/normalizeCollection";
@@ -25,6 +27,8 @@ const { api, core, hydra, xsd } = namespaces;
 
 const findNormalizer = (type: undefined | string): Normalizer => {
   switch (type) {
+    case api.hierarchy.iri:
+      return normalizeHierarchy;
     case core.act.iri:
       return normalizeActs;
     case hydra.Collection.iri:
@@ -37,16 +41,16 @@ const findNormalizer = (type: undefined | string): Normalizer => {
       return normalizeUser;
     default:
       // Do nothing
-      return () => undefined;
+      return async () => undefined;
   }
 };
 
-const initNormalized = (
+const initNormalized = async (
   node: NodeObject,
   cache: Cache,
   blanks: Blanks,
   propertyMap: PropertyMap
-): Normalized => {
+): Promise<Normalized> => {
   const normalized = { links: {} } as Normalized;
   const resourceIris = Object.keys(node);
   for (let i = 0, length = resourceIris.length; i < length; i++) {
@@ -78,11 +82,15 @@ const initNormalized = (
       const resource = (Array.isArray(node[iri])
         ? node[iri]
         : [node[iri]]) as NodeObject[];
-      const propertyKey = mapKey(propertyMap, normalized.types, iri);
       const properties: Normalized[] = [];
       const literals: Literal[] = [];
       for (let i = 0, length = resource.length; i < length; i++) {
-        const property = normalizeNode(resource[i], cache, blanks, propertyMap);
+        const property = await normalizeNode(
+          resource[i],
+          cache,
+          blanks,
+          propertyMap
+        );
         if (!property) {
           continue;
         } else if (property.value !== undefined) {
@@ -91,6 +99,7 @@ const initNormalized = (
           properties.push(property as Normalized);
         }
       }
+      const propertyKey = mapKey(propertyMap, normalized.types, iri);
       if (literals.length > 0) {
         normalized[propertyKey] = literals;
       } else if (properties.length > 0) {
@@ -122,22 +131,12 @@ const joinCache = (normalized: Normalized, cache: Cache): NormalizeResult => {
   return result;
 };
 
-const mapKey = (
-  map: PropertyMap,
-  types: undefined | string[],
-  property: string
-): string => {
-  const itemType = (types || []).find((t) => map[t]);
-  const mapped = !itemType ? undefined : map[itemType]?.[property];
-  return mapped || property;
-};
-
-const normalizeNode = (
+const normalizeNode = async (
   node: NodeObject | null,
   cache: Cache,
   blanks: Blanks,
   propertyMap: PropertyMap
-): undefined | Normalized | Literal => {
+): Promise<undefined | Normalized | Literal> => {
   if (!node || typeof node !== "object") {
     return;
   }
@@ -156,10 +155,10 @@ const normalizeNode = (
       return literal;
     }
   } else if (node["@id"]) {
-    const normalized = initNormalized(node, cache, blanks, propertyMap);
+    const normalized = await initNormalized(node, cache, blanks, propertyMap);
     for (let i = 0, length = normalized.types?.length || 0; i < length; i++) {
       const normalizer = findNormalizer(normalized.types?.[i]);
-      normalizer(node, normalized, cache, blanks, propertyMap);
+      await normalizer(node, normalized, cache, blanks, propertyMap);
     }
     const original = (cache[normalized.idLocal] || {}) as Normalized;
     cache[normalized.idLocal] = { ...original, ...normalized };
@@ -167,21 +166,21 @@ const normalizeNode = (
   }
 };
 
-export const normalize = (
+export const normalize = async (
   jsonArray: JsonLdArray,
   propertyMap: PropertyMap
-): undefined | NormalizeResult => {
+): Promise<undefined | NormalizeResult> => {
   const blanks: Blanks = {};
   const cache: Cache = {};
   const root = jsonArray?.[0] || {};
   if (!root || Object.keys(root).length === 0) {
     return;
   }
-  const { idLocal } = normalizeNode(
+  const { idLocal } = (await normalizeNode(
     root,
     cache,
     blanks,
     propertyMap
-  ) as Normalized;
+  )) as Normalized;
   return joinCache(cache[idLocal], cache);
 };

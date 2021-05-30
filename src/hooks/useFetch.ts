@@ -116,8 +116,8 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
   }, []);
 
   const mapResult = useCallback(
-    (expanded: JsonLdArray) => {
-      const normalized = normalize(expanded, propertyMap);
+    async (expanded: JsonLdArray) => {
+      const normalized = await normalize(expanded, propertyMap);
       if (normalized?.types.includes(namespaces.hydra.Collection.iri)) {
         // Map collection data
         const {

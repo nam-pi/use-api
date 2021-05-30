@@ -4,7 +4,7 @@ import { MaybeNodes, Normalizer, RDFResource } from "types";
 
 const { schema } = namespaces;
 
-export const normalizeUser: Normalizer = (node, normalized) => {
+export const normalizeUser: Normalizer = async (node, normalized) => {
   const addValue = (property: RDFResource, name: string): void => {
     const value = (node[property.iri] as MaybeNodes)?.[0]?.["@value"];
     if (value) {

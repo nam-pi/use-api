@@ -201,6 +201,29 @@ export interface Group extends Item {
 /** Query parameters to fetch a partial groups collection */
 export type GroupsQuery = CollectionQuery;
 
+export interface Hierarchy extends Omit<Item, "response"> {
+  /** The id of the root item */
+  root: string;
+  /** A map with all hierarchy items indexed by their id for fast access */
+  items: { [id: string]: HierarchyItem };
+  /** All inheritance paths for the current hierarchy ([[ child -> parent 1 -> parent 2 -> parent 3 ], [ child -> parent A -> parent B ]]) */
+  paths: string[][];
+}
+
+export interface HierarchyItem extends Item {
+  /** The ids of all items this item is a descendant of */
+  descendantOf: undefined | string[];
+  /** The ids of the direct parent items */
+  parents: string[];
+  /** The ids of the direct children items */
+  children: string[];
+}
+
+export interface HierarchyQuery extends Record<string, unknown> {
+  /** The iri of the item to get the hierarchy for */
+  iri: string;
+}
+
 /** An inverted version of a property map where the property iris and short keys are switched to simplify reverse iri lookups */
 export interface InversePropertyMap {
   [itemIri: string]: { [shortKey: string]: string };
@@ -263,7 +286,7 @@ export type Normalizer = (
   cache: Cache,
   blanks: Blanks,
   propertyMap: PropertyMap
-) => void;
+) => Promise<void>;
 
 export interface NormalizeResult extends Record<string, unknown> {
   id: string;

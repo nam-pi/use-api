@@ -4,7 +4,7 @@ import { MaybeNodes, Normalizer } from "types";
 
 const { core } = namespaces;
 
-export const normalizeEvent: Normalizer = (node, normalized, cache) => {
+export const normalizeEvent: Normalizer = async (node, normalized, cache) => {
   const exact = cache[normalized.links?.exact?.[0] || ""];
   if (exact) {
     const value = (exact[core.hasDateTime.iri] as MaybeNodes)?.[0]?.value;

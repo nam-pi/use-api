@@ -16,6 +16,8 @@ import {
   FetchResult,
   Group,
   GroupsQuery,
+  Hierarchy,
+  HierarchyQuery,
   Person,
   PersonsQuery,
   Place,
@@ -125,6 +127,22 @@ export const useGroups: FetchCollectionHook<Group, GroupsQuery> = ({
   const { apiUrl } = useNampiContext();
   const sorter = getDefaultSorter(query);
   return useFetch(buildPath(apiUrl, "groups"), query, sorter, paused);
+};
+
+export const useHierarchy = ({
+  paused,
+  query,
+}: Parameters<
+  FetchCollectionHook<Hierarchy, HierarchyQuery>
+>[0]): FetchResult<Hierarchy> => {
+  const { apiUrl } = useNampiContext();
+  const { data, initialized, loading } = useFetch<Hierarchy, HierarchyQuery>(
+    buildPath(apiUrl, "hierarchy"),
+    query,
+    undefined,
+    paused
+  );
+  return { data: (data as unknown) as Hierarchy, initialized, loading };
 };
 
 export const usePerson: FetchHook<Person> = ({ idLocal, paused }) => {
