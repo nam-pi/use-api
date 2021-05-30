@@ -91,6 +91,7 @@ export interface CollectionQuery extends Record<string, unknown> {
 /** The internal state of the use-NAMPI context */
 export interface ContextState {
   apiUrl: string;
+  defaultLimit: number;
   initialized: boolean;
   inversePropertyMap: InversePropertyMap;
   keycloak: KeycloakInstance;
@@ -200,6 +201,29 @@ export interface Group extends Item {
 /** Query parameters to fetch a partial groups collection */
 export type GroupsQuery = CollectionQuery;
 
+export interface Hierarchy extends Omit<Item, "response"> {
+  /** The id of the root item */
+  root: string;
+  /** A map with all hierarchy items indexed by their id for fast access */
+  items: { [id: string]: HierarchyItem };
+  /** All inheritance paths for the current hierarchy ([[ child -> parent 1 -> parent 2 -> parent 3 ], [ child -> parent A -> parent B ]]) */
+  paths: string[][];
+}
+
+export interface HierarchyItem extends Item {
+  /** The ids of all items this item is a descendant of */
+  descendantOf: undefined | string[];
+  /** The ids of the direct parent items */
+  parents: string[];
+  /** The ids of the direct children items */
+  children: string[];
+}
+
+export interface HierarchyQuery extends Record<string, unknown> {
+  /** The iri of the item to get the hierarchy for */
+  iri: string;
+}
+
 /** An inverted version of a property map where the property iris and short keys are switched to simplify reverse iri lookups */
 export interface InversePropertyMap {
   [itemIri: string]: { [shortKey: string]: string };
@@ -262,7 +286,7 @@ export type Normalizer = (
   cache: Cache,
   blanks: Blanks,
   propertyMap: PropertyMap
-) => void;
+) => Promise<void>;
 
 export interface NormalizeResult extends Record<string, unknown> {
   id: string;
@@ -300,21 +324,23 @@ export interface PropertyMap {
 
 /** The NAMPI Provider configuration */
 export interface ProviderConfig {
-  /** * The URL of the NAMPI API endpoint * */
+  /** The URL of the NAMPI API endpoint * */
   api: string;
-  /** * The URL of the NAMPI Keycloak auth endpoint.  */
+  /** The URL of the NAMPI Keycloak auth endpoint.  */
   auth?: string;
-  /** * The name of the Keycloak client to use. If not present in combination with "realm", the login and logout auth functions will throw an error on use.  */
+  /** The name of the Keycloak client to use. If not present in combination with "realm", the login and logout auth functions will throw an error on use.  */
   client?: string;
+  /** The default limit to use when querying collections */
+  defaultLimit?: number;
   /** An optional custom property map to use when normalizing responses */
   propertyMap?: PropertyMap;
-  /** * The name of the Keycloak realm. If not present in combination with "client", the login and logout auth functions will throw an error on use.  */
+  /** The name of the Keycloak realm. If not present in combination with "client", the login and logout auth functions will throw an error on use.  */
   realm?: string;
-  /** * The timeout in ms to bundle search box entries when live searching so the server doesn't get flooded. Defaults to 200ms */
+  /** The timeout in ms to bundle search box entries when live searching so the server doesn't get flooded. Defaults to 200ms */
   searchTimeout?: number;
-  /** * Whether or not to to keep users logged in over browser restarts */
+  /** Whether or not to to keep users logged in over browser restarts */
   sso?: boolean;
-  /** * Enables the silent sso check. If enabled, the url to a site on the NAMPI app with special content needs to be provided.  * The content is described in the Keycloak documentation: https://github.com/keycloak/keycloak-documentation/blob/master/securing_apps/topics/oidc/javascript-adapter.adoc */
+  /** Enables the silent sso check. If enabled, the url to a site on the NAMPI app with special content needs to be provided.  * The content is described in the Keycloak documentation: https://github.com/keycloak/keycloak-documentation/blob/master/securing_apps/topics/oidc/javascript-adapter.adoc */
   silentSsoUri?: string;
 }
 

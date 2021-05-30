@@ -3,7 +3,14 @@ import { PropertyMap } from "types";
 
 const { api, core, hydra, rdfs, schema } = namespaces;
 
+export const DEFAULT_LIMIT = 20;
+
 export const DEFAULT_PROPERTY_MAP: PropertyMap = {
+  [api.hierarchy.iri]: {
+    [rdfs.label.iri]: "labels",
+    [api.descendantOf.iri]: "descendantOf",
+    [api.hierarchyRoot.iri]: "root",
+  },
   [api.user.iri]: {
     [core.sameAs.iri]: "author",
     [schema.email.iri]: "email",
@@ -80,6 +87,7 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
   [rdfs.Resource.iri]: {
     [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",
+    [api.descendantOf.iri]: "descendantOf",
   },
 };
 

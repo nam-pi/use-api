@@ -13,7 +13,7 @@ const getPage = (url: string) => {
   return Math.floor(offset / limit + 1);
 };
 
-export const normalizeCollection: Normalizer = (node, normalized) => {
+export const normalizeCollection: Normalizer = async (node, normalized) => {
   const view = (node[hydra.view.iri] as MaybeNodes)?.[0];
   if (view) {
     const first = view[hydra.first.iri] as MaybeNodes;
