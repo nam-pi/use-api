@@ -77,7 +77,7 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [hydra.member.iri]: "members",
     [hydra.totalItems.iri]: "total",
   },
-  [rdfs.Class.iri]: {
+  [rdfs.Resource.iri]: {
     [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",
   },

@@ -6,7 +6,6 @@ export {
   useAspects,
   useAuthor,
   useAuthors,
-  useClasses,
   useEvent,
   useEvents,
   useGroup,
@@ -17,6 +16,7 @@ export {
   usePlaces,
   useSource,
   useSources,
+  useTypes,
   useUser,
 } from "hooks/dataHooks";
 export { useAuth } from "hooks/useAuth";
@@ -29,8 +29,6 @@ export type {
   AspectsQuery,
   Author,
   AuthorsQuery,
-  Class,
-  ClassesQuery,
   CollectionNav,
   CollectionQuery,
   Entity,
@@ -52,5 +50,7 @@ export type {
   Source,
   SourceLocation,
   SourcesQuery,
+  Type,
+  TypesQuery,
   User,
 } from "types";

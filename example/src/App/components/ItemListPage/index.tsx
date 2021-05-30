@@ -14,7 +14,7 @@ import {
 import { LoadingPlaceholder } from "../LoadingPlaceholder";
 
 interface Props {
-  baseClass?: string;
+  baseType?: string;
   itemData: FetchCollectionResult;
   onClassChange?: ItemTypeSelectProps["onChange"];
   onTextChange?: (text: string) => void;
@@ -23,7 +23,7 @@ interface Props {
 }
 
 export const ItemListPage = ({
-  baseClass,
+  baseType,
   itemData,
   onClassChange = () => undefined,
   onTextChange = () => undefined,
@@ -36,10 +36,10 @@ export const ItemListPage = ({
     <div>
       <Heading>{total !== undefined ? `${title} (${total})` : title}</Heading>
       <div className="w-1/3 flex flex-col">
-        {baseClass ? (
+        {baseType ? (
           <div className="mt-4 flex w-full">
             <div className="mr-2 w-32">Aspect type:</div>
-            <ItemTypeSelect baseClass={baseClass} onChange={onClassChange} />
+            <ItemTypeSelect baseType={baseType} onChange={onClassChange} />
           </div>
         ) : (
           <></>
@@ -81,7 +81,7 @@ export const ItemListPage = ({
           })}
         </ul>
       ) : (
-        "No events found"
+        "No items found"
       )}
     </div>
   );

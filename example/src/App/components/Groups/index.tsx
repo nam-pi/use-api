@@ -10,7 +10,7 @@ export const Groups = () => {
   });
   return (
     <ItemListPage
-      baseClass="https://purl.org/nampi/owl/core#group"
+      baseType="https://purl.org/nampi/owl/core#group"
       itemData={itemData}
       title="Groups"
       onClassChange={setType}
