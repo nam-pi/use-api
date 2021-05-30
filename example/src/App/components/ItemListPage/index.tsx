@@ -81,7 +81,7 @@ export const ItemListPage = ({
           })}
         </ul>
       ) : (
-        "No events found"
+        "No items found"
       )}
     </div>
   );
