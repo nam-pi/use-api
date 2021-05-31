@@ -309,7 +309,10 @@ export interface Person extends Item {
 }
 
 /** Query parameters to fetch a partial persons collection */
-export type PersonsQuery = CollectionQuery;
+export interface PersonsQuery extends CollectionQuery {
+  /** Filter by aspects used in events the person appears in combination with a property descending of 'changes aspect of'. */
+  aspect?: string;
+}
 
 /** A place */
 export interface Place extends Item {
