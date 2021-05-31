@@ -24,8 +24,10 @@ export interface ActsQuery extends CollectionQuery {
 
 /** An aspect */
 export interface Aspect extends Item {
-  /** Items, possibly in other databases, that are the same as this aspect. */
+  /** Items, possibly in other databases, that are the same as this aspect */
   sameAs?: string[];
+  /** Textual content that is added to the aspect */
+  text?: LiteralString[];
 }
 
 export interface AspectsQuery extends CollectionQuery {
@@ -175,6 +177,7 @@ export interface FetchCollectionResult<T = Item> extends FetchResult<T[]> {
   /** The total number of results (members) of the collection */
   total: undefined | number;
 }
+
 export type FetchHook<T> = <
   ExtendedType extends Record<string, unknown> = Record<string, never>
 >(config: {
