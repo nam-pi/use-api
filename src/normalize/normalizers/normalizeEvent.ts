@@ -32,6 +32,7 @@ export const normalizeEvent: Normalizer = async (node, normalized, cache) => {
     normalized.sort =
       normalized.exact || normalized.latest || normalized.earliest;
   }
-  makeSingle(normalized, "place");
   makeSingle(normalized, "act");
+  makeSingle(normalized, "mainParticipant");
+  makeSingle(normalized, "place");
 };
