@@ -95,24 +95,25 @@ export const useEvents: FetchCollectionHook<Event, EventsQuery> = ({
   paused,
   query,
 }) => {
+  const copy = { ...query };
   const { apiUrl } = useNampiContext();
   let sorter: undefined | SortFunction<any> = undefined; // eslint-disable-line @typescript-eslint/no-explicit-any
-  switch (query.orderBy) {
+  switch (copy.orderBy) {
     case "date":
       sorter = sortByEventDate;
       break;
     default:
-      sorter = getDefaultSorter(query);
+      sorter = getDefaultSorter(copy);
   }
-  if (query.startDate || query.endDate) {
-    const dates = `${getDateString(query.startDate)}-${getDateString(
-      query.endDate
+  if (copy.startDate || copy.endDate) {
+    const dates = `${getDateString(copy.startDate)}-${getDateString(
+      copy.endDate
     )}`;
-    delete query.startDate;
-    delete query.endDate;
-    query.dates = dates;
+    delete copy.startDate;
+    delete copy.endDate;
+    copy.dates = dates;
   }
-  return useFetch(buildPath(apiUrl, "events"), query, sorter, paused);
+  return useFetch(buildPath(apiUrl, "events"), copy, sorter, paused);
 };
 
 export const useGroup: FetchHook<Group> = ({ idLocal, paused }) => {
