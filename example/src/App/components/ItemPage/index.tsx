@@ -14,7 +14,6 @@ export const ItemPage = ({ data, title }: Props) => {
     paused: !data,
     query: { iri: data?.id || "" },
   });
-  console.log(data);
   return data ? (
     <div>
       <Heading>{serializeLabels(data)}</Heading>
