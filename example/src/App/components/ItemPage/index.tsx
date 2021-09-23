@@ -1,5 +1,4 @@
 import { Item, useHierarchy } from "nampi-use-api/bundle";
-import React from "react";
 import { serializeLabels } from "../../utils/serializeLabels";
 import { Heading } from "../Heading";
 import { InheritancePath } from "../InheritancePath";
@@ -15,6 +14,7 @@ export const ItemPage = ({ data, title }: Props) => {
     paused: !data,
     query: { iri: data?.id || "" },
   });
+  console.log(data);
   return data ? (
     <div>
       <Heading>{serializeLabels(data)}</Heading>

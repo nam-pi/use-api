@@ -2,31 +2,31 @@ import { sortByEventDate } from "sorters/sortByEventDate";
 import { sortById } from "sorters/sortById";
 import { sortByLabel } from "sorters/sortByLabel";
 import {
-  Act,
-  ActsQuery,
-  Aspect,
-  AspectsQuery,
-  Author,
-  AuthorsQuery,
-  CollectionQuery,
-  Event,
-  EventsQuery,
-  FetchCollectionHook,
-  FetchHook,
-  FetchResult,
-  Group,
-  GroupsQuery,
-  Hierarchy,
-  HierarchyQuery,
-  Person,
-  PersonsQuery,
-  Place,
-  SortFunction,
-  Source,
-  SourcesQuery,
-  Type,
-  TypesQuery,
-  User,
+    Act,
+    ActsQuery,
+    Aspect,
+    AspectsQuery,
+    Author,
+    AuthorsQuery,
+    CollectionQuery,
+    Event,
+    EventsQuery,
+    FetchCollectionHook,
+    FetchHook,
+    FetchResult,
+    Group,
+    GroupsQuery,
+    Hierarchy,
+    HierarchyQuery,
+    Person,
+    PersonsQuery,
+    Place,
+    SortFunction,
+    Source,
+    SourcesQuery,
+    Type,
+    TypesQuery,
+    User
 } from "types";
 import { buildPath } from "utils/buildPath";
 import { getDateString } from "utils/getDateString";
@@ -55,7 +55,7 @@ export const useActs: FetchCollectionHook<Act, ActsQuery> = ({
 
 export const useAct: FetchHook<Act> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "act", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "acts", idLocal), paused);
 };
 
 export const useAspects: FetchCollectionHook<Aspect, AspectsQuery> = ({
@@ -69,7 +69,7 @@ export const useAspects: FetchCollectionHook<Aspect, AspectsQuery> = ({
 
 export const useAspect: FetchHook<Aspect> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "aspect", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "aspects", idLocal), paused);
 };
 
 export const useAuthors: FetchCollectionHook<Author, AuthorsQuery> = ({
@@ -83,12 +83,12 @@ export const useAuthors: FetchCollectionHook<Author, AuthorsQuery> = ({
 
 export const useAuthor: FetchHook<Author> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "author", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "authors", idLocal), paused);
 };
 
 export const useEvent: FetchHook<Event> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "event", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "events", idLocal), paused);
 };
 
 export const useEvents: FetchCollectionHook<Event, EventsQuery> = ({
@@ -118,7 +118,7 @@ export const useEvents: FetchCollectionHook<Event, EventsQuery> = ({
 
 export const useGroup: FetchHook<Group> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "group", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "groups", idLocal), paused);
 };
 
 export const useGroups: FetchCollectionHook<Group, GroupsQuery> = ({
@@ -148,7 +148,7 @@ export const useHierarchy = ({
 
 export const usePerson: FetchHook<Person> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "person", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "persons", idLocal), paused);
 };
 
 export const usePersons: FetchCollectionHook<Person, PersonsQuery> = ({
@@ -162,7 +162,7 @@ export const usePersons: FetchCollectionHook<Person, PersonsQuery> = ({
 
 export const usePlace: FetchHook<Place> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "place", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "places", idLocal), paused);
 };
 
 export const usePlaces: FetchCollectionHook<Place, PersonsQuery> = ({
@@ -176,7 +176,7 @@ export const usePlaces: FetchCollectionHook<Place, PersonsQuery> = ({
 
 export const useSource: FetchHook<Source> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "source", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "sources", idLocal), paused);
 };
 
 export const useSources: FetchCollectionHook<Source, SourcesQuery> = ({

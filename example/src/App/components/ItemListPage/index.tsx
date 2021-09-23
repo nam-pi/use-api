@@ -1,6 +1,6 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FetchCollectionResult } from "nampi-use-api/bundle";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { serializeLabels } from "../../utils/serializeLabels";
 import { Heading } from "../Heading";
@@ -8,8 +8,8 @@ import { Icon } from "../Icon";
 import { Input } from "../Input";
 import { ItemNav } from "../ItemNav";
 import {
-  ItemTypeSelect,
-  Props as ItemTypeSelectProps,
+    ItemTypeSelect,
+    Props as ItemTypeSelectProps
 } from "../ItemTypeSelect";
 import { LoadingPlaceholder } from "../LoadingPlaceholder";
 

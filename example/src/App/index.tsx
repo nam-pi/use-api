@@ -35,22 +35,22 @@ export const App = () => {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/persons/:idLocal" component={Person} />
             <Route exact path="/persons" component={Persons} />
-            <Route exact path="/person/:idLocal" component={Person} />
+            <Route exact path="/events/:idLocal" component={Event} />
             <Route exact path="/events" component={Events} />
-            <Route exact path="/event/:idLocal" component={Event} />
+            <Route exact path="/aspects/:idLocal" component={Aspect} />
             <Route exact path="/aspects" component={Aspects} />
-            <Route exact path="/aspect/:idLocal" component={Aspect} />
+            <Route exact path="/acts/:idLocal" component={Act} />
             <Route exact path="/acts" component={Acts} />
-            <Route exact path="/act/:idLocal" component={Act} />
+            <Route exact path="/authors/:idLocal" component={Author} />
             <Route exact path="/authors" component={Authors} />
-            <Route exact path="/author/:idLocal" component={Author} />
+            <Route exact path="/places/:idLocal" component={Place} />
             <Route exact path="/places" component={Places} />
-            <Route exact path="/place/:idLocal" component={Place} />
+            <Route exact path="/groups/:idLocal" component={Group} />
             <Route exact path="/groups" component={Groups} />
-            <Route exact path="/group/:idLocal" component={Group} />
+            <Route exact path="/sources/:idLocal" component={Source} />
             <Route exact path="/sources" component={Sources} />
-            <Route exact path="/source/:idLocal" component={Source} />
             <PrivateRoute exact path="/profile" component={Profile} />
             <Route path="*" component={NoMatch} />
           </Switch>

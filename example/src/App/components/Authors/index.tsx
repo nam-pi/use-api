@@ -1,5 +1,5 @@
 import { useAuthors } from "nampi-use-api/bundle";
-import React, { useState } from "react";
+import { useState } from "react";
 import { ItemListPage } from "../ItemListPage";
 
 export const Authors = () => {
@@ -12,7 +12,7 @@ export const Authors = () => {
       itemData={itemData}
       onTextChange={setText}
       title="Authors"
-      urlPart="author"
+      urlPart="authors"
     />
   );
 };

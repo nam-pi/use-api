@@ -1,5 +1,5 @@
 import { useGroups } from "nampi-use-api/bundle";
-import React, { useState } from "react";
+import { useState } from "react";
 import { ItemListPage } from "../ItemListPage";
 
 export const Groups = () => {
@@ -15,7 +15,7 @@ export const Groups = () => {
       title="Groups"
       onClassChange={setType}
       onTextChange={setText}
-      urlPart="group"
+      urlPart="groups"
     />
   );
 };

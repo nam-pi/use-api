@@ -1,5 +1,5 @@
 import { useAspects } from "nampi-use-api/bundle";
-import React, { useState } from "react";
+import { useState } from "react";
 import { ItemListPage } from "../ItemListPage";
 
 export const Aspects = () => {
@@ -15,7 +15,7 @@ export const Aspects = () => {
       onClassChange={setType}
       onTextChange={setText}
       title="Aspects"
-      urlPart="aspect"
+      urlPart="aspects"
     />
   );
 };
