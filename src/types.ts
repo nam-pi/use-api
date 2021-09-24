@@ -199,6 +199,10 @@ export interface FetchResult<T = Item> {
 export interface Group extends Item {
   /** Items, possibly in other databases, that are the same as this group. */
   sameAs?: string[];
+  /** Groups this group is part of. */
+  isPartOf?: Group[];
+  /** Groups that are a part of this group. */
+  hasPart?: Group[];
 }
 
 /** Query parameters to fetch a partial groups collection */

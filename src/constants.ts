@@ -53,6 +53,8 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [rdfs.label.iri]: "labels",
   },
   [core.group.iri]: {
+    [core.hasPart.iri]: "hasPart",
+    [core.isPartOf.iri]: "isPartOf",
     [core.sameAs.iri]: "sameAs",
     [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",

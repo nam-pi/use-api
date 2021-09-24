@@ -143,7 +143,7 @@ export const useHierarchy = ({
     undefined,
     paused
   );
-  return { data: (data as unknown) as Hierarchy, initialized, loading };
+  return { data: data as unknown as Hierarchy, initialized, loading };
 };
 
 export const usePerson: FetchHook<Person> = ({ idLocal, paused }) => {
@@ -199,5 +199,5 @@ export const useTypes: FetchCollectionHook<Type, TypesQuery> = ({
 
 export const useUser = (): FetchResult<User> => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "user"));
+  return useFetch(buildPath(apiUrl, "users", "current"));
 };
