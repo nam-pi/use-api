@@ -5,14 +5,14 @@ import { normalizeEvent } from "normalize/normalizers/normalizeEvent";
 import { normalizeHierarchy } from "normalize/normalizers/normalizeHierarchy";
 import { normalizeUser } from "normalize/normalizers/normalizeUser";
 import {
-  Blanks,
-  Cache,
-  Literal,
-  LiteralString,
-  Normalized,
-  Normalizer,
-  NormalizeResult,
-  PropertyMap,
+    Blanks,
+    Cache,
+    Literal,
+    LiteralString,
+    Normalized,
+    Normalizer,
+    NormalizeResult,
+    PropertyMap
 } from "types";
 import { v4 as uuidv4 } from "uuid";
 import { getIdLocal } from "./helpers/getIdLocal";
@@ -22,6 +22,7 @@ import { addLinks } from "./helpers/transforms";
 import { normalizeActs } from "./normalizers/normalizeActs";
 import { normalizeCollection } from "./normalizers/normalizeCollection";
 import { normalizeSourceLocation } from "./normalizers/normalizeSourceLocation";
+import { normalizeStatus } from "./normalizers/normalizeStatus";
 
 const { api, core, hydra, xsd } = namespaces;
 
@@ -39,6 +40,8 @@ const findNormalizer = (type: undefined | string): Normalizer => {
       return normalizeSourceLocation;
     case api.user.iri:
       return normalizeUser;
+    case hydra.Status.iri:
+      return normalizeStatus;
     default:
       // Do nothing
       return async () => undefined;
@@ -61,9 +64,9 @@ const initNormalized = async (
     // Add types
     if (iri === "@type") {
       const resource = node[iri] as string | string[];
-      normalized.types = (Array.isArray(resource)
-        ? resource
-        : [resource]) as string[];
+      normalized.types = (
+        Array.isArray(resource) ? resource : [resource]
+      ) as string[];
     }
     // Add id
     else if (iri === "@id") {
@@ -79,9 +82,9 @@ const initNormalized = async (
     }
     // Add all other nodes
     else {
-      const resource = (Array.isArray(node[iri])
-        ? node[iri]
-        : [node[iri]]) as NodeObject[];
+      const resource = (
+        Array.isArray(node[iri]) ? node[iri] : [node[iri]]
+      ) as NodeObject[];
       const properties: Normalized[] = [];
       const literals: Literal[] = [];
       for (let i = 0, length = resource.length; i < length; i++) {

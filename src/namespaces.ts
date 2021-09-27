@@ -53,6 +53,7 @@ export const namespaces = {
     eventParticipantVariable: api.resource("eventParticipantVariable"),
     hierarchy: api.resource("hierarchy"),
     hierarchyRoot: api.resource("hierarchyRoot"),
+    isAuthor: api.resource("is_author"),
     personOrderByVariable: api.resource("personOrderByVariable"),
     textVariable: api.resource("textVariable"),
     user: api.resource("user"),
@@ -94,13 +95,17 @@ export const namespaces = {
 
   hydra: {
     Collection: hydra.resource("Collection"),
-    member: hydra.resource("member"),
-    view: hydra.resource("view"),
+    description: hydra.resource("description"),
     first: hydra.resource("first"),
-    previous: hydra.resource("previous"),
-    next: hydra.resource("next"),
     last: hydra.resource("last"),
+    member: hydra.resource("member"),
+    next: hydra.resource("next"),
+    previous: hydra.resource("previous"),
+    Status: hydra.resource("Status"),
+    statusCode: hydra.resource("statusCode"),
+    title: hydra.resource("title"),
     totalItems: hydra.resource("totalItems"),
+    view: hydra.resource("view"),
   },
 
   rdfs: {

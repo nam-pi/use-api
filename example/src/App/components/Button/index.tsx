@@ -5,7 +5,7 @@ export interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
 export const Button = ({ className = "", disabled, ...props }: Props) => {
   let defaultClasses =
-    "rounded border border-gray-400 border-1 shadow disabled:opacity-50";
+    "rounded border h-10 border-gray-400 border-1 shadow disabled:opacity-50 transition-colors duration-150";
   if (!className.includes("p-") && !className.includes("px-")) {
     defaultClasses += " px-2";
   }
@@ -14,6 +14,9 @@ export const Button = ({ className = "", disabled, ...props }: Props) => {
   }
   if (disabled) {
     defaultClasses += " cursor-default";
+  }
+  if (!disabled) {
+    defaultClasses += " hover:bg-gray-100";
   }
 
   return (

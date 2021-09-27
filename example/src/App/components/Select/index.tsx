@@ -1,8 +1,14 @@
 import clsx from "clsx";
-import { HTMLProps } from "react";
+import { DetailedHTMLProps, forwardRef, SelectHTMLAttributes } from "react";
 
-interface Props extends HTMLProps<HTMLSelectElement> {}
+interface Props
+  extends DetailedHTMLProps<
+    SelectHTMLAttributes<HTMLSelectElement>,
+    HTMLSelectElement
+  > {}
 
-export const Select = ({ className, ...props }: Props) => (
-  <select {...props} className={clsx(className)} />
+export const Select = forwardRef<HTMLSelectElement, Props>(
+  ({ className, ...props }, ref) => (
+    <select {...props} className={clsx(className, "rounded")} ref={ref} />
+  )
 );

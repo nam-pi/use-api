@@ -12,14 +12,14 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [api.hierarchyRoot.iri]: "root",
   },
   [api.user.iri]: {
-    [core.sameAs.iri]: "author",
+    [api.isAuthor.iri]: "author",
+    [rdfs.comment.iri]: "comments",
+    [rdfs.label.iri]: "labels",
     [schema.email.iri]: "email",
     [schema.familyName.iri]: "familyName",
     [schema.givenName.iri]: "givenName",
     [schema.identifier.iri]: "identifier",
     [schema.name.iri]: "username",
-    [rdfs.comment.iri]: "comments",
-    [rdfs.label.iri]: "labels",
   },
   [core.act.iri]: {
     [core.hasInterpretation.iri]: "interpretation",
@@ -85,6 +85,11 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
   [hydra.Collection.iri]: {
     [hydra.member.iri]: "members",
     [hydra.totalItems.iri]: "total",
+  },
+  [hydra.Status.iri]: {
+    [hydra.statusCode.iri]: "code",
+    [hydra.title.iri]: "title",
+    [hydra.description.iri]: "description",
   },
   [rdfs.Resource.iri]: {
     [rdfs.comment.iri]: "comments",

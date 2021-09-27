@@ -135,6 +135,88 @@ export interface Event extends Item {
   place?: Place;
 }
 
+interface BaseMutationPayload extends MutationPayload {
+  /**
+   * Comments for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
+   * @example A string
+   * @example A language string@en
+   */
+  comments: string[];
+  /**
+   * Labels for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
+   * @example A string
+   * @example A language string@en
+   */
+  labels: string[];
+  /**
+   * Texts for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
+   * @example A string
+   * @example A language string@en
+   */
+  texts: string[];
+  /**
+   * The full URL of the entity type.
+   * @example https://purl.org/nampi/owl/core#event
+   */
+  type: string;
+}
+
+export interface EventMutationPayload extends BaseMutationPayload {
+  /**
+   * The aspects that are used in the events.
+   * Can be either a full URL for each aspect or the full URLS for each aspect usage (default is core:uses_aspect)
+   * and aspect type, separated by a pipe-char.
+   * @example http://example.org/aspects/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
+   * @example https://purl.org/nampi/owl/core#adds_aspect|http://example.org/aspects/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
+   */
+  aspects: string[];
+  /**
+   * All authors of the connected document interpretation act with their full URL.
+   * @example http://example.org/authors/54d5056c-0d87-4a23-8211-390920b22248
+   * */
+  authors: string[];
+  /**
+   * The date for the event. Can be a variant of one or two dates in the format YYYY-MM-DD, separated by a hyphen.
+   * @example 1798-12-01 Exactly on the date
+   * @example 1798-12-01- Not earlier than the date
+   * @example -1798-12-01 Not later than the date
+   * @example 1797-01-01-1798-12-01 Not earlier than the first date and not later than the second date
+   */
+  date: string;
+  /**
+   * The main participant of the event.
+   * Can be either the person's full URL or the full URLS for the participation (default is core:has_main_participant)
+   * and the person type, separated by a pipe-char.
+   * @example http://example.org/persons/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
+   * @example https://purl.org/nampi/owl/core#starts_life_of|http://example.org/persons/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
+   */
+  mainParticipant: string;
+  /**
+   * The other participants of the event.
+   * Can be either a full URL for each person or the full URLS for each participation  (default is core:has_participant)
+   * and person type, separated by a pipe-char.
+   * @example https://purl.org/nampi/owl/core#has_participant|http://example.org/persons/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
+   */
+  otherParticipants: string[];
+  /**
+   * The full URL of the event place.
+   * @example http://example.org/places/8757ab2f-aaab-4c96-bfb4-faff947c1be7
+   */
+  place: string;
+  /**
+   * The full URL of the interpretation source.
+   * @example http://example.org/sources/9876ab2f-aaab-4c96-bfb4-faff947c1be7
+   */
+  source: string;
+  /**
+   * The text of the source location.
+   * @example p7
+   * @example 6v
+   * @example pages 7-9
+   */
+  sourceLocation: string;
+}
+
 /** Query parameters to fetch a partial events collection */
 export interface EventsQuery extends CollectionQuery {
   /** Filter by aspect used in the event. Can be the iri of any aspect individual */
@@ -276,12 +358,54 @@ export interface LiteralString extends Literal {
 
 export type MaybeNodes = undefined | NodeObject[];
 
+export type MutationConfig = MutationCreate | MutationUpdate | MutationDelete;
+
+export interface MutationCreate {
+  action: "create";
+}
+
+export interface MutationUpdate {
+  action: "update";
+  idLocal: string;
+}
+
+export interface MutationDelete {
+  action: "delete";
+  idLocal: string;
+}
+
+export type MutationHook<PayloadType, ResponseType> = (
+  config: MutationConfig
+) => {
+  mutate:
+    | (() => Promise<MutationResponse<true>>)
+    | ((payload: PayloadType) => Promise<MutationResponse<ResponseType>>);
+  loading: boolean;
+  data?: void | true | ResponseType;
+  error?: void | NampiError;
+};
+
+export type MutationPayload = Record<string, string | string[]>;
+
+export interface MutationResponse<T> {
+  data?: undefined | T;
+  error?: undefined | NampiError;
+}
+
 export interface Namespace {
   iri: string;
   resource: (localName: string) => RDFResource;
 }
 
 export type Namespaces = typeof namespaces;
+
+export interface NampiError {
+  description: LiteralString;
+  statusCode: number;
+  title: LiteralString;
+  /** The RDF type iris */
+  types: string[];
+}
 
 export interface Normalized extends NormalizeResult {
   links: Links;

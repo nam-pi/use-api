@@ -1,6 +1,6 @@
 import {
-  FontAwesomeIcon,
-  FontAwesomeIconProps,
+    FontAwesomeIcon,
+    FontAwesomeIconProps
 } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { Button, Props as ButtonProps } from "../Button";
@@ -48,7 +48,13 @@ const separate = (
 export const IconButton = (props: Props) => {
   const [buttonProps, iconProps] = separate(props);
   return (
-    <Button {...buttonProps} className={clsx("px-1", buttonProps.className)}>
+    <Button
+      {...buttonProps}
+      className={clsx(
+        "inline-flex items-center justify-center h-10",
+        buttonProps.className
+      )}
+    >
       <FontAwesomeIcon {...iconProps} fixedWidth />
     </Button>
   );

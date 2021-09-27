@@ -10,6 +10,7 @@ import {
     AuthorsQuery,
     CollectionQuery,
     Event,
+    EventMutationPayload,
     EventsQuery,
     FetchCollectionHook,
     FetchHook,
@@ -18,6 +19,7 @@ import {
     GroupsQuery,
     Hierarchy,
     HierarchyQuery,
+    MutationHook,
     Person,
     PersonsQuery,
     Place,
@@ -31,6 +33,7 @@ import {
 import { buildPath } from "utils/buildPath";
 import { getDateString } from "utils/getDateString";
 import { useFetch } from "./useFetch";
+import { useMutation } from "./useMutation";
 import { useNampiContext } from "./useNampiContext";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,7 +41,6 @@ const getDefaultSorter = (query: CollectionQuery): SortFunction<any> => {
   switch (query.orderBy) {
     case "label":
       return sortByLabel;
-      break;
     default:
       return sortById;
   }
@@ -90,6 +92,9 @@ export const useEvent: FetchHook<Event> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
   return useFetch(buildPath(apiUrl, "events", idLocal), paused);
 };
+
+export const useEventMutations: MutationHook<EventMutationPayload, Event> =
+  useMutation;
 
 export const useEvents: FetchCollectionHook<Event, EventsQuery> = ({
   paused,
