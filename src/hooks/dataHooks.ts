@@ -10,6 +10,7 @@ import {
     Author,
     AuthorsQuery,
     CollectionQuery,
+    DeleteHook,
     Event,
     EventMutationPayload,
     EventsQuery,
@@ -29,6 +30,7 @@ import {
     PlaceMutationPayload,
     SortFunction,
     Source,
+    SourceMutationPayload,
     SourcesQuery,
     Type,
     TypesQuery,
@@ -78,7 +80,7 @@ export const useAspectCreate = (): MutationHook<
   Aspect
 > => useCreate("aspects");
 
-export const useAspectDelete = (idLocal: string): MutationHook =>
+export const useAspectDelete = (idLocal: string): DeleteHook =>
   useDelete("aspects", idLocal);
 
 export const useAspectUpdate = (
@@ -112,7 +114,7 @@ export const useEvent: FetchHook<Event> = ({ idLocal, paused }) => {
 export const useEventCreate = (): MutationHook<EventMutationPayload, Event> =>
   useCreate("events");
 
-export const useEventDelete = (idLocal: string): MutationHook =>
+export const useEventDelete = (idLocal: string): DeleteHook =>
   useDelete("events", idLocal);
 
 export const useEventUpdate = (
@@ -152,7 +154,7 @@ export const useGroup: FetchHook<Group> = ({ idLocal, paused }) => {
 export const useGroupCreate = (): MutationHook<GroupMutationPayload, Group> =>
   useCreate("groups");
 
-export const useGroupDelete = (idLocal: string): MutationHook =>
+export const useGroupDelete = (idLocal: string): DeleteHook =>
   useDelete("groups", idLocal);
 
 export const useGroupUpdate = (
@@ -194,7 +196,7 @@ export const usePersonCreate = (): MutationHook<
   Person
 > => useCreate("persons");
 
-export const usePersonDelete = (idLocal: string): MutationHook =>
+export const usePersonDelete = (idLocal: string): DeleteHook =>
   useDelete("persons", idLocal);
 
 export const usePersonUpdate = (
@@ -218,7 +220,7 @@ export const usePlace: FetchHook<Place> = ({ idLocal, paused }) => {
 export const usePlaceCreate = (): MutationHook<PlaceMutationPayload, Place> =>
   useCreate("places");
 
-export const usePlaceDelete = (idLocal: string): MutationHook =>
+export const usePlaceDelete = (idLocal: string): DeleteHook =>
   useDelete("places", idLocal);
 
 export const usePlaceUpdate = (
@@ -238,6 +240,18 @@ export const useSource: FetchHook<Source> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
   return useFetch(buildPath(apiUrl, "sources", idLocal), paused);
 };
+
+export const useSourceCreate = (): MutationHook<
+  SourceMutationPayload,
+  Source
+> => useCreate("sources");
+
+export const useSourceDelete = (idLocal: string): DeleteHook =>
+  useDelete("sources", idLocal);
+
+export const useSourceUpdate = (
+  idLocal: string
+): MutationHook<SourceMutationPayload, Source> => useUpdate("sources", idLocal);
 
 export const useSources: FetchCollectionHook<Source, SourcesQuery> = ({
   paused,

@@ -2,10 +2,10 @@ import { expand } from "jsonld";
 import { normalize } from "normalize";
 import { useState } from "react";
 import {
+    DeleteHook,
     Endpoint,
     MutationFunction,
     MutationHook,
-    MutationPayload,
     MutationResultContent,
     MutationState,
     NampiError
@@ -17,9 +17,11 @@ import { useNampiContext } from "./useNampiContext";
 const isError = <ResultType>(
   data: NampiError | ResultType
 ): data is NampiError =>
-  (data as unknown as NampiError).types.includes(namespaces.hydra.Status.iri);
+  (data as unknown as NampiError)?.types?.includes(namespaces.hydra.Status.iri);
 
-const toFetchFormData = (data: MutationPayload): string => {
+const toFetchFormData = (
+  data: Record<string, undefined | string | string[]>
+): string => {
   const formData: string[] = [];
   Object.entries(data).forEach(([key, value]) => {
     if (!value) {
@@ -49,10 +51,7 @@ const wrapResult = <ResultType>(
   }
 };
 
-export const useMutate = <
-  PayloadType extends undefined | MutationPayload,
-  ResultType
->(
+export const useMutate = <PayloadType, ResultType>(
   url: string,
   method: "POST" | "PUT" | "DELETE"
 ): [
@@ -88,16 +87,28 @@ export const useMutate = <
               Authorization: `Bearer ${keycloak.token}`,
             },
             method,
-            body: payload && toFetchFormData(payload),
+            body:
+              payload &&
+              toFetchFormData(
+                payload as unknown as Record<
+                  string,
+                  undefined | string | string[]
+                >
+              ),
           })
         )
-        .then((response) => response.json())
-        .then(expand)
-        .then(
-          (expanded) =>
-            normalize(expanded, propertyMap) as unknown as
-              | ResultType
-              | NampiError
+        .then((response) =>
+          Number(response.headers.get("Content-Length") ?? "0") === 0
+            ? (true as unknown as ResultType)
+            : response
+                .json()
+                .then(expand)
+                .then(
+                  (expanded) =>
+                    normalize(expanded, propertyMap) as unknown as
+                      | ResultType
+                      | NampiError
+                )
         )
         .then((normalized) => {
           const result = wrapResult(normalized);
@@ -114,25 +125,26 @@ export const useMutate = <
   ];
 };
 
-export const useCreate = <PayloadType extends MutationPayload, ResponseType>(
+export const useCreate = <PayloadType, ResultType>(
   endpoint: Endpoint
-): MutationHook<PayloadType, ResponseType> => {
+): MutationHook<PayloadType, ResultType> => {
   const { apiUrl } = useNampiContext();
   return useMutate(buildPath(apiUrl, endpoint), "POST");
 };
 
-export const useUpdate = <PayloadType extends MutationPayload, ResponseType>(
+export const useUpdate = <PayloadType, ResultType>(
   endpoint: Endpoint,
   idLocal: string
-): MutationHook<PayloadType, ResponseType> => {
+): MutationHook<PayloadType, ResultType> => {
   const { apiUrl } = useNampiContext();
   return useMutate(buildPath(apiUrl, endpoint, idLocal), "PUT");
 };
 
-export const useDelete = (
-  endpoint: Endpoint,
-  idLocal: string
-): MutationHook<undefined, true> => {
+export const useDelete = (endpoint: Endpoint, idLocal: string): DeleteHook => {
   const { apiUrl } = useNampiContext();
-  return useMutate(buildPath(apiUrl, endpoint, idLocal), "DELETE");
+  const [mutate, state] = useMutate<undefined, true>(
+    buildPath(apiUrl, endpoint, idLocal),
+    "DELETE"
+  );
+  return [() => mutate(undefined), state];
 };

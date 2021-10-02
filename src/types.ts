@@ -45,7 +45,7 @@ export type Author = Item;
 
 export type AuthorsQuery = CollectionQuery;
 
-interface BaseMutationPayload extends MutationPayload {
+interface BaseMutationPayload {
   /**
    * Comments for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
    * @example A string
@@ -174,7 +174,7 @@ export type Endpoint =
   | "aspects"
   | "places"
   | "groups"
-  | "source";
+  | "sources";
 
 export interface EventMutationPayload extends BaseMutationPayload {
   /**
@@ -382,17 +382,18 @@ export interface LiteralString extends Literal {
 
 export type MaybeNodes = undefined | NodeObject[];
 
-export type MutationFunction<
-  PayloadType extends undefined | MutationPayload,
-  ResultType
-> = (payload: PayloadType) => Promise<MutationResultContent<ResultType>>;
+export type MutationFunction<PayloadType, ResultType> = (
+  payload: PayloadType
+) => Promise<MutationResultContent<ResultType>>;
 
-export type MutationHook<
-  PayloadType extends undefined | MutationPayload = undefined,
-  ResultType = true
-> = [
+export type MutationHook<PayloadType = undefined, ResultType = true> = [
   mutate: MutationFunction<PayloadType, ResultType>,
   state: MutationState<ResultType>
+];
+
+export type DeleteHook = [
+  () => Promise<MutationResultContent<true>>,
+  MutationState<true>
 ];
 
 export type MutationPayload = Record<string, undefined | string | string[]>;
@@ -527,6 +528,12 @@ export interface SourceLocation extends Item {
 /** A source */
 export interface Source extends Item {
   /** Items, possibly in other databases, that are the same as this source. */
+  sameAs?: string[];
+}
+
+export interface SourceMutationPayload
+  extends Omit<BaseMutationPayload, "texts"> {
+  /** Items, possibly in other databases, that are the same as this source */
   sameAs?: string[];
 }
 

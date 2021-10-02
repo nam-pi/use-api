@@ -22,7 +22,7 @@ export const Event = () => {
   }, [data, state.data, state.error, history]);
   return (
     <>
-      <Button onClick={() => doDelete(undefined)} disabled={state.loading}>
+      <Button onClick={() => doDelete()} disabled={state.loading}>
         Delete
       </Button>
       {state.error && (
