@@ -304,6 +304,13 @@ export interface Group extends Item {
   texts?: LiteralString[];
 }
 
+export interface GroupMutationPayload extends BaseMutationPayload {
+  /** Items, possibly in other databases, that are the same as this aspect */
+  sameAs?: string[];
+  /** The full URLs of existing groups in the NAMPI database this group is a part of*/
+  partOf?: string[];
+}
+
 /** Query parameters to fetch a partial groups collection */
 export type GroupsQuery = CollectionQuery;
 

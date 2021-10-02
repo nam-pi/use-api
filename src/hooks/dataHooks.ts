@@ -17,6 +17,7 @@ import {
     FetchHook,
     FetchResult,
     Group,
+    GroupMutationPayload,
     GroupsQuery,
     Hierarchy,
     HierarchyQuery,
@@ -145,6 +146,16 @@ export const useGroup: FetchHook<Group> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
   return useFetch(buildPath(apiUrl, "groups", idLocal), paused);
 };
+
+export const useGroupCreate = (): MutationHook<GroupMutationPayload, Group> =>
+  useCreate("groups");
+
+export const useGroupDelete = (idLocal: string): MutationHook =>
+  useDelete("groups", idLocal);
+
+export const useGroupUpdate = (
+  idLocal: string
+): MutationHook<GroupMutationPayload, Group> => useUpdate("groups", idLocal);
 
 export const useGroups: FetchCollectionHook<Group, GroupsQuery> = ({
   paused,
