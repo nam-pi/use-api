@@ -30,7 +30,7 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [rdfs.label.iri]: "labels",
   },
   [core.aspect.iri]: {
-    [core.hasText.iri]: "text",
+    [core.hasText.iri]: "texts",
     [core.sameAs.iri]: "sameAs",
     [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",
@@ -40,6 +40,7 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [rdfs.label.iri]: "labels",
   },
   [core.event.iri]: {
+    [core.hasText.iri]: "texts",
     [core.hasMainParticipant.iri]: "mainParticipant",
     [core.hasParticipant.iri]: "participants",
     [core.hasSortingDate.iri]: "sort",
@@ -53,6 +54,7 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [rdfs.label.iri]: "labels",
   },
   [core.group.iri]: {
+    [core.hasText.iri]: "texts",
     [core.hasPart.iri]: "hasPart",
     [core.isPartOf.iri]: "isPartOf",
     [core.sameAs.iri]: "sameAs",
@@ -60,11 +62,13 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [rdfs.label.iri]: "labels",
   },
   [core.place.iri]: {
+    [core.hasText.iri]: "texts",
     [core.sameAs.iri]: "sameAs",
     [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",
   },
   [core.person.iri]: {
+    [core.hasText.iri]: "texts",
     [core.diesIn.iri]: "diesIn",
     [core.isBornIn.iri]: "bornIn",
     [core.sameAs.iri]: "sameAs",

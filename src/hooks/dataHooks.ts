@@ -33,7 +33,7 @@ import {
 import { buildPath } from "utils/buildPath";
 import { getDateString } from "utils/getDateString";
 import { useFetch } from "./useFetch";
-import { useMutation } from "./useMutation";
+import { useCreate, useDelete, useUpdate } from "./useMutation";
 import { useNampiContext } from "./useNampiContext";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -93,8 +93,15 @@ export const useEvent: FetchHook<Event> = ({ idLocal, paused }) => {
   return useFetch(buildPath(apiUrl, "events", idLocal), paused);
 };
 
-export const useEventMutations: MutationHook<EventMutationPayload, Event> =
-  useMutation;
+export const useEventCreate = (): MutationHook<EventMutationPayload, Event> =>
+  useCreate("events");
+
+export const useEventDelete = (idLocal: string): MutationHook =>
+  useDelete("events", idLocal);
+
+export const useEventUpdate = (
+  idLocal: string
+): MutationHook<EventMutationPayload, Event> => useUpdate("events", idLocal);
 
 export const useEvents: FetchCollectionHook<Event, EventsQuery> = ({
   paused,

@@ -7,8 +7,10 @@ export {
     useAuthor,
     useAuthors,
     useEvent,
-    useEventMutations,
+    useEventCreate,
+    useEventDelete,
     useEvents,
+    useEventUpdate,
     useGroup,
     useGroups,
     useHierarchy,
@@ -22,7 +24,6 @@ export {
     useUser
 } from "hooks/dataHooks";
 export { useAuth } from "hooks/useAuth";
-export { useMutation } from "hooks/useMutation";
 export { usePropertyIris } from "hooks/usePropertyIris";
 export { namespaces } from "namespaces";
 export type {

@@ -1,122 +1,138 @@
 import { expand } from "jsonld";
-import { JsonLdArray } from "jsonld/jsonld-spec";
 import { normalize } from "normalize";
-import { useCallback, useMemo, useState } from "react";
+import { useState } from "react";
 import {
-    MutationConfig,
+    Endpoint,
+    MutationFunction,
     MutationHook,
     MutationPayload,
+    MutationResultContent,
+    MutationState,
     NampiError
 } from "types";
 import { buildPath } from "utils/buildPath";
 import { namespaces } from "../namespaces";
 import { useNampiContext } from "./useNampiContext";
 
-export const useMutation = <PayloadType extends MutationPayload, ResponseType>(
-  config: MutationConfig
-): ReturnType<MutationHook<PayloadType, ResponseType>> => {
-  const [state, setState] = useState<
-    Omit<ReturnType<MutationHook<PayloadType, ResponseType>>, "mutate">
-  >({ loading: false });
-  const { apiUrl, keycloak, propertyMap } = useNampiContext();
-  const defaultConfig = useMemo<RequestInit>(
-    () => ({
-      headers: {
-        Accept: "application/ld+json",
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: `Bearer ${keycloak.token}`,
-      },
-    }),
-    [keycloak.token]
-  );
-  const url =
-    config.action === "create"
-      ? buildPath(apiUrl, "events")
-      : buildPath(apiUrl, "events", config.idLocal);
-  const mapResult = useCallback(
-    async (expanded: JsonLdArray) => {
-      return (await normalize(expanded, propertyMap)) as unknown as
-        | ResponseType
-        | NampiError;
-    },
-    [propertyMap]
-  );
-  const toFormData = useCallback(
-    (data: Record<string, string | string[]>): string => {
-      const formData: string[] = [];
-      Object.entries(data).forEach(([key, value]) => {
-        if (!value) {
-          return;
-        }
-        if (Array.isArray(value)) {
-          value.forEach((v) => {
-            if (v) {
-              formData.push(`${key}%5B%5D=${encodeURIComponent(v)}`);
-            }
-          });
-        } else {
-          formData.push(`${key}=${encodeURIComponent(value)}`);
+const isError = <ResultType>(
+  data: NampiError | ResultType
+): data is NampiError =>
+  (data as unknown as NampiError).types.includes(namespaces.hydra.Status.iri);
+
+const toFetchFormData = (data: MutationPayload): string => {
+  const formData: string[] = [];
+  Object.entries(data).forEach(([key, value]) => {
+    if (!value) {
+      return;
+    }
+    if (Array.isArray(value)) {
+      value.forEach((v) => {
+        if (v) {
+          formData.push(`${key}%5B%5D=${encodeURIComponent(v)}`);
         }
       });
-      return formData.join("&");
-    },
-    []
-  );
-  const doFetch = useCallback(
-    (url, method: "POST" | "PUT" | "DELETE", payload?: PayloadType) =>
-      keycloak
+    } else {
+      formData.push(`${key}=${encodeURIComponent(value)}`);
+    }
+  });
+  return formData.join("&");
+};
+
+const wrapResult = <ResultType>(
+  result: NampiError | ResultType
+): MutationResultContent<ResultType> => {
+  if (isError(result)) {
+    delete (result as unknown as { idLocal?: string }).idLocal;
+    return { error: result };
+  } else {
+    return { data: result };
+  }
+};
+
+export const useMutate = <
+  PayloadType extends undefined | MutationPayload,
+  ResultType
+>(
+  url: string,
+  method: "POST" | "PUT" | "DELETE"
+): [
+  mutate: MutationFunction<PayloadType, ResultType>,
+  state: MutationState<ResultType>
+] => {
+  const { keycloak, propertyMap } = useNampiContext();
+  const [state, setState] = useState<MutationState<ResultType>>({
+    loading: false,
+  });
+  return [
+    async (payload: PayloadType) => {
+      if (!keycloak.token) {
+        const result = {
+          error: {
+            title: { value: "Unauthorized", language: "en" },
+            description: { value: "No token available" },
+            statusCode: 401,
+            types: [namespaces.hydra.Status.iri],
+          },
+        };
+        setState({ ...result, loading: false });
+        return result;
+      }
+      setState((old) => ({ ...old, loading: true }));
+      return keycloak
         .updateToken(30)
-        .then(() => setState((old) => ({ ...old, loading: true })))
         .then(() =>
           fetch(url, {
-            ...defaultConfig,
+            headers: {
+              Accept: "application/ld+json",
+              "Content-Type": "application/x-www-form-urlencoded",
+              Authorization: `Bearer ${keycloak.token}`,
+            },
             method,
-            body: payload && toFormData(payload),
+            body: payload && toFetchFormData(payload),
           })
         )
         .then((response) => response.json())
         .then(expand)
-        .then(mapResult)
-        .then((result) => {
-          if (
-            (result as unknown as NampiError).types.includes(
-              namespaces.hydra.Status.iri
-            )
-          ) {
-            const error = result as unknown as NampiError;
-            delete (error as unknown as { idLocal?: string }).idLocal;
-            setState({ loading: false, error });
-            return { error };
-          } else {
-            const data = result as ResponseType;
-            setState({ loading: false, data });
-            return { data };
-          }
+        .then(
+          (expanded) =>
+            normalize(expanded, propertyMap) as unknown as
+              | ResultType
+              | NampiError
+        )
+        .then((normalized) => {
+          const result = wrapResult(normalized);
+          setState({ ...result, loading: false });
+          return result;
         })
         .catch((e) => {
-          console.log(e);
+          console.log("Non-handled error:", e);
           setState({ loading: false });
           return {};
-        }),
-    [defaultConfig, keycloak, mapResult, toFormData]
-  );
-  const handleCreate = useCallback(
-    (payload: PayloadType) => doFetch(url, "POST", payload),
-    [doFetch, url]
-  );
-  const handleUpdate = useCallback(
-    (payload: PayloadType) => doFetch(url, "PUT", payload),
-    [doFetch, url]
-  );
-  const handleDelete = useCallback(
-    () => doFetch(url, "DELETE"),
-    [doFetch, url]
-  );
-  const mutate =
-    config.action === "create"
-      ? handleCreate
-      : config.action == "update"
-      ? handleUpdate
-      : handleDelete;
-  return { mutate, ...state };
+        });
+    },
+    state,
+  ];
+};
+
+export const useCreate = <PayloadType extends MutationPayload, ResponseType>(
+  endpoint: Endpoint
+): MutationHook<PayloadType, ResponseType> => {
+  const { apiUrl } = useNampiContext();
+  return useMutate(buildPath(apiUrl, endpoint), "POST");
+};
+
+export const useUpdate = <PayloadType extends MutationPayload, ResponseType>(
+  endpoint: Endpoint,
+  idLocal: string
+): MutationHook<PayloadType, ResponseType> => {
+  const { apiUrl } = useNampiContext();
+  return useMutate(buildPath(apiUrl, endpoint, idLocal), "PUT");
+};
+
+export const useDelete = (
+  endpoint: Endpoint,
+  idLocal: string
+): MutationHook<undefined, true> => {
+  const { apiUrl } = useNampiContext();
+  return useMutate(buildPath(apiUrl, endpoint, idLocal), "DELETE");
 };

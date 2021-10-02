@@ -1,5 +1,5 @@
 import { Dialog } from "@headlessui/react";
-import { EventMutationPayload, useEventMutations } from "nampi-use-api/bundle";
+import { EventMutationPayload, useEventCreate } from "nampi-use-api/bundle";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Button } from "../Button";
@@ -92,12 +92,10 @@ export const NewEventDialog = ({ visible, onClose }: Props) => {
     state.sourceLocation.length,
     state.type.length,
   ]);
-  const { mutate, data, error, loading } = useEventMutations({
-    action: "create",
-  });
+  const [create, { data, error, loading }] = useEventCreate();
   const handleSubmit = useCallback(() => {
-    mutate({ ...state });
-  }, [mutate, state]);
+    create({ ...state });
+  }, [create, state]);
   const history = useHistory();
   useEffect(() => {
     if (data && typeof data !== "boolean") {

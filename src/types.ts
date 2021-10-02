@@ -27,7 +27,7 @@ export interface Aspect extends Item {
   /** Items, possibly in other databases, that are the same as this aspect */
   sameAs?: string[];
   /** Textual content that is added to the aspect */
-  text?: LiteralString[];
+  texts?: LiteralString[];
 }
 
 export interface AspectsQuery extends CollectionQuery {
@@ -115,6 +115,8 @@ export interface Entity {
 
 /** An event */
 export interface Event extends Item {
+  /** Textual content that is added to the event */
+  texts?: LiteralString[];
   /** The document interpretation act this event is used */
   act: Act;
   /** The sorting date for the event, to be used when sorting the event as part of a list */
@@ -160,6 +162,14 @@ interface BaseMutationPayload extends MutationPayload {
    */
   type: string;
 }
+
+export type Endpoint =
+  | "events"
+  | "persons"
+  | "aspects"
+  | "places"
+  | "groups"
+  | "source";
 
 export interface EventMutationPayload extends BaseMutationPayload {
   /**
@@ -285,6 +295,8 @@ export interface Group extends Item {
   isPartOf?: Group[];
   /** Groups that are a part of this group. */
   hasPart?: Group[];
+  /** Textual content that is added to the group */
+  texts?: LiteralString[];
 }
 
 /** Query parameters to fetch a partial groups collection */
@@ -358,38 +370,29 @@ export interface LiteralString extends Literal {
 
 export type MaybeNodes = undefined | NodeObject[];
 
-export type MutationConfig = MutationCreate | MutationUpdate | MutationDelete;
+export type MutationFunction<
+  PayloadType extends undefined | MutationPayload,
+  ResultType
+> = (payload: PayloadType) => Promise<MutationResultContent<ResultType>>;
 
-export interface MutationCreate {
-  action: "create";
-}
-
-export interface MutationUpdate {
-  action: "update";
-  idLocal: string;
-}
-
-export interface MutationDelete {
-  action: "delete";
-  idLocal: string;
-}
-
-export type MutationHook<PayloadType, ResponseType> = (
-  config: MutationConfig
-) => {
-  mutate:
-    | (() => Promise<MutationResponse<true>>)
-    | ((payload: PayloadType) => Promise<MutationResponse<ResponseType>>);
-  loading: boolean;
-  data?: void | true | ResponseType;
-  error?: void | NampiError;
-};
+export type MutationHook<
+  PayloadType extends undefined | MutationPayload = undefined,
+  ResultType = true
+> = [
+  mutate: MutationFunction<PayloadType, ResultType>,
+  state: MutationState<ResultType>
+];
 
 export type MutationPayload = Record<string, string | string[]>;
 
-export interface MutationResponse<T> {
-  data?: undefined | T;
+export interface MutationResultContent<ResultType> {
   error?: undefined | NampiError;
+  data?: undefined | ResultType;
+}
+
+export interface MutationState<ResultType>
+  extends MutationResultContent<ResultType> {
+  loading: boolean;
 }
 
 export interface Namespace {
@@ -434,6 +437,8 @@ export interface Person extends Item {
   diesIn?: Event[];
   /** Items, possibly in other databases, that are the same as this person. */
   sameAs?: string[];
+  /** Textual content that is added to the person */
+  texts?: LiteralString[];
 }
 
 /** Query parameters to fetch a partial persons collection */
@@ -446,6 +451,8 @@ export interface PersonsQuery extends CollectionQuery {
 export interface Place extends Item {
   /** Items, possibly in other databases, that are the same as this place. */
   sameAs?: string[];
+  /** Textual content that is added to the person */
+  texts?: LiteralString[];
 }
 
 /** Query parameters to fetch a partial places collection */
