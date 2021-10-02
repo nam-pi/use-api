@@ -471,11 +471,19 @@ export interface Place extends Item {
   sameAs?: string[];
   /** Textual content that is added to the person */
   texts?: LiteralString[];
+  /** The latitude of the place */
+  latitude?: number;
+  /** The longitude of the place */
+  longitude?: number;
 }
 
 export interface PlaceMutationPayload extends BaseMutationPayload {
   /** Items, possibly in other databases, that are the same as this place */
   sameAs?: string[];
+  /** The latitude of the place. Should be the string representation of a number between -90 and 90 */
+  latitude?: string;
+  /** The longitude of the place. Has to be the string representation of a number between -180 and 180 */
+  longitude?: string;
 }
 
 /** Query parameters to fetch a partial places collection */

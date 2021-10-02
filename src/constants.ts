@@ -62,6 +62,8 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [rdfs.label.iri]: "labels",
   },
   [core.place.iri]: {
+    [core.hasLatitude.iri]: "latitude",
+    [core.hasLongitude.iri]: "longitude",
     [core.hasText.iri]: "texts",
     [core.sameAs.iri]: "sameAs",
     [rdfs.comment.iri]: "comments",

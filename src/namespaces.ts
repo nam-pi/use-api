@@ -69,6 +69,8 @@ export const namespaces = {
     group: core.resource("group"),
     hasDateTime: core.resource("has_date_time"),
     hasInterpretation: core.resource("has_interpretation"),
+    hasLatitude: core.resource("has_latitude"),
+    hasLongitude: core.resource("has_longitude"),
     hasMainParticipant: core.resource("has_main_participant"),
     hasPart: core.resource("has_part"),
     hasParticipant: core.resource("has_participant"),

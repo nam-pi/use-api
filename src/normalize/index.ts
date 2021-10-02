@@ -21,6 +21,7 @@ import { mapKey } from "./helpers/mapKey";
 import { addLinks } from "./helpers/transforms";
 import { normalizeActs } from "./normalizers/normalizeActs";
 import { normalizeCollection } from "./normalizers/normalizeCollection";
+import { normalizePlaces } from "./normalizers/normalizePlaces";
 import { normalizeSourceLocation } from "./normalizers/normalizeSourceLocation";
 import { normalizeStatus } from "./normalizers/normalizeStatus";
 
@@ -36,6 +37,8 @@ const findNormalizer = (type: undefined | string): Normalizer => {
       return normalizeCollection;
     case core.event.iri:
       return normalizeEvent;
+    case core.place.iri:
+      return normalizePlaces;
     case core.sourceLocation.iri:
       return normalizeSourceLocation;
     case api.user.iri:
