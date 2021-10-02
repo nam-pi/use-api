@@ -453,6 +453,11 @@ export interface Person extends Item {
   texts?: LiteralString[];
 }
 
+export interface PersonMutationPayload extends BaseMutationPayload {
+  /** Items, possibly in other databases, that are the same as this person */
+  sameAs?: string[];
+}
+
 /** Query parameters to fetch a partial persons collection */
 export interface PersonsQuery extends CollectionQuery {
   /** Filter by aspects used in events the person appears in combination with a property descending of 'changes aspect of'. */

@@ -23,6 +23,7 @@ import {
     HierarchyQuery,
     MutationHook,
     Person,
+    PersonMutationPayload,
     PersonsQuery,
     Place,
     SortFunction,
@@ -186,6 +187,18 @@ export const usePerson: FetchHook<Person> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
   return useFetch(buildPath(apiUrl, "persons", idLocal), paused);
 };
+
+export const usePersonCreate = (): MutationHook<
+  PersonMutationPayload,
+  Person
+> => useCreate("persons");
+
+export const usePersonDelete = (idLocal: string): MutationHook =>
+  useDelete("persons", idLocal);
+
+export const usePersonUpdate = (
+  idLocal: string
+): MutationHook<PersonMutationPayload, Person> => useUpdate("persons", idLocal);
 
 export const usePersons: FetchCollectionHook<Person, PersonsQuery> = ({
   paused,
