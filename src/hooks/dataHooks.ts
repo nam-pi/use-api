@@ -26,6 +26,7 @@ import {
     PersonMutationPayload,
     PersonsQuery,
     Place,
+    PlaceMutationPayload,
     SortFunction,
     Source,
     SourcesQuery,
@@ -213,6 +214,16 @@ export const usePlace: FetchHook<Place> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
   return useFetch(buildPath(apiUrl, "places", idLocal), paused);
 };
+
+export const usePlaceCreate = (): MutationHook<PlaceMutationPayload, Place> =>
+  useCreate("places");
+
+export const usePlaceDelete = (idLocal: string): MutationHook =>
+  useDelete("places", idLocal);
+
+export const usePlaceUpdate = (
+  idLocal: string
+): MutationHook<PlaceMutationPayload, Place> => useUpdate("places", idLocal);
 
 export const usePlaces: FetchCollectionHook<Place, PersonsQuery> = ({
   paused,

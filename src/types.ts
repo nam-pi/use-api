@@ -472,6 +472,11 @@ export interface Place extends Item {
   texts?: LiteralString[];
 }
 
+export interface PlaceMutationPayload extends BaseMutationPayload {
+  /** Items, possibly in other databases, that are the same as this place */
+  sameAs?: string[];
+}
+
 /** Query parameters to fetch a partial places collection */
 export type PlacesQuery = CollectionQuery;
 
