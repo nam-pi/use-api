@@ -30,6 +30,11 @@ export interface Aspect extends Item {
   texts?: LiteralString[];
 }
 
+export interface AspectMutationPayload extends BaseMutationPayload {
+  /** Items, possibly in other databases, that are the same as this aspect */
+  sameAs?: string[];
+}
+
 export interface AspectsQuery extends CollectionQuery {
   /** Filter by participants of events the aspect is used in */
   participant?: string;
@@ -39,6 +44,32 @@ export interface AspectsQuery extends CollectionQuery {
 export type Author = Item;
 
 export type AuthorsQuery = CollectionQuery;
+
+interface BaseMutationPayload extends MutationPayload {
+  /**
+   * Comments for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
+   * @example A string
+   * @example A language string@en
+   */
+  comments: string[];
+  /**
+   * Labels for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
+   * @example A string
+   * @example A language string@en
+   */
+  labels: string[];
+  /**
+   * Texts for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
+   * @example A string
+   * @example A language string@en
+   */
+  texts: string[];
+  /**
+   * The full URL of the entity type.
+   * @example https://purl.org/nampi/owl/core#event
+   */
+  type: string;
+}
 
 export type Blanks = Record<string, string>;
 
@@ -135,32 +166,6 @@ export interface Event extends Item {
   aspects: Aspect[];
   /** The place where the event took place */
   place?: Place;
-}
-
-interface BaseMutationPayload extends MutationPayload {
-  /**
-   * Comments for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
-   * @example A string
-   * @example A language string@en
-   */
-  comments: string[];
-  /**
-   * Labels for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
-   * @example A string
-   * @example A language string@en
-   */
-  labels: string[];
-  /**
-   * Texts for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
-   * @example A string
-   * @example A language string@en
-   */
-  texts: string[];
-  /**
-   * The full URL of the entity type.
-   * @example https://purl.org/nampi/owl/core#event
-   */
-  type: string;
 }
 
 export type Endpoint =
@@ -383,7 +388,7 @@ export type MutationHook<
   state: MutationState<ResultType>
 ];
 
-export type MutationPayload = Record<string, string | string[]>;
+export type MutationPayload = Record<string, undefined | string | string[]>;
 
 export interface MutationResultContent<ResultType> {
   error?: undefined | NampiError;

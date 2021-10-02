@@ -5,6 +5,7 @@ import {
     Act,
     ActsQuery,
     Aspect,
+    AspectMutationPayload,
     AspectsQuery,
     Author,
     AuthorsQuery,
@@ -68,6 +69,18 @@ export const useAspects: FetchCollectionHook<Aspect, AspectsQuery> = ({
   const sorter = getDefaultSorter(query);
   return useFetch(buildPath(apiUrl, "aspects"), query, sorter, paused);
 };
+
+export const useAspectCreate = (): MutationHook<
+  AspectMutationPayload,
+  Aspect
+> => useCreate("aspects");
+
+export const useAspectDelete = (idLocal: string): MutationHook =>
+  useDelete("aspects", idLocal);
+
+export const useAspectUpdate = (
+  idLocal: string
+): MutationHook<AspectMutationPayload, Aspect> => useUpdate("aspects", idLocal);
 
 export const useAspect: FetchHook<Aspect> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
