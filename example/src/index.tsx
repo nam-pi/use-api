@@ -1,6 +1,6 @@
 import { NampiProvider } from "nampi-use-api/bundle";
-import React from "react";
-import ReactDOM from "react-dom";
+import { StrictMode } from "react";
+import { render } from "react-dom";
 import "tailwindcss/tailwind.css";
 import { App } from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -14,8 +14,8 @@ if (!api) {
   throw new Error("No API url provided");
 }
 
-ReactDOM.render(
-  <React.StrictMode>
+render(
+  <StrictMode>
     <NampiProvider
       api={api}
       auth={auth}
@@ -28,7 +28,7 @@ ReactDOM.render(
     >
       <App />
     </NampiProvider>
-  </React.StrictMode>,
+  </StrictMode>,
   document.getElementById("root")
 );
 

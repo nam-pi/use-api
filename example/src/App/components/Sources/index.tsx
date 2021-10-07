@@ -1,5 +1,5 @@
 import { useSources } from "nampi-use-api/bundle";
-import React, { useState } from "react";
+import { useState } from "react";
 import { ItemListPage } from "../ItemListPage";
 
 export const Sources = () => {
@@ -12,7 +12,7 @@ export const Sources = () => {
       itemData={itemData}
       onTextChange={setText}
       title="Sources"
-      urlPart="source"
+      urlPart="sources"
     />
   );
 };

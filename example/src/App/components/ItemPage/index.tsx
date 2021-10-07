@@ -1,5 +1,4 @@
 import { Item, useHierarchy } from "nampi-use-api/bundle";
-import React from "react";
 import { serializeLabels } from "../../utils/serializeLabels";
 import { Heading } from "../Heading";
 import { InheritancePath } from "../InheritancePath";

@@ -2,35 +2,44 @@ import { sortByEventDate } from "sorters/sortByEventDate";
 import { sortById } from "sorters/sortById";
 import { sortByLabel } from "sorters/sortByLabel";
 import {
-  Act,
-  ActsQuery,
-  Aspect,
-  AspectsQuery,
-  Author,
-  AuthorsQuery,
-  CollectionQuery,
-  Event,
-  EventsQuery,
-  FetchCollectionHook,
-  FetchHook,
-  FetchResult,
-  Group,
-  GroupsQuery,
-  Hierarchy,
-  HierarchyQuery,
-  Person,
-  PersonsQuery,
-  Place,
-  SortFunction,
-  Source,
-  SourcesQuery,
-  Type,
-  TypesQuery,
-  User,
+    Act,
+    ActsQuery,
+    Aspect,
+    AspectMutationPayload,
+    AspectsQuery,
+    Author,
+    AuthorsQuery,
+    CollectionQuery,
+    DeleteHook,
+    Event,
+    EventMutationPayload,
+    EventsQuery,
+    FetchCollectionHook,
+    FetchHook,
+    FetchResult,
+    Group,
+    GroupMutationPayload,
+    GroupsQuery,
+    Hierarchy,
+    HierarchyQuery,
+    MutationHook,
+    Person,
+    PersonMutationPayload,
+    PersonsQuery,
+    Place,
+    PlaceMutationPayload,
+    SortFunction,
+    Source,
+    SourceMutationPayload,
+    SourcesQuery,
+    Type,
+    TypesQuery,
+    User
 } from "types";
 import { buildPath } from "utils/buildPath";
 import { getDateString } from "utils/getDateString";
 import { useFetch } from "./useFetch";
+import { useCreate, useDelete, useUpdate } from "./useMutation";
 import { useNampiContext } from "./useNampiContext";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,7 +47,6 @@ const getDefaultSorter = (query: CollectionQuery): SortFunction<any> => {
   switch (query.orderBy) {
     case "label":
       return sortByLabel;
-      break;
     default:
       return sortById;
   }
@@ -55,7 +63,7 @@ export const useActs: FetchCollectionHook<Act, ActsQuery> = ({
 
 export const useAct: FetchHook<Act> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "act", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "acts", idLocal), paused);
 };
 
 export const useAspects: FetchCollectionHook<Aspect, AspectsQuery> = ({
@@ -67,9 +75,21 @@ export const useAspects: FetchCollectionHook<Aspect, AspectsQuery> = ({
   return useFetch(buildPath(apiUrl, "aspects"), query, sorter, paused);
 };
 
+export const useAspectCreate = (): MutationHook<
+  AspectMutationPayload,
+  Aspect
+> => useCreate("aspects");
+
+export const useAspectDelete = (idLocal: string): DeleteHook =>
+  useDelete("aspects", idLocal);
+
+export const useAspectUpdate = (
+  idLocal: string
+): MutationHook<AspectMutationPayload, Aspect> => useUpdate("aspects", idLocal);
+
 export const useAspect: FetchHook<Aspect> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "aspect", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "aspects", idLocal), paused);
 };
 
 export const useAuthors: FetchCollectionHook<Author, AuthorsQuery> = ({
@@ -83,13 +103,23 @@ export const useAuthors: FetchCollectionHook<Author, AuthorsQuery> = ({
 
 export const useAuthor: FetchHook<Author> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "author", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "authors", idLocal), paused);
 };
 
 export const useEvent: FetchHook<Event> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "event", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "events", idLocal), paused);
 };
+
+export const useEventCreate = (): MutationHook<EventMutationPayload, Event> =>
+  useCreate("events");
+
+export const useEventDelete = (idLocal: string): DeleteHook =>
+  useDelete("events", idLocal);
+
+export const useEventUpdate = (
+  idLocal: string
+): MutationHook<EventMutationPayload, Event> => useUpdate("events", idLocal);
 
 export const useEvents: FetchCollectionHook<Event, EventsQuery> = ({
   paused,
@@ -118,8 +148,18 @@ export const useEvents: FetchCollectionHook<Event, EventsQuery> = ({
 
 export const useGroup: FetchHook<Group> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "group", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "groups", idLocal), paused);
 };
+
+export const useGroupCreate = (): MutationHook<GroupMutationPayload, Group> =>
+  useCreate("groups");
+
+export const useGroupDelete = (idLocal: string): DeleteHook =>
+  useDelete("groups", idLocal);
+
+export const useGroupUpdate = (
+  idLocal: string
+): MutationHook<GroupMutationPayload, Group> => useUpdate("groups", idLocal);
 
 export const useGroups: FetchCollectionHook<Group, GroupsQuery> = ({
   paused,
@@ -143,13 +183,25 @@ export const useHierarchy = ({
     undefined,
     paused
   );
-  return { data: (data as unknown) as Hierarchy, initialized, loading };
+  return { data: data as unknown as Hierarchy, initialized, loading };
 };
 
 export const usePerson: FetchHook<Person> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "person", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "persons", idLocal), paused);
 };
+
+export const usePersonCreate = (): MutationHook<
+  PersonMutationPayload,
+  Person
+> => useCreate("persons");
+
+export const usePersonDelete = (idLocal: string): DeleteHook =>
+  useDelete("persons", idLocal);
+
+export const usePersonUpdate = (
+  idLocal: string
+): MutationHook<PersonMutationPayload, Person> => useUpdate("persons", idLocal);
 
 export const usePersons: FetchCollectionHook<Person, PersonsQuery> = ({
   paused,
@@ -162,8 +214,18 @@ export const usePersons: FetchCollectionHook<Person, PersonsQuery> = ({
 
 export const usePlace: FetchHook<Place> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "place", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "places", idLocal), paused);
 };
+
+export const usePlaceCreate = (): MutationHook<PlaceMutationPayload, Place> =>
+  useCreate("places");
+
+export const usePlaceDelete = (idLocal: string): DeleteHook =>
+  useDelete("places", idLocal);
+
+export const usePlaceUpdate = (
+  idLocal: string
+): MutationHook<PlaceMutationPayload, Place> => useUpdate("places", idLocal);
 
 export const usePlaces: FetchCollectionHook<Place, PersonsQuery> = ({
   paused,
@@ -176,8 +238,20 @@ export const usePlaces: FetchCollectionHook<Place, PersonsQuery> = ({
 
 export const useSource: FetchHook<Source> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "source", idLocal), paused);
+  return useFetch(buildPath(apiUrl, "sources", idLocal), paused);
 };
+
+export const useSourceCreate = (): MutationHook<
+  SourceMutationPayload,
+  Source
+> => useCreate("sources");
+
+export const useSourceDelete = (idLocal: string): DeleteHook =>
+  useDelete("sources", idLocal);
+
+export const useSourceUpdate = (
+  idLocal: string
+): MutationHook<SourceMutationPayload, Source> => useUpdate("sources", idLocal);
 
 export const useSources: FetchCollectionHook<Source, SourcesQuery> = ({
   paused,
@@ -199,5 +273,5 @@ export const useTypes: FetchCollectionHook<Type, TypesQuery> = ({
 
 export const useUser = (): FetchResult<User> => {
   const { apiUrl } = useNampiContext();
-  return useFetch(buildPath(apiUrl, "user"));
+  return useFetch(buildPath(apiUrl, "users", "current"));
 };

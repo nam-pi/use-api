@@ -27,7 +27,12 @@ export interface Aspect extends Item {
   /** Items, possibly in other databases, that are the same as this aspect */
   sameAs?: string[];
   /** Textual content that is added to the aspect */
-  text?: LiteralString[];
+  texts?: LiteralString[];
+}
+
+export interface AspectMutationPayload extends BaseMutationPayload {
+  /** Items, possibly in other databases, that are the same as this aspect */
+  sameAs?: string[];
 }
 
 export interface AspectsQuery extends CollectionQuery {
@@ -39,6 +44,32 @@ export interface AspectsQuery extends CollectionQuery {
 export type Author = Item;
 
 export type AuthorsQuery = CollectionQuery;
+
+interface BaseMutationPayload {
+  /**
+   * Comments for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
+   * @example A string
+   * @example A language string@en
+   */
+  comments: string[];
+  /**
+   * Labels for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
+   * @example A string
+   * @example A language string@en
+   */
+  labels: string[];
+  /**
+   * Texts for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
+   * @example A string
+   * @example A language string@en
+   */
+  texts: string[];
+  /**
+   * The full URL of the entity type.
+   * @example https://purl.org/nampi/owl/core#event
+   */
+  type: string;
+}
 
 export type Blanks = Record<string, string>;
 
@@ -115,6 +146,8 @@ export interface Entity {
 
 /** An event */
 export interface Event extends Item {
+  /** Textual content that is added to the event */
+  texts?: LiteralString[];
   /** The document interpretation act this event is used */
   act: Act;
   /** The sorting date for the event, to be used when sorting the event as part of a list */
@@ -133,6 +166,70 @@ export interface Event extends Item {
   aspects: Aspect[];
   /** The place where the event took place */
   place?: Place;
+}
+
+export type Endpoint =
+  | "events"
+  | "persons"
+  | "aspects"
+  | "places"
+  | "groups"
+  | "sources";
+
+export interface EventMutationPayload extends BaseMutationPayload {
+  /**
+   * The aspects that are used in the events.
+   * Can be either a full URL for each aspect or the full URLS for each aspect usage (default is core:uses_aspect)
+   * and aspect type, separated by a pipe-char.
+   * @example http://example.org/aspects/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
+   * @example https://purl.org/nampi/owl/core#adds_aspect|http://example.org/aspects/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
+   */
+  aspects: string[];
+  /**
+   * All authors of the connected document interpretation act with their full URL.
+   * @example http://example.org/authors/54d5056c-0d87-4a23-8211-390920b22248
+   * */
+  authors: string[];
+  /**
+   * The date for the event. Can be a variant of one or two dates in the format YYYY-MM-DD, separated by a hyphen.
+   * @example 1798-12-01 Exactly on the date
+   * @example 1798-12-01- Not earlier than the date
+   * @example -1798-12-01 Not later than the date
+   * @example 1797-01-01-1798-12-01 Not earlier than the first date and not later than the second date
+   */
+  date: string;
+  /**
+   * The main participant of the event.
+   * Can be either the person's full URL or the full URLS for the participation (default is core:has_main_participant)
+   * and the person type, separated by a pipe-char.
+   * @example http://example.org/persons/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
+   * @example https://purl.org/nampi/owl/core#starts_life_of|http://example.org/persons/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
+   */
+  mainParticipant: string;
+  /**
+   * The other participants of the event.
+   * Can be either a full URL for each person or the full URLS for each participation  (default is core:has_participant)
+   * and person type, separated by a pipe-char.
+   * @example https://purl.org/nampi/owl/core#has_participant|http://example.org/persons/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
+   */
+  otherParticipants: string[];
+  /**
+   * The full URL of the event place.
+   * @example http://example.org/places/8757ab2f-aaab-4c96-bfb4-faff947c1be7
+   */
+  place: string;
+  /**
+   * The full URL of the interpretation source.
+   * @example http://example.org/sources/9876ab2f-aaab-4c96-bfb4-faff947c1be7
+   */
+  source: string;
+  /**
+   * The text of the source location.
+   * @example p7
+   * @example 6v
+   * @example pages 7-9
+   */
+  sourceLocation: string;
 }
 
 /** Query parameters to fetch a partial events collection */
@@ -199,6 +296,19 @@ export interface FetchResult<T = Item> {
 export interface Group extends Item {
   /** Items, possibly in other databases, that are the same as this group. */
   sameAs?: string[];
+  /** Groups this group is part of. */
+  isPartOf?: Group[];
+  /** Groups that are a part of this group. */
+  hasPart?: Group[];
+  /** Textual content that is added to the group */
+  texts?: LiteralString[];
+}
+
+export interface GroupMutationPayload extends BaseMutationPayload {
+  /** Items, possibly in other databases, that are the same as this aspect */
+  sameAs?: string[];
+  /** The full URLs of existing groups in the NAMPI database this group is a part of*/
+  partOf?: string[];
 }
 
 /** Query parameters to fetch a partial groups collection */
@@ -272,12 +382,46 @@ export interface LiteralString extends Literal {
 
 export type MaybeNodes = undefined | NodeObject[];
 
+export type MutationFunction<PayloadType, ResultType> = (
+  payload: PayloadType
+) => Promise<MutationResultContent<ResultType>>;
+
+export type MutationHook<PayloadType = undefined, ResultType = true> = [
+  mutate: MutationFunction<PayloadType, ResultType>,
+  state: MutationState<ResultType>
+];
+
+export type DeleteHook = [
+  () => Promise<MutationResultContent<true>>,
+  MutationState<true>
+];
+
+export type MutationPayload = Record<string, undefined | string | string[]>;
+
+export interface MutationResultContent<ResultType> {
+  error?: undefined | NampiError;
+  data?: undefined | ResultType;
+}
+
+export interface MutationState<ResultType>
+  extends MutationResultContent<ResultType> {
+  loading: boolean;
+}
+
 export interface Namespace {
   iri: string;
   resource: (localName: string) => RDFResource;
 }
 
 export type Namespaces = typeof namespaces;
+
+export interface NampiError {
+  description: LiteralString;
+  statusCode: number;
+  title: LiteralString;
+  /** The RDF type iris */
+  types: string[];
+}
 
 export interface Normalized extends NormalizeResult {
   links: Links;
@@ -306,6 +450,13 @@ export interface Person extends Item {
   diesIn?: Event[];
   /** Items, possibly in other databases, that are the same as this person. */
   sameAs?: string[];
+  /** Textual content that is added to the person */
+  texts?: LiteralString[];
+}
+
+export interface PersonMutationPayload extends BaseMutationPayload {
+  /** Items, possibly in other databases, that are the same as this person */
+  sameAs?: string[];
 }
 
 /** Query parameters to fetch a partial persons collection */
@@ -318,6 +469,21 @@ export interface PersonsQuery extends CollectionQuery {
 export interface Place extends Item {
   /** Items, possibly in other databases, that are the same as this place. */
   sameAs?: string[];
+  /** Textual content that is added to the person */
+  texts?: LiteralString[];
+  /** The latitude of the place */
+  latitude?: number;
+  /** The longitude of the place */
+  longitude?: number;
+}
+
+export interface PlaceMutationPayload extends BaseMutationPayload {
+  /** Items, possibly in other databases, that are the same as this place */
+  sameAs?: string[];
+  /** The latitude of the place. Should be the string representation of a number between -90 and 90 */
+  latitude?: string;
+  /** The longitude of the place. Has to be the string representation of a number between -180 and 180 */
+  longitude?: string;
 }
 
 /** Query parameters to fetch a partial places collection */
@@ -370,6 +536,12 @@ export interface SourceLocation extends Item {
 /** A source */
 export interface Source extends Item {
   /** Items, possibly in other databases, that are the same as this source. */
+  sameAs?: string[];
+}
+
+export interface SourceMutationPayload
+  extends Omit<BaseMutationPayload, "texts"> {
+  /** Items, possibly in other databases, that are the same as this source */
   sameAs?: string[];
 }
 

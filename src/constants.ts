@@ -12,14 +12,14 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [api.hierarchyRoot.iri]: "root",
   },
   [api.user.iri]: {
-    [core.sameAs.iri]: "author",
+    [api.isAuthor.iri]: "author",
+    [rdfs.comment.iri]: "comments",
+    [rdfs.label.iri]: "labels",
     [schema.email.iri]: "email",
     [schema.familyName.iri]: "familyName",
     [schema.givenName.iri]: "givenName",
     [schema.identifier.iri]: "identifier",
     [schema.name.iri]: "username",
-    [rdfs.comment.iri]: "comments",
-    [rdfs.label.iri]: "labels",
   },
   [core.act.iri]: {
     [core.hasInterpretation.iri]: "interpretation",
@@ -30,7 +30,7 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [rdfs.label.iri]: "labels",
   },
   [core.aspect.iri]: {
-    [core.hasText.iri]: "text",
+    [core.hasText.iri]: "texts",
     [core.sameAs.iri]: "sameAs",
     [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",
@@ -40,6 +40,7 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [rdfs.label.iri]: "labels",
   },
   [core.event.iri]: {
+    [core.hasText.iri]: "texts",
     [core.hasMainParticipant.iri]: "mainParticipant",
     [core.hasParticipant.iri]: "participants",
     [core.hasSortingDate.iri]: "sort",
@@ -53,16 +54,23 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [rdfs.label.iri]: "labels",
   },
   [core.group.iri]: {
+    [core.hasText.iri]: "texts",
+    [core.hasPart.iri]: "hasPart",
+    [core.isPartOf.iri]: "isPartOf",
     [core.sameAs.iri]: "sameAs",
     [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",
   },
   [core.place.iri]: {
+    [core.hasLatitude.iri]: "latitude",
+    [core.hasLongitude.iri]: "longitude",
+    [core.hasText.iri]: "texts",
     [core.sameAs.iri]: "sameAs",
     [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",
   },
   [core.person.iri]: {
+    [core.hasText.iri]: "texts",
     [core.diesIn.iri]: "diesIn",
     [core.isBornIn.iri]: "bornIn",
     [core.sameAs.iri]: "sameAs",
@@ -83,6 +91,11 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
   [hydra.Collection.iri]: {
     [hydra.member.iri]: "members",
     [hydra.totalItems.iri]: "total",
+  },
+  [hydra.Status.iri]: {
+    [hydra.statusCode.iri]: "code",
+    [hydra.title.iri]: "title",
+    [hydra.description.iri]: "description",
   },
   [rdfs.Resource.iri]: {
     [rdfs.comment.iri]: "comments",
