@@ -213,7 +213,6 @@ export const useHierarchy = ({
 
 export const usePerson: FetchHook<Person> = ({ idLocal, paused }) => {
   const { apiUrl } = useNampiContext();
-  console.log(paused);
   return useFetch(
     buildPath(apiUrl, "persons", idLocal),
     undefined,
