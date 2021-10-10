@@ -4,14 +4,14 @@ import { namespaces } from "namespaces";
 import { normalize } from "normalize";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  Collection,
-  CollectionNav,
-  CollectionQuery,
-  Entity,
-  FetchCollectionResult,
-  FetchResult,
-  SortFunction,
-  Timeout,
+    Collection,
+    CollectionNav,
+    CollectionQuery,
+    Entity,
+    FetchCollectionResult,
+    FetchResult,
+    SortFunction,
+    Timeout
 } from "types";
 import { useNampiContext } from "./useNampiContext";
 
@@ -55,6 +55,8 @@ function toUrlSearchParams<Query extends CollectionQuery>(
 
 export function useFetch<T extends Entity>(
   baseUrl: string,
+  query: undefined,
+  sorter: undefined,
   paused?: boolean
 ): FetchResult<T>;
 export function useFetch<T extends Entity, Query extends CollectionQuery>(
@@ -72,13 +74,8 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
   const dirty = useRef<boolean>(false);
   const inputTimeout = useRef<Timeout>();
   const oldQuery = useRef<string>("");
-  const {
-    defaultLimit,
-    initialized,
-    keycloak,
-    propertyMap,
-    searchTimeout,
-  } = useNampiContext();
+  const { defaultLimit, initialized, keycloak, propertyMap, searchTimeout } =
+    useNampiContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [state, setState] = useState<State<T>>({});
 
@@ -120,16 +117,8 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
       const normalized = await normalize(expanded, propertyMap);
       if (normalized?.types.includes(namespaces.hydra.Collection.iri)) {
         // Map collection data
-        const {
-          members,
-          first,
-          last,
-          id,
-          next,
-          page,
-          previous,
-          total,
-        } = (normalized as unknown) as Collection<T>;
+        const { members, first, last, id, next, page, previous, total } =
+          normalized as unknown as Collection<T>;
         return {
           data: sorter && total > 0 ? members.sort(sorter) : members,
           nav: {
@@ -148,7 +137,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
       } else {
         // Map single class data
         return {
-          data: (normalized as unknown) as T,
+          data: normalized as unknown as T,
           response: expanded,
         } as Partial<FetchResult<T>>;
       }
