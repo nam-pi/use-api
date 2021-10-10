@@ -146,9 +146,9 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
   );
 
   const doFetch = useCallback(
-    async (url: string) => {
+    async (url: string, abort: AbortController) => {
       setLoading(true);
-      const config: RequestInit = { ...DEFAULT_CONFIG };
+      const config: RequestInit = { ...DEFAULT_CONFIG, signal: abort.signal };
       if (keycloak.token) {
         config.headers = {
           ...config.headers,
@@ -199,17 +199,25 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
 
   // Fetch result for non-query uses
   useEffect(() => {
+    const abort = new AbortController();
     if (initialized && !query && !paused) {
-      doFetch(baseUrl);
+      doFetch(baseUrl, abort);
     }
+    return () => {
+      abort.abort();
+    };
   }, [baseUrl, doFetch, initialized, paused, query]);
 
   // Fetch a new state when dirty
   useEffect(() => {
+    const abort = new AbortController();
     if (initialized && dirty.current && !paused) {
       dirty.current = false;
-      doFetch(baseUrl);
+      doFetch(baseUrl, abort);
     }
+    return () => {
+      abort.abort();
+    };
   }, [baseUrl, doFetch, initialized, paused]);
 
   return {
