@@ -195,6 +195,11 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
         setSearchParams(toUrlSearchParams(query));
       }
     }, searchTimeout);
+    return () => {
+      if (inputTimeout.current) {
+        clearTimeout(inputTimeout.current);
+      }
+    };
   }, [initialized, paused, query, searchTimeout]);
 
   // Fetch result for non-query uses
