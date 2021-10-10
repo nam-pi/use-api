@@ -14,6 +14,7 @@ import {
     NormalizeResult,
     PropertyMap
 } from "types";
+import { parseDate } from "utils/parseDate";
 import { v4 as uuidv4 } from "uuid";
 import { getIdLocal } from "./helpers/getIdLocal";
 import { isBlank } from "./helpers/isBlank";
@@ -150,7 +151,7 @@ const normalizeNode = async (
     const value = node["@value"] as string;
     const types = node["@type"];
     if (types?.includes(xsd.dateTime.iri)) {
-      return { value: new Date(value) };
+      return { value: parseDate(value) };
     } else if (types?.includes(xsd.integer.iri)) {
       return { value: parseInt(value) };
     } else {

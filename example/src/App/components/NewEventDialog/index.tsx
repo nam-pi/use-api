@@ -26,7 +26,7 @@ const defaultState: EventMutationPayload = {
   source: "",
   sourceLocation: "",
   texts: [],
-  type: "",
+  types: [],
 };
 
 export const NewEventDialog = ({ visible, onClose }: Props) => {
@@ -70,14 +70,10 @@ export const NewEventDialog = ({ visible, onClose }: Props) => {
     [formHandler]
   );
   const handleTexts = useMemo(() => formHandler("texts"), [formHandler]);
-  const handleType = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) =>
-      formHandler("type")(e.target.value),
-    [formHandler]
-  );
+  const handleTypes = useMemo(() => formHandler("types"), [formHandler]);
   const isValid = useMemo(() => {
     return (
-      state.type.length > 0 &&
+      state.types.length > 0 &&
       state.labels.length > 0 &&
       state.source.length !== 0 &&
       state.sourceLocation.length !== 0 &&
@@ -90,7 +86,7 @@ export const NewEventDialog = ({ visible, onClose }: Props) => {
     state.mainParticipant.length,
     state.source.length,
     state.sourceLocation.length,
-    state.type.length,
+    state.types.length,
   ]);
   const [create, { data, error, loading }] = useEventCreate();
   const handleSubmit = useCallback(() => {
@@ -118,9 +114,7 @@ export const NewEventDialog = ({ visible, onClose }: Props) => {
           <form>
             <div className="mt-4 flex flex-row flex-wrap">
               <div className="mr-8">
-                <Label id="type" label="Type">
-                  <Input id="type" onChange={handleType} />
-                </Label>
+                <InputRepeater label="Types" onChange={handleTypes} />
                 <InputRepeater label="Labels" onChange={handleLabels} />
                 <InputRepeater label="Texts" onChange={handleTexts} />
                 <InputRepeater label="Authors" onChange={handleAuthors} />

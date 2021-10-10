@@ -65,10 +65,10 @@ interface BaseMutationPayload {
    */
   texts: string[];
   /**
-   * The full URL of the entity type.
+   * The full URLs for all entity types.
    * @example https://purl.org/nampi/owl/core#event
    */
-  type: string;
+  types: string[];
 }
 
 export type Blanks = Record<string, string>;
