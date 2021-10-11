@@ -176,12 +176,9 @@ export const normalizeHierarchy: Normalizer = async (
   const flat = await flatten(node);
   if (Array.isArray(flat)) {
     const rootId = root?.["@id"] as string;
-    const rootDescendants = root?.[namespaces.api.descendantOf.iri] as
-      | Objects
-      | undefined;
     const map = createMap(flat);
     delete map[node["@id"] || ""];
-    if (root && rootDescendants) {
+    if (root) {
       const paths: Path[] = [];
       findPaths(map[rootId], map, [], paths);
       const endpoints = findEndPointIds(flat);
