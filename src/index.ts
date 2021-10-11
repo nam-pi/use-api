@@ -31,7 +31,10 @@ export {
     usePlaces,
     usePlaceUpdate,
     useSource,
+    useSourceCreate,
+    useSourceDelete,
     useSources,
+    useSourceUpdate,
     useTypes,
     useUser
 } from "hooks/dataHooks";
@@ -73,6 +76,7 @@ export type {
     PlacesQuery,
     Source,
     SourceLocation,
+    SourceMutationPayload,
     SourcesQuery,
     Type,
     TypesQuery,
