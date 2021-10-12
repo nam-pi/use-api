@@ -142,6 +142,8 @@ export interface Entity {
   labels?: LiteralString[];
   /** The RDF type iris */
   types: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
 }
 
 /** An event */
@@ -314,7 +316,7 @@ export interface GroupMutationPayload extends BaseMutationPayload {
 /** Query parameters to fetch a partial groups collection */
 export type GroupsQuery = CollectionQuery;
 
-export interface Hierarchy extends Omit<Item, "response"> {
+export interface Hierarchy extends Omit<Item, "response">, Entity {
   /** The id of the root item */
   root: string;
   /** A map with all hierarchy items indexed by their id for fast access */
@@ -335,6 +337,8 @@ export interface HierarchyItem extends Item {
 export interface HierarchyQuery extends Record<string, unknown> {
   /** The iri of the item to get the hierarchy for */
   iri: string;
+  /** Whether or not to query descendants of the item with the provided iri */
+  descendants?: boolean;
 }
 
 /** An inverted version of a property map where the property iris and short keys are switched to simplify reverse iri lookups */
