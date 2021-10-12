@@ -12,15 +12,16 @@ type Objects = NodeObject[];
 interface PathMap {
   [id: string]: Path;
 }
+const { api, rdfs } = namespaces;
 
 /** Get the ids of all endpoint items (items that don't have ancestors) */
 const findEndPointIds = (flatObjects: Objects): string[] => {
   const endpoints: string[] = [];
   for (let i = 0, length = flatObjects.length; i < length; i++) {
-    if (flatObjects[i]["@type"]?.includes(namespaces.api.hierarchy.iri)) {
+    if (flatObjects[i]["@type"]?.includes(api.hierarchy.iri)) {
       continue;
     }
-    if (!flatObjects[i][namespaces.api.descendantOf.iri]) {
+    if (!flatObjects[i][api.descendantOf.iri]) {
       const id = flatObjects[i]["@id"];
       if (id) {
         endpoints.push(id);
@@ -53,11 +54,12 @@ const findPaths = (
   const pathCopy = [...path];
   pathCopy.push(id);
   paths.push(pathCopy);
-  const descendants = (object[namespaces.api.descendantOf.iri] ||
-    []) as Objects;
-  for (let i = 0, length = descendants.length; i < length; i++) {
-    const descendant = objects[descendants[i]["@id"] || ""];
-    findPaths(descendant, objects, pathCopy, paths);
+  const descendants = (object[api.descendantOf.iri] || []) as Objects;
+  const ancestors = (object[api.ancestorOf.iri] || []) as Objects;
+  const items = ancestors.length > 0 ? ancestors : descendants;
+  for (let i = 0, length = items.length; i < length; i++) {
+    const next = objects[items[i]["@id"] || ""];
+    findPaths(next, objects, pathCopy, paths);
   }
 };
 
@@ -132,11 +134,10 @@ const deNormalizePaths = (
       const labelKey = mapKey(
         propertyMap,
         object["@type"] as string[],
-        namespaces.rdfs.label.iri
+        rdfs.label.iri
       );
       (object as Record<string, unknown>)[labelKey] = [
-        ...((object[namespaces.rdfs.label.iri] as undefined | ValueObject[]) ||
-          []),
+        ...((object[rdfs.label.iri] as undefined | ValueObject[]) || []),
       ].map<LiteralString>((node) => ({
         value: node["@value"] as string,
         language: (node as Record<string, unknown>)["@language"] as
@@ -146,10 +147,10 @@ const deNormalizePaths = (
       const descendantOfKey = mapKey(
         propertyMap,
         object["@type"] as string[],
-        namespaces.api.descendantOf.iri
+        api.descendantOf.iri
       );
       object[descendantOfKey] = [
-        ...((object[namespaces.api.descendantOf.iri] as MaybeNodes) || []),
+        ...((object[api.descendantOf.iri] as MaybeNodes) || []),
       ].map((node) => node["@id"] as string);
       const children = (object.children || []) as string[];
       if (previous && !children.includes(previous)) {
@@ -172,7 +173,7 @@ export const normalizeHierarchy: Normalizer = async (
   __,
   propertyMap
 ) => {
-  const root = (node[namespaces.api.hierarchyRoot.iri] as MaybeNodes)?.[0];
+  const root = (node[api.hierarchyRoot.iri] as MaybeNodes)?.[0];
   const flat = await flatten(node);
   if (Array.isArray(flat)) {
     const rootId = root?.["@id"] as string;

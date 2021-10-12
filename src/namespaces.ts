@@ -48,6 +48,7 @@ const xsd: Namespace = {
 
 export const namespaces = {
   api: {
+    ancestorOf: api.resource("ancestorOf"),
     descendantOf: api.resource("descendantOf"),
     eventOrderByVariable: api.resource("eventOrderByVariable"),
     eventParticipantVariable: api.resource("eventParticipantVariable"),
