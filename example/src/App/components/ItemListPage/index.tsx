@@ -71,7 +71,7 @@ export const ItemListPage = ({
             return (
               <li key={event.idLocal}>
                 <Link
-                  to={urlPart + "/" + event.idLocal}
+                  to={`/${urlPart}/${event.idLocal}`}
                   className="text-gray-800"
                 >
                   {label}
