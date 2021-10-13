@@ -193,11 +193,13 @@ export interface EventMutationPayload extends BaseMutationPayload {
    * */
   authors: string[];
   /**
-   * The date for the event. Can be a variant of one or two dates in the format YYYY-MM-DD, separated by a hyphen.
+   * The date for the event. Can be a variant of one or two dates in the format (-?)YYYY-MM-DD, separated by a pipe.
+   * Values with a preceding hyphen signify dates BCE.
    * @example 1798-12-01 Exactly on the date
-   * @example 1798-12-01- Not earlier than the date
-   * @example -1798-12-01 Not later than the date
-   * @example 1797-01-01-1798-12-01 Not earlier than the first date and not later than the second date
+   * @example -0050-12-01 Exactly on the date (BCE)
+   * @example 1798-12-01| Not earlier than the date
+   * @example |1798-12-01 Not later than the date
+   * @example 1797-01-01|1798-12-01 Not earlier than the first date and not later than the second date
    */
   date: string;
   /**
