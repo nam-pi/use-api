@@ -74,6 +74,7 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
     [rdfs.label.iri]: "labels",
   },
   [core.source.iri]: {
+    [core.hasText.iri]: "texts",
     [rdfs.comment.iri]: "comments",
     [rdfs.label.iri]: "labels",
   },
