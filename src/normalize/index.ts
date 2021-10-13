@@ -83,6 +83,10 @@ const initNormalized = async (
         normalized.id = id;
         normalized.idLocal = getIdLocal(id);
       }
+    } else if (iri === namespaces.core.sameAs.iri) {
+      normalized.sameAs = (
+        node[namespaces.core.sameAs.iri] as unknown as Record<string, string>[]
+      )?.map((v) => v["@id"]);
     }
     // Add all other nodes
     else {
