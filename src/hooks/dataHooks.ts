@@ -156,7 +156,7 @@ export const useEvents: FetchCollectionHook<Event, EventsQuery> = ({
       sorter = getDefaultSorter(copy);
   }
   if (copy.startDate || copy.endDate) {
-    const dates = `${getDateString(copy.startDate)}-${getDateString(
+    const dates = `${getDateString(copy.startDate)}|${getDateString(
       copy.endDate
     )}`;
     delete copy.startDate;
