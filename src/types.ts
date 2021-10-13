@@ -543,10 +543,11 @@ export interface SourceLocation extends Item {
 export interface Source extends Item {
   /** Items, possibly in other databases, that are the same as this source. */
   sameAs?: string[];
+  /** Textual content that is added to the source */
+  texts?: LiteralString[];
 }
 
-export interface SourceMutationPayload
-  extends Omit<BaseMutationPayload, "texts"> {
+export interface SourceMutationPayload extends BaseMutationPayload {
   /** Items, possibly in other databases, that are the same as this source */
   sameAs?: string[];
 }
