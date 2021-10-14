@@ -21,18 +21,12 @@ export default {
       name: "UseNampiApi",
       sourcemap: true,
       globals: {
-        "react/jsx-runtime": "jsxRuntime",
         "keycloak-js": "Keycloak",
-        react: "react",
         jsonld: "jsonld",
         uuid: "uuid",
       },
     },
   ],
-  external: [
-    "react/jsx-runtime",
-    ...Object.keys(pkg.dependencies || {}),
-    ...Object.keys(pkg.peerDependencies || {}),
-  ],
+  external: [...Object.keys(pkg.dependencies || {})],
   plugins: [typescript(), terser()],
 };
