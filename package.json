@@ -1,6 +1,6 @@
 {
   "name": "nampi-use-api",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "author": "Daniel Jeller <djeller@nettek.at>",
   "repository": {
     "type": "git",
@@ -50,9 +50,9 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "rollup": "^2.58.0",
+    "rollup-plugin-typescript2": "^0.30.0",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.4",
-    "rollup-plugin-typescript2": "^0.30.0"
+    "typescript": "^4.4.4"
   },
   "dependencies": {
     "jsonld": "^5.2.0",
