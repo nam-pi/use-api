@@ -56,7 +56,6 @@ export const NampiProvider = ({
         }
         await keycloak
           .init(config)
-          .then(() => console.log("Initialisation finished"))
           .catch(console.log);
       } else {
         // Define fallback values in case the keycloak data is not provided in the props
