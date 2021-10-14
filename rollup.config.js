@@ -15,17 +15,17 @@ export default {
       format: "es",
       sourcemap: true,
     },
-    {
-      file: pkg.browser,
-      format: "iife",
-      name: "UseNampiApi",
-      sourcemap: true,
-      globals: {
-        "keycloak-js": "Keycloak",
-        jsonld: "jsonld",
-        uuid: "uuid",
-      },
-    },
+    //  {
+      //  file: pkg.browser,
+      //  format: "iife",
+      //  name: "UseNampiApi",
+      //  sourcemap: true,
+      //  globals: {
+        //  "keycloak-js": "Keycloak",
+        //  jsonld: "jsonld",
+        //  uuid: "uuid",
+      //  },
+    //  },
   ],
   external: [...Object.keys(pkg.dependencies || {})],
   plugins: [typescript(), terser()],
