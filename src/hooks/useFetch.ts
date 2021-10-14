@@ -74,8 +74,14 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
   const dirty = useRef<boolean>(false);
   const inputTimeout = useRef<Timeout>();
   const oldQuery = useRef<string>("");
-  const { defaultLimit, initialized, keycloak, propertyMap, searchTimeout } =
-    useNampiContext();
+  const {
+    defaultLimit,
+    initialized,
+    updateToken,
+    token,
+    propertyMap,
+    searchTimeout,
+  } = useNampiContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [state, setState] = useState<State<T>>({});
 
@@ -149,16 +155,15 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
     async (url: string, abort: AbortController) => {
       setLoading(true);
       const config: RequestInit = { ...DEFAULT_CONFIG, signal: abort.signal };
-      if (keycloak.token) {
+      if (token) {
         config.headers = {
           ...config.headers,
-          Authorization: `Bearer ${keycloak.token}`,
+          Authorization: `Bearer ${token}`,
         };
       }
       const fullUrl =
         url + (searchParams ? "?" + searchParams?.toString() : "");
-      keycloak
-        .updateToken(30)
+      updateToken(30)
         .then(() => fetch(fullUrl, config))
         .catch(() => fetch(fullUrl, DEFAULT_CONFIG))
         .then((response) => response.json())
@@ -176,7 +181,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
           setLoading(false);
         });
     },
-    [keycloak, mapResult, searchParams]
+    [mapResult, searchParams, token, updateToken]
   );
 
   // Update the search params state when receiving new search params after a timeout
