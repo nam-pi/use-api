@@ -506,6 +506,8 @@ export interface ProviderConfig {
   api: string;
   /** The URL of the NAMPI Keycloak auth endpoint.  */
   auth?: string;
+  /** Whether or not to enable the keycloak logging mechanism */
+  authLogging?: boolean;
   /** The name of the Keycloak client to use. If not present in combination with "realm", the login and logout auth functions will throw an error on use.  */
   client?: string;
   /** The default limit to use when querying collections */

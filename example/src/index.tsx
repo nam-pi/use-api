@@ -19,6 +19,7 @@ render(
     <NampiProvider
       api={api}
       auth={auth}
+      authLogging={true}
       client={client}
       defaultLimit={15}
       realm={realm}
