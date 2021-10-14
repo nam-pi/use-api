@@ -58,13 +58,13 @@ export const useMutate = <PayloadType, ResultType>(
   mutate: MutationFunction<PayloadType, ResultType>,
   state: MutationState<ResultType>
 ] => {
-  const { keycloak, propertyMap } = useNampiContext();
+  const { token, propertyMap, updateToken } = useNampiContext();
   const [state, setState] = useState<MutationState<ResultType>>({
     loading: false,
   });
   return [
     async (payload: PayloadType) => {
-      if (!keycloak.token) {
+      if (!token) {
         const result = {
           error: {
             title: { value: "Unauthorized", language: "en" },
@@ -77,14 +77,13 @@ export const useMutate = <PayloadType, ResultType>(
         return result;
       }
       setState((old) => ({ ...old, loading: true }));
-      return keycloak
-        .updateToken(30)
+      return updateToken(30)
         .then(() =>
           fetch(url, {
             headers: {
               Accept: "application/ld+json",
               "Content-Type": "application/x-www-form-urlencoded",
-              Authorization: `Bearer ${keycloak.token}`,
+              Authorization: `Bearer ${token}`,
             },
             method,
             body:

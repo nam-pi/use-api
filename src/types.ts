@@ -124,12 +124,16 @@ export interface CollectionQuery extends Record<string, unknown> {
 /** The internal state of the use-NAMPI context */
 export interface ContextState {
   apiUrl: string;
+  authenticated: boolean;
   defaultLimit: number;
   initialized: boolean;
   inversePropertyMap: InversePropertyMap;
-  keycloak: KeycloakInstance;
+  login: KeycloakInstance["login"];
+  logout: KeycloakInstance["logout"];
   propertyMap: PropertyMap;
   searchTimeout: number;
+  token: KeycloakInstance["token"];
+  updateToken: KeycloakInstance["updateToken"];
 }
 
 type DefaultOrderBy = "id" | "label";
