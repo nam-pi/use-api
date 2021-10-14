@@ -3,9 +3,9 @@ import { ReactNode, useEffect, useMemo, useState } from "react";
 import { InversePropertyMap, PropertyMap, ProviderConfig } from "types";
 import { deepMerge } from "utils/deepMerge";
 import {
-  DEFAULT_LIMIT,
-  DEFAULT_PROPERTY_MAP,
-  DEFAULT_SEARCH_TIMEOUT,
+    DEFAULT_LIMIT,
+    DEFAULT_PROPERTY_MAP,
+    DEFAULT_SEARCH_TIMEOUT
 } from "../constants";
 import { NampiContext } from "./NampiContext";
 
@@ -27,6 +27,7 @@ export const NampiProvider = ({
   children,
   api,
   auth,
+  authLogging: enableLogging = false,
   client,
   defaultLimit = DEFAULT_LIMIT,
   propertyMap,
@@ -43,14 +44,20 @@ export const NampiProvider = ({
   useEffect(() => {
     const initialize = async () => {
       if (auth && realm && client) {
-        const config: KeycloakInitOptions = { checkLoginIframe: true };
+        const config: KeycloakInitOptions = {
+          checkLoginIframe: true,
+          enableLogging,
+        };
         if (sso) {
           config.onLoad = "check-sso";
         }
         if (silentSsoUri) {
           config.silentCheckSsoRedirectUri = silentSsoUri;
         }
-        await keycloak.init(config);
+        await keycloak
+          .init(config)
+          .then(() => console.log("Initialisation finished"))
+          .catch(console.log);
       } else {
         // Define fallback values in case the keycloak data is not provided in the props
         keycloak.authenticated = false;
@@ -64,7 +71,7 @@ export const NampiProvider = ({
       setInitialized(true);
     };
     initialize();
-  }, [auth, client, keycloak, realm, silentSsoUri, sso]);
+  }, [auth, client, enableLogging, keycloak, realm, silentSsoUri, sso]);
   const fullPropertyMap = deepMerge(propertyMap || {}, DEFAULT_PROPERTY_MAP);
   return (
     <NampiContext.Provider
