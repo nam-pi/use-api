@@ -1,5 +1,5 @@
 import { Dialog } from "@headlessui/react";
-import { EventMutationPayload, useEventCreate } from "nampi-use-api/bundle";
+import { EventMutationPayload, useEventCreate } from "nampi-use-api/index";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Button } from "../Button";

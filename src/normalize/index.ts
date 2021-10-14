@@ -1,9 +1,7 @@
 import { NodeObject } from "jsonld";
 import { JsonLdArray } from "jsonld/jsonld-spec";
-import { namespaces } from "namespaces";
-import { normalizeEvent } from "normalize/normalizers/normalizeEvent";
-import { normalizeHierarchy } from "normalize/normalizers/normalizeHierarchy";
-import { normalizeUser } from "normalize/normalizers/normalizeUser";
+import { v4 as uuidv4 } from "uuid";
+import { namespaces } from "../namespaces";
 import {
     Blanks,
     Cache,
@@ -13,18 +11,20 @@ import {
     Normalizer,
     NormalizeResult,
     PropertyMap
-} from "types";
-import { parseDate } from "utils/parseDate";
-import { v4 as uuidv4 } from "uuid";
+} from "../types";
+import { parseDate } from "../utils/parseDate";
 import { getIdLocal } from "./helpers/getIdLocal";
 import { isBlank } from "./helpers/isBlank";
 import { mapKey } from "./helpers/mapKey";
 import { addLinks } from "./helpers/transforms";
 import { normalizeActs } from "./normalizers/normalizeActs";
 import { normalizeCollection } from "./normalizers/normalizeCollection";
+import { normalizeEvent } from "./normalizers/normalizeEvent";
+import { normalizeHierarchy } from "./normalizers/normalizeHierarchy";
 import { normalizePlaces } from "./normalizers/normalizePlaces";
 import { normalizeSourceLocation } from "./normalizers/normalizeSourceLocation";
 import { normalizeStatus } from "./normalizers/normalizeStatus";
+import { normalizeUser } from "./normalizers/normalizeUser";
 
 const { api, core, hydra, xsd } = namespaces;
 

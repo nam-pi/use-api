@@ -1,4 +1,4 @@
-import { Namespace, RDFResource } from "types";
+import { Namespace, RDFResource } from "../types";
 
 export const API_IRI = "https://purl.org/nampi/owl/api#";
 export const CORE_IRI = "https://purl.org/nampi/owl/core#";

@@ -1,4 +1,4 @@
-import { useAuth } from "nampi-use-api/bundle";
+import { useAuth } from "nampi-use-api/index";
 import { useEffect } from "react";
 import { useHistory, useLocation } from "react-router";
 

@@ -1,4 +1,4 @@
-import { Item, SortFunction } from "types";
+import { Item, SortFunction } from "../types";
 
 export const sortById: SortFunction<Item> = (a, b) => {
   const idA = a.id || a.idLocal;

@@ -1,4 +1,4 @@
-import { Event, SortFunction } from "types";
+import { Event, SortFunction } from "../types";
 
 export const sortByEventDate: SortFunction<Event> = (a, b) => {
   const dateA = a.sort || new Date();

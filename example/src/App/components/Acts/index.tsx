@@ -1,4 +1,4 @@
-import { useActs } from "nampi-use-api/bundle";
+import { useActs } from "nampi-use-api/index";
 import { useState } from "react";
 import { ItemListPage } from "../ItemListPage";
 

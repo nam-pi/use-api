@@ -1,6 +1,7 @@
 import { expand } from "jsonld";
-import { normalize } from "normalize";
 import { useState } from "react";
+import { namespaces } from "../namespaces";
+import { normalize } from "../normalize";
 import {
     DeleteHook,
     Endpoint,
@@ -9,9 +10,8 @@ import {
     MutationResultContent,
     MutationState,
     NampiError
-} from "types";
-import { buildPath } from "utils/buildPath";
-import { namespaces } from "../namespaces";
+} from "../types";
+import { buildPath } from "../utils/buildPath";
 import { useNampiContext } from "./useNampiContext";
 
 const isError = <ResultType>(

@@ -1,7 +1,7 @@
 import { NodeObject } from "jsonld";
 import { JsonLdArray } from "jsonld/jsonld-spec";
 import { KeycloakInstance } from "keycloak-js";
-import { namespaces } from "namespaces";
+import { namespaces } from "./namespaces";
 
 /** A document interpretation act */
 export interface Act extends Item {

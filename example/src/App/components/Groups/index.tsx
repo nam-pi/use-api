@@ -1,4 +1,4 @@
-import { useGroups } from "nampi-use-api/bundle";
+import { useGroups } from "nampi-use-api/index";
 import { useState } from "react";
 import { ItemListPage } from "../ItemListPage";
 

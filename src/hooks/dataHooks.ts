@@ -1,6 +1,6 @@
-import { sortByEventDate } from "sorters/sortByEventDate";
-import { sortById } from "sorters/sortById";
-import { sortByLabel } from "sorters/sortByLabel";
+import { sortByEventDate } from "../sorters/sortByEventDate";
+import { sortById } from "../sorters/sortById";
+import { sortByLabel } from "../sorters/sortByLabel";
 import {
     Act,
     ActsQuery,
@@ -35,9 +35,9 @@ import {
     Type,
     TypesQuery,
     User
-} from "types";
-import { buildPath } from "utils/buildPath";
-import { getDateString } from "utils/getDateString";
+} from "../types";
+import { buildPath } from "../utils/buildPath";
+import { getDateString } from "../utils/getDateString";
 import { useFetch } from "./useFetch";
 import { useCreate, useDelete, useUpdate } from "./useMutation";
 import { useNampiContext } from "./useNampiContext";

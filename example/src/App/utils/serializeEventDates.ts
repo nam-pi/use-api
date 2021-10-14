@@ -1,5 +1,5 @@
 import { format as fmt } from "date-fns";
-import { Event } from "nampi-use-api/bundle";
+import { Event } from "nampi-use-api/index";
 
 export const serializeEventDates = (
   events: undefined | Event | Event[] = [],

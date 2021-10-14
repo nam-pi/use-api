@@ -1,4 +1,4 @@
-import { useAuth, useEvents } from "nampi-use-api/bundle";
+import { useAuth, useEvents } from "nampi-use-api/index";
 import { useState } from "react";
 import { Button } from "../Button";
 import { ItemListPage } from "../ItemListPage";

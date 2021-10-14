@@ -1,6 +1,6 @@
-import { namespaces } from "namespaces";
-import { flattenLiteral } from "normalize/helpers/transforms";
-import { MaybeNodes, Normalizer } from "types";
+import { namespaces } from "../../namespaces";
+import { MaybeNodes, Normalizer } from "../../types";
+import { flattenLiteral } from "../helpers/transforms";
 
 const { hydra } = namespaces;
 

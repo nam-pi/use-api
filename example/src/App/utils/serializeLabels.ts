@@ -1,4 +1,4 @@
-import { LiteralString } from "nampi-use-api/bundle";
+import { LiteralString } from "nampi-use-api/index";
 
 export const serializeLabels = <
   T extends { labels?: undefined | LiteralString[] } = {

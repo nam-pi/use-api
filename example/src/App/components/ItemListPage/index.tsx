@@ -1,5 +1,5 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FetchCollectionResult } from "nampi-use-api/bundle";
+import { FetchCollectionResult } from "nampi-use-api/index";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { serializeLabels } from "../../utils/serializeLabels";

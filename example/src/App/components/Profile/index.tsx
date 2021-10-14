@@ -1,4 +1,4 @@
-import { useUser } from "nampi-use-api/bundle";
+import { useUser } from "nampi-use-api/index";
 import { Heading } from "../Heading";
 import { LoadingPlaceholder } from "../LoadingPlaceholder";
 import { Pre } from "../Pre";

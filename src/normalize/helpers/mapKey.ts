@@ -1,4 +1,4 @@
-import { PropertyMap } from "types";
+import { PropertyMap } from "../../types";
 
 export const mapKey = (
   map: PropertyMap,

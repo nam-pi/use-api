@@ -1,6 +1,6 @@
-import { namespaces } from "namespaces";
-import { makeSingle } from "normalize/helpers/transforms";
-import { MaybeNodes, Normalizer, RDFResource } from "types";
+import { namespaces } from "../../namespaces";
+import { MaybeNodes, Normalizer, RDFResource } from "../../types";
+import { makeSingle } from "../helpers/transforms";
 
 const { schema } = namespaces;
 

@@ -1,10 +1,10 @@
-import { namespaces } from "namespaces";
-import { makeSingle } from "normalize/helpers/transforms";
-import { MaybeNodes, Normalizer } from "types";
+import { namespaces } from "../../namespaces";
+import { MaybeNodes, Normalizer } from "../../types";
+import { makeSingle } from "../helpers/transforms";
 
 const { core } = namespaces;
 
-export const normalizeEvent: Normalizer = async (node, normalized, cache) => {
+export const normalizeEvent: Normalizer = async (_, normalized, cache) => {
   const exact = cache[normalized.links?.exact?.[0] || ""];
   if (exact) {
     const value = (exact[core.hasDateTime.iri] as MaybeNodes)?.[0]?.value;

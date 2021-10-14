@@ -1,4 +1,4 @@
-import { NampiProvider } from "nampi-use-api/bundle";
+import { NampiProvider } from "nampi-use-api/index";
 import { StrictMode } from "react";
 import { render } from "react-dom";
 import "tailwindcss/tailwind.css";
