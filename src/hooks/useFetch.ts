@@ -1,8 +1,8 @@
 import { expand } from "jsonld";
 import { JsonLdArray } from "jsonld/jsonld-spec";
-import { namespaces } from "namespaces";
-import { normalize } from "normalize";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { namespaces } from "../namespaces";
+import { normalize } from "../normalize";
 import {
     Collection,
     CollectionNav,
@@ -12,7 +12,7 @@ import {
     FetchResult,
     SortFunction,
     Timeout
-} from "types";
+} from "../types";
 import { useNampiContext } from "./useNampiContext";
 
 const DEFAULT_CONFIG: RequestInit = {

@@ -1,4 +1,4 @@
-import { Item, useHierarchy } from "nampi-use-api/bundle";
+import { Item, useHierarchy } from "nampi-use-api/index";
 import { serializeLabels } from "../../utils/serializeLabels";
 import { Heading } from "../Heading";
 import { InheritancePath } from "../InheritancePath";

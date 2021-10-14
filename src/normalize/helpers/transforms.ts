@@ -1,4 +1,4 @@
-import { Blanks, Literal, MaybeNodes, Normalized } from "types";
+import { Blanks, Literal, MaybeNodes, Normalized } from "../../types";
 import { isBlank } from "./isBlank";
 
 export const addLinks = (

@@ -1,4 +1,4 @@
-import { Entity, SortFunction } from "types";
+import { Entity, SortFunction } from "../types";
 
 const getLabel = (e: Entity): string => {
   let str = "";

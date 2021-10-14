@@ -1,5 +1,5 @@
 import { Menu } from "@headlessui/react";
-import { useAuth, useUser } from "nampi-use-api/bundle";
+import { useAuth, useUser } from "nampi-use-api/index";
 import { Link } from "react-router-dom";
 import { LoadingPlaceholder } from "../LoadingPlaceholder";
 import { NampiLogo } from "../NampiLogo";

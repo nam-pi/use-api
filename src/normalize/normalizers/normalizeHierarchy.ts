@@ -1,7 +1,12 @@
 import { flatten, NodeObject, ValueObject } from "jsonld";
-import { namespaces } from "namespaces";
-import { mapKey } from "normalize/helpers/mapKey";
-import { LiteralString, MaybeNodes, Normalizer, PropertyMap } from "types";
+import { namespaces } from "../../namespaces";
+import {
+    LiteralString,
+    MaybeNodes,
+    Normalizer,
+    PropertyMap
+} from "../../types";
+import { mapKey } from "../helpers/mapKey";
 
 interface LookupMap {
   [id: string]: NodeObject;

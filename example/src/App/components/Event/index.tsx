@@ -1,4 +1,4 @@
-import { useEvent, useEventDelete } from "nampi-use-api/bundle";
+import { useEvent, useEventDelete } from "nampi-use-api/index";
 import { useEffect } from "react";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";

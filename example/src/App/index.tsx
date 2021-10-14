@@ -1,4 +1,4 @@
-import { useAuth } from "nampi-use-api/bundle";
+import { useAuth } from "nampi-use-api/index";
 import { Route, Router, Switch } from "react-router";
 import { Act } from "./components/Act";
 import { Acts } from "./components/Acts";

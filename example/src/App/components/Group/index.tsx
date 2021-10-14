@@ -1,4 +1,4 @@
-import { useGroup } from "nampi-use-api/bundle";
+import { useGroup } from "nampi-use-api/index";
 import { useParams } from "react-router";
 import { ItemPage } from "../ItemPage";
 

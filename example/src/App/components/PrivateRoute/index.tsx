@@ -1,4 +1,4 @@
-import { useAuth } from "nampi-use-api/bundle";
+import { useAuth } from "nampi-use-api/index";
 import { Redirect, Route, RouteComponentProps, RouteProps } from "react-router";
 
 interface PrivateRouteParams extends RouteProps {

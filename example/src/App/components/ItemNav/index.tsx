@@ -5,7 +5,7 @@ import {
   faStepForward,
 } from "@fortawesome/free-solid-svg-icons";
 import clsx from "clsx";
-import { CollectionNav } from "nampi-use-api/bundle";
+import { CollectionNav } from "nampi-use-api/index";
 import { IconButton } from "../IconButton";
 
 export const ItemNav = ({

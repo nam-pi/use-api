@@ -1,3 +1,4 @@
+import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
 import pkg from "./package.json";
 
@@ -7,11 +8,31 @@ export default {
     {
       file: pkg.main,
       format: "cjs",
-      exports: "named",
       sourcemap: true,
-      strict: false,
+    },
+    {
+      file: pkg.module,
+      format: "es",
+      sourcemap: true,
+    },
+    {
+      file: pkg.browser,
+      format: "iife",
+      name: "UseNampiApi",
+      sourcemap: true,
+      globals: {
+        "react/jsx-runtime": "jsxRuntime",
+        "keycloak-js": "Keycloak",
+        react: "react",
+        jsonld: "jsonld",
+        uuid: "uuid",
+      },
     },
   ],
-  plugins: [typescript()],
-  external: ["react", "react-dom"],
+  external: [
+    "react/jsx-runtime",
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.peerDependencies || {}),
+  ],
+  plugins: [typescript(), terser()],
 };

@@ -1,5 +1,5 @@
-import { namespaces } from "namespaces";
-import { PropertyMap } from "types";
+import { namespaces } from "../namespaces";
+import { ContextState, PropertyMap } from "../types";
 
 const { api, core, hydra, rdfs, schema } = namespaces;
 
@@ -101,3 +101,23 @@ export const DEFAULT_PROPERTY_MAP: PropertyMap = {
 };
 
 export const DEFAULT_SEARCH_TIMEOUT = 200;
+
+export const DEFAULT_CONTEXT_STATE: ContextState = {
+  apiUrl: "",
+  defaultLimit: DEFAULT_LIMIT,
+  initialized: false,
+  inversePropertyMap: {},
+  authenticated: false,
+  login: () => {
+    throw new Error("No Keycloak realm and client provided.");
+  },
+  logout: () => {
+    throw new Error("No Keycloak realm and client provided.");
+  },
+  propertyMap: {},
+  searchTimeout: DEFAULT_SEARCH_TIMEOUT,
+  token: undefined,
+  updateToken: () => {
+    throw new Error("No Keycloak realm and client provided.");
+  },
+};

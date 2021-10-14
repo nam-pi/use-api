@@ -1,7 +1,7 @@
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { Listbox } from "@headlessui/react";
 import clsx from "clsx";
-import { useTypes } from "nampi-use-api/bundle";
+import { useTypes } from "nampi-use-api/index";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { serializeLabels } from "../../utils/serializeLabels";
 import { Icon } from "../Icon";

@@ -22,7 +22,6 @@
     "clsx": "^1.1.1",
     "craco": "^0.0.3",
     "date-fns": "^2.24.0",
-    "jsonpath-plus": "link:../node_modules/jsonpath-plus",
     "nampi-use-api": "link:../dist",
     "postcss": "^7",
     "react": "link:../node_modules/react",

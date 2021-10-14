@@ -1,5 +1,5 @@
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
-import { Hierarchy } from "nampi-use-api/bundle";
+import { Hierarchy } from "nampi-use-api/index";
 import { serializeLabels } from "../../utils/serializeLabels";
 import { Icon } from "../Icon";
 

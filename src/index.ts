@@ -1,4 +1,4 @@
-export { NampiProvider } from "components/NampiProvider";
+export { NampiProvider } from "./components/NampiProvider";
 export {
     useAct,
     useActs,
@@ -37,10 +37,10 @@ export {
     useSourceUpdate,
     useTypes,
     useUser
-} from "hooks/dataHooks";
-export { useAuth } from "hooks/useAuth";
-export { usePropertyIris } from "hooks/usePropertyIris";
-export { namespaces } from "namespaces";
+} from "./hooks/dataHooks";
+export { useAuth } from "./hooks/useAuth";
+export { usePropertyIris } from "./hooks/usePropertyIris";
+export { namespaces } from "./namespaces";
 export type {
     Act,
     ActsQuery,
@@ -81,5 +81,5 @@ export type {
     Type,
     TypesQuery,
     User
-} from "types";
+} from "./types";
 
