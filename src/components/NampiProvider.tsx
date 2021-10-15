@@ -56,11 +56,8 @@ export const NampiProvider = ({
     inversePropertyMap: invertPropertyMap(fullPropertyMap),
   });
   useEffect(() => {
-    console.log(state);
     if (!state.initialized) {
-      console.log("initialize");
       if (auth && realm && client) {
-        console.log("with-keycloak");
         const kc = Keycloak({ url: auth, realm: realm, clientId: client });
         kc.init({
           checkLoginIframe: true,
@@ -69,7 +66,6 @@ export const NampiProvider = ({
           silentCheckSsoRedirectUri: silentSsoUri || undefined,
         })
           .then((authenticated) => {
-            console.log("authenticated: " + authenticated);
             keycloak.current = kc;
             setState((old) => ({
               ...old,
@@ -81,9 +77,8 @@ export const NampiProvider = ({
               token: kc.token,
             }));
           })
-          .catch((e) => console.log(e));
+          .catch(console.log);
       } else {
-        console.log("without-keycloak");
         setState((old) => ({ ...old, initialized: true }));
       }
     }
