@@ -19,14 +19,8 @@ export default {
       format: "esm",
       sourcemap: true,
     },
-    //  {
-    //  file: pkg.browser,
-    //  format: "iife",
-    //  name: "UseNampiApi",
-    //  sourcemap: true,
-    //  },
   ],
-  //  external: [...Object.keys(pkg.dependencies || {})],
+  external: [...Object.keys(pkg.dependencies || {})],
   plugins: [
     external(),
     resolve(),
