@@ -163,7 +163,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
       }
       const fullUrl =
         url + (searchParams ? "?" + searchParams?.toString() : "");
-      updateToken(30)
+      updateToken()
         .then(() => fetch(fullUrl, config))
         .catch(() => fetch(fullUrl, DEFAULT_CONFIG))
         .then((response) => response.json())
