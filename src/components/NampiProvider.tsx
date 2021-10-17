@@ -15,6 +15,8 @@ import {
 import { deepMerge } from "../utils/deepMerge";
 import { NampiContext } from "./NampiContext";
 
+const MIN_VALIDITY = 30;
+
 const invertPropertyMap = (propertyMap: PropertyMap): InversePropertyMap => {
   const inverse: InversePropertyMap = {};
   for (const itemIri in propertyMap) {
@@ -59,6 +61,11 @@ export const NampiProvider = ({
     if (!state.initialized) {
       if (auth && realm && client) {
         const kc = Keycloak({ url: auth, realm: realm, clientId: client });
+        kc.onTokenExpired = () => {
+          kc.updateToken(MIN_VALIDITY)
+            .then(() => setState((old) => ({ ...old, token: kc.token })))
+            .catch(console.log);
+        };
         kc.init({
           checkLoginIframe: true,
           enableLogging,
@@ -73,7 +80,7 @@ export const NampiProvider = ({
               logout: kc.logout,
               authenticated,
               initialized: true,
-              updateToken: kc.updateToken,
+              updateToken: () => kc.updateToken(MIN_VALIDITY),
               token: kc.token,
             }));
           })

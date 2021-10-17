@@ -133,7 +133,7 @@ export interface ContextState {
   propertyMap: PropertyMap;
   searchTimeout: number;
   token: KeycloakInstance["token"];
-  updateToken: KeycloakInstance["updateToken"];
+  updateToken: () => ReturnType<KeycloakInstance["updateToken"]>;
 }
 
 type DefaultOrderBy = "id" | "label";

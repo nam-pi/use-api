@@ -77,7 +77,7 @@ export const useMutate = <PayloadType, ResultType>(
         return result;
       }
       setState((old) => ({ ...old, loading: true }));
-      return updateToken(30)
+      return updateToken()
         .then(() =>
           fetch(url, {
             headers: {
