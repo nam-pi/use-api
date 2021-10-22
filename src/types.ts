@@ -66,7 +66,7 @@ interface BaseMutationPayload {
   texts: string[];
   /**
    * The full URLs for all entity types.
-   * @example https://purl.org/nampi/owl/core#event
+   * @example http://purl.org/nampi/owl/core#event
    */
   types: string[];
 }
@@ -188,7 +188,7 @@ export interface EventMutationPayload extends BaseMutationPayload {
    * Can be either a full URL for each aspect or the full URLS for each aspect usage (default is core:uses_aspect)
    * and aspect type, separated by a pipe-char.
    * @example http://example.org/aspects/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
-   * @example https://purl.org/nampi/owl/core#adds_aspect|http://example.org/aspects/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
+   * @example http://purl.org/nampi/owl/core#adds_aspect|http://example.org/aspects/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
    */
   aspects: string[];
   /**
@@ -211,14 +211,14 @@ export interface EventMutationPayload extends BaseMutationPayload {
    * Can be either the person's full URL or the full URLS for the participation (default is core:has_main_participant)
    * and the person type, separated by a pipe-char.
    * @example http://example.org/persons/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
-   * @example https://purl.org/nampi/owl/core#starts_life_of|http://example.org/persons/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
+   * @example http://purl.org/nampi/owl/core#starts_life_of|http://example.org/persons/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
    */
   mainParticipant: string;
   /**
    * The other participants of the event.
    * Can be either a full URL for each person or the full URLS for each participation  (default is core:has_participant)
    * and person type, separated by a pipe-char.
-   * @example https://purl.org/nampi/owl/core#has_participant|http://example.org/persons/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
+   * @example http://purl.org/nampi/owl/core#has_participant|http://example.org/persons/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
    */
   otherParticipants: string[];
   /**
@@ -244,9 +244,9 @@ export interface EventMutationPayload extends BaseMutationPayload {
 export interface EventsQuery extends CollectionQuery {
   /** Filter by aspect used in the event. Can be the iri of any aspect individual */
   aspect?: string;
-  /** Filter by the type of aspect used in the event. Can be any subclass of *https://purl.org/nampi/owl/core#aspect* that is part of the connected ontologies */
+  /** Filter by the type of aspect used in the event. Can be any subclass of *http://purl.org/nampi/owl/core#aspect* that is part of the connected ontologies */
   aspectType?: string;
-  /** Filter by the type of aspect use. Can be any subclass of *https://purl.org/nampi/owl/core#uses_aspect* that is part of the connected ontologies */
+  /** Filter by the type of aspect use. Can be any subclass of *http://purl.org/nampi/owl/core#uses_aspect* that is part of the connected ontologies */
   aspectUseType?: string;
   /** Filter by the author of the connected document interpretation act. Can be the iri of any author individual */
   author?: string;
@@ -256,9 +256,9 @@ export interface EventsQuery extends CollectionQuery {
   orderBy?: DefaultOrderBy | "date";
   /** Filter by event participant. Can be the iri of any agent individual */
   participant?: string;
-  /** Filter by type of participant. Can by the iri of any subclass of *https://purl.org/nampi/owl/core#agent* that is part of the connected ontologies */
+  /** Filter by type of participant. Can by the iri of any subclass of *http://purl.org/nampi/owl/core#agent* that is part of the connected ontologies */
   participantType?: string;
-  /** Filter by participation type. Can by any subclass of *https://purl.org/nampi/owl/core#has_participant* that is part of the connected ontologies */
+  /** Filter by participation type. Can by any subclass of *http://purl.org/nampi/owl/core#has_participant* that is part of the connected ontologies */
   participationType?: string;
   /** Filter by event place. Can be the iri of any place individual */
   place?: string;

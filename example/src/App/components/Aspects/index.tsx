@@ -10,7 +10,7 @@ export const Aspects = () => {
   });
   return (
     <ItemListPage
-      baseType="https://purl.org/nampi/owl/core#aspect"
+      baseType="http://purl.org/nampi/owl/core#aspect"
       itemData={itemData}
       onClassChange={setType}
       onTextChange={setText}

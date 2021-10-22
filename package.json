@@ -10,7 +10,7 @@
     "email": "info@nampi.icar-us.eu",
     "url": "https://github.com/nam-pi/use-api"
   },
-  "homepage": "https://purl.org/nampi",
+  "homepage": "http://purl.org/nampi",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
