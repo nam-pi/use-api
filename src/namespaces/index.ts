@@ -1,7 +1,7 @@
 import { Namespace, RDFResource } from "../types";
 
-export const API_IRI = "https://purl.org/nampi/owl/api#";
-export const CORE_IRI = "https://purl.org/nampi/owl/core#";
+export const API_IRI = "http://purl.org/nampi/owl/api#";
+export const CORE_IRI = "http://purl.org/nampi/owl/core#";
 export const HYDRA_IRI = "http://www.w3.org/ns/hydra/core#";
 export const RDFS_IRI = "http://www.w3.org/2000/01/rdf-schema#";
 export const SCHEMA_IRI = "https://schema.org/";
