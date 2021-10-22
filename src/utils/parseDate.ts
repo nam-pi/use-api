@@ -11,7 +11,7 @@ export const parseDate = (dateString: string): Date => {
     const minutes = match.groups?.min;
     const seconds = match.groups?.sec || "0";
     const milliSeconds = match.groups?.ms || "0";
-    return new Date(
+    const date = new Date(
       Number(year),
       Number(month) - 1,
       Number(day),
@@ -20,6 +20,8 @@ export const parseDate = (dateString: string): Date => {
       Number(seconds),
       Number(milliSeconds)
     );
+    date.setFullYear(Number(year));
+    return date;
   }
   throw new Error("Illegal date: '" + dateString + "'");
 };
