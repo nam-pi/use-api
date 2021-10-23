@@ -21,7 +21,7 @@
   ],
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rollup -c && tsc",
+    "build": "rollup -c",
     "watch": "rollup -cw",
     "prepublish": "yarn build"
   },
