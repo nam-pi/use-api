@@ -51,7 +51,7 @@ interface BaseMutationPayload {
    * @example A string
    * @example A language string@en
    */
-  comments: string[];
+  comments?: string[];
   /**
    * Labels for the entity. Can be simple strings or language literal strings according to https://www.rfc-editor.org/rfc/bcp/bcp47.txt.
    * @example A string
@@ -63,7 +63,7 @@ interface BaseMutationPayload {
    * @example A string
    * @example A language string@en
    */
-  texts: string[];
+  texts?: string[];
   /**
    * The full URLs for all entity types.
    * @example http://purl.org/nampi/owl/core#event
@@ -190,7 +190,7 @@ export interface EventMutationPayload extends BaseMutationPayload {
    * @example http://example.org/aspects/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
    * @example http://purl.org/nampi/owl/core#adds_aspect|http://example.org/aspects/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
    */
-  aspects: string[];
+  aspects?: string[];
   /**
    * All authors of the connected document interpretation act with their full URL.
    * @example http://example.org/authors/54d5056c-0d87-4a23-8211-390920b22248
@@ -205,7 +205,7 @@ export interface EventMutationPayload extends BaseMutationPayload {
    * @example |1798-12-01 Not later than the date
    * @example 1797-01-01|1798-12-01 Not earlier than the first date and not later than the second date
    */
-  date: string;
+  date?: string;
   /**
    * The main participant of the event.
    * Can be either the person's full URL or the full URLS for the participation (default is core:has_main_participant)
@@ -220,12 +220,12 @@ export interface EventMutationPayload extends BaseMutationPayload {
    * and person type, separated by a pipe-char.
    * @example http://purl.org/nampi/owl/core#has_participant|http://example.org/persons/7755ab2f-aaab-4c96-bfb4-faff947c1bc8
    */
-  otherParticipants: string[];
+  otherParticipants?: string[];
   /**
    * The full URL of the event place.
    * @example http://example.org/places/8757ab2f-aaab-4c96-bfb4-faff947c1be7
    */
-  place: string;
+  place?: string;
   /**
    * The full URL of the interpretation source.
    * @example http://example.org/sources/9876ab2f-aaab-4c96-bfb4-faff947c1be7

@@ -17,9 +17,9 @@
     "jsx": "react-jsx",
     "declaration": true,
     "outDir": "./dist",
-    "declarationDir": "./dist",
+    "declarationDir": ".",
     "emitDeclarationOnly": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "lib"]
+  "exclude": ["node_modules", "lib", "dist"]
 }
