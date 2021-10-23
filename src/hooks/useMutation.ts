@@ -19,27 +19,6 @@ const isError = <ResultType>(
 ): data is NampiError =>
   (data as unknown as NampiError)?.types?.includes(namespaces.hydra.Status.iri);
 
-const toFetchFormData = (
-  data: Record<string, undefined | string | string[]>
-): string => {
-  const formData: string[] = [];
-  Object.entries(data).forEach(([key, value]) => {
-    if (!value) {
-      return;
-    }
-    if (Array.isArray(value)) {
-      value.forEach((v) => {
-        if (v) {
-          formData.push(`${key}%5B%5D=${encodeURIComponent(v)}`);
-        }
-      });
-    } else {
-      formData.push(`${key}=${encodeURIComponent(value)}`);
-    }
-  });
-  return formData.join("&");
-};
-
 const wrapResult = <ResultType>(
   result: NampiError | ResultType
 ): MutationResultContent<ResultType> => {
@@ -82,18 +61,11 @@ export const useMutate = <PayloadType, ResultType>(
           fetch(url, {
             headers: {
               Accept: "application/ld+json",
-              "Content-Type": "application/x-www-form-urlencoded",
+              "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
             method,
-            body:
-              payload &&
-              toFetchFormData(
-                payload as unknown as Record<
-                  string,
-                  undefined | string | string[]
-                >
-              ),
+            body: payload && JSON.stringify(payload),
           })
         )
         .then((response) =>
