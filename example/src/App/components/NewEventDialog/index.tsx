@@ -76,7 +76,8 @@ export const NewEventDialog = ({ visible, onClose }: Props) => {
       state.types.length > 0 &&
       state.labels.length > 0 &&
       state.source.length !== 0 &&
-      state.sourceLocation.length !== 0 &&
+      (state.sourceLocation === undefined ||
+        state.sourceLocation.length === 0) &&
       state.mainParticipant.length !== 0 &&
       state.authors.length > 0
     );
@@ -85,7 +86,7 @@ export const NewEventDialog = ({ visible, onClose }: Props) => {
     state.labels.length,
     state.mainParticipant.length,
     state.source.length,
-    state.sourceLocation.length,
+    state.sourceLocation,
     state.types.length,
   ]);
   const [create, { data, error, loading }] = useEventCreate();

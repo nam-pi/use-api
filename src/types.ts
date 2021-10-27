@@ -237,7 +237,7 @@ export interface EventMutationPayload extends BaseMutationPayload {
    * @example 6v
    * @example pages 7-9
    */
-  sourceLocation: string;
+  sourceLocation?: string;
 }
 
 /** Query parameters to fetch a partial events collection */
@@ -262,6 +262,8 @@ export interface EventsQuery extends CollectionQuery {
   participationType?: string;
   /** Filter by event place. Can be the iri of any place individual */
   place?: string;
+  /** Filter by source of the connected documentation interpretation act. Can be the iri of any source individual */
+  source?: string;
   /** Filter events by start date. All events that have dates (exact, earliest, latest, sort), *at* or *after* this date will be included */
   startDate?: Date;
 }
@@ -539,8 +541,8 @@ export type SortFunction<T> = (a: T, b: T) => -1 | 0 | 1;
 
 /** A source location */
 export interface SourceLocation extends Item {
-  /** The location text, usually the page, url or other textual content that specifies the actual location */
-  text: string;
+  /** The optional location text, usually the page, url or other textual content that specifies the actual location */
+  text?: string;
   /** The source for the source location */
   source: Source;
 }
