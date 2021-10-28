@@ -1,5 +1,6 @@
 import { expand } from "jsonld";
 import { useState } from "react";
+import { MIN_TOKEN_VALIDITY } from "../constants";
 import { namespaces } from "../namespaces";
 import { normalize } from "../normalize";
 import {
@@ -37,13 +38,13 @@ export const useMutate = <PayloadType, ResultType>(
   mutate: MutationFunction<PayloadType, ResultType>,
   state: MutationState<ResultType>
 ] => {
-  const { token, propertyMap, updateToken } = useNampiContext();
+  const { keycloak, propertyMap } = useNampiContext();
   const [state, setState] = useState<MutationState<ResultType>>({
     loading: false,
   });
   return [
     async (payload: PayloadType) => {
-      if (!token) {
+      if (!keycloak?.token) {
         const result = {
           error: {
             title: { value: "Unauthorized", language: "en" },
@@ -56,13 +57,14 @@ export const useMutate = <PayloadType, ResultType>(
         return result;
       }
       setState((old) => ({ ...old, loading: true }));
-      return updateToken()
+      return keycloak
+        ?.updateToken(MIN_TOKEN_VALIDITY)
         .then(() =>
           fetch(url, {
             headers: {
               Accept: "application/ld+json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${keycloak?.token}`,
             },
             method,
             body: payload && JSON.stringify(payload),

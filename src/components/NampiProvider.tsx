@@ -1,10 +1,11 @@
-import Keycloak, { KeycloakInstance } from "keycloak-js";
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import Keycloak from "keycloak-js";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import {
     DEFAULT_CONTEXT_STATE,
     DEFAULT_LIMIT,
     DEFAULT_PROPERTY_MAP,
-    DEFAULT_SEARCH_TIMEOUT
+    DEFAULT_SEARCH_TIMEOUT,
+    MIN_TOKEN_VALIDITY
 } from "../constants";
 import {
     ContextState,
@@ -14,8 +15,6 @@ import {
 } from "../types";
 import { deepMerge } from "../utils/deepMerge";
 import { NampiContext } from "./NampiContext";
-
-const MIN_VALIDITY = 30;
 
 const invertPropertyMap = (propertyMap: PropertyMap): InversePropertyMap => {
   const inverse: InversePropertyMap = {};
@@ -44,7 +43,6 @@ export const NampiProvider = ({
   silentSsoUri,
   sso,
 }: { children: ReactNode } & ProviderConfig): JSX.Element => {
-  const keycloak = useRef<null | KeycloakInstance>(null);
   const fullPropertyMap = useMemo(
     () => deepMerge(propertyMap || {}, DEFAULT_PROPERTY_MAP),
     [propertyMap]
@@ -60,28 +58,27 @@ export const NampiProvider = ({
   useEffect(() => {
     if (!state.initialized) {
       if (auth && realm && client) {
-        const kc = Keycloak({ url: auth, realm: realm, clientId: client });
-        kc.onTokenExpired = () => {
-          kc.updateToken(MIN_VALIDITY)
-            .then(() => setState((old) => ({ ...old, token: kc.token })))
-            .catch(console.log);
+        const keycloak = Keycloak({
+          url: auth,
+          realm: realm,
+          clientId: client,
+        });
+        keycloak.onTokenExpired = () => {
+          keycloak.updateToken(MIN_TOKEN_VALIDITY).catch(console.log);
         };
-        kc.init({
-          checkLoginIframe: true,
-          enableLogging,
-          onLoad: sso ? "check-sso" : undefined,
-          silentCheckSsoRedirectUri: silentSsoUri || undefined,
-        })
+        keycloak
+          .init({
+            checkLoginIframe: true,
+            enableLogging,
+            onLoad: sso ? "check-sso" : undefined,
+            silentCheckSsoRedirectUri: silentSsoUri || undefined,
+          })
           .then((authenticated) => {
-            keycloak.current = kc;
             setState((old) => ({
               ...old,
-              login: kc.login,
-              logout: kc.logout,
               authenticated,
               initialized: true,
-              updateToken: () => kc.updateToken(MIN_VALIDITY),
-              token: kc.token,
+              keycloak,
             }));
           })
           .catch(console.log);
@@ -96,7 +93,6 @@ export const NampiProvider = ({
     realm,
     silentSsoUri,
     sso,
-    state,
     state.initialized,
   ]);
   return (

@@ -128,12 +128,9 @@ export interface ContextState {
   defaultLimit: number;
   initialized: boolean;
   inversePropertyMap: InversePropertyMap;
-  login: KeycloakInstance["login"];
-  logout: KeycloakInstance["logout"];
   propertyMap: PropertyMap;
   searchTimeout: number;
-  token: KeycloakInstance["token"];
-  updateToken: () => ReturnType<KeycloakInstance["updateToken"]>;
+  keycloak: null | KeycloakInstance;
 }
 
 type DefaultOrderBy = "id" | "label";
