@@ -104,20 +104,13 @@ export const DEFAULT_SEARCH_TIMEOUT = 200;
 
 export const DEFAULT_CONTEXT_STATE: ContextState = {
   apiUrl: "",
+  authenticated: false,
   defaultLimit: DEFAULT_LIMIT,
   initialized: false,
   inversePropertyMap: {},
-  authenticated: false,
-  login: () => {
-    throw new Error("No Keycloak realm and client provided.");
-  },
-  logout: () => {
-    throw new Error("No Keycloak realm and client provided.");
-  },
+  keycloak: null,
   propertyMap: {},
   searchTimeout: DEFAULT_SEARCH_TIMEOUT,
-  token: undefined,
-  updateToken: () => {
-    throw new Error("No Keycloak realm and client provided.");
-  },
 };
+
+export const MIN_TOKEN_VALIDITY = 30;

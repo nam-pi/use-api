@@ -1,6 +1,7 @@
 import { expand } from "jsonld";
 import { JsonLdArray } from "jsonld/jsonld-spec";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { MIN_TOKEN_VALIDITY } from "../constants";
 import { namespaces } from "../namespaces";
 import { normalize } from "../normalize";
 import {
@@ -74,14 +75,8 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
   const dirty = useRef<boolean>(false);
   const inputTimeout = useRef<Timeout>();
   const oldQuery = useRef<string>("");
-  const {
-    defaultLimit,
-    initialized,
-    updateToken,
-    token,
-    propertyMap,
-    searchTimeout,
-  } = useNampiContext();
+  const { defaultLimit, initialized, keycloak, propertyMap, searchTimeout } =
+    useNampiContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [state, setState] = useState<State<T>>({});
 
@@ -155,15 +150,16 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
     async (url: string, abort: AbortController) => {
       setLoading(true);
       const config: RequestInit = { ...DEFAULT_CONFIG, signal: abort.signal };
-      if (token) {
+      if (keycloak?.token) {
         config.headers = {
           ...config.headers,
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${keycloak.token}`,
         };
       }
       const fullUrl =
         url + (searchParams ? "?" + searchParams?.toString() : "");
-      updateToken()
+      keycloak
+        ?.updateToken(MIN_TOKEN_VALIDITY)
         .then(() => fetch(fullUrl, config))
         .catch(() => fetch(fullUrl, DEFAULT_CONFIG))
         .then((response) => response.json())
@@ -181,7 +177,7 @@ export function useFetch<T extends Entity, Query extends CollectionQuery>(
           setLoading(false);
         });
     },
-    [mapResult, searchParams, token, updateToken]
+    [keycloak, mapResult, searchParams]
   );
 
   // Update the search params state when receiving new search params after a timeout
