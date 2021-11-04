@@ -50,13 +50,13 @@ export const namespaces = {
   api: {
     ancestorOf: api.resource("ancestorOf"),
     descendantOf: api.resource("descendantOf"),
-    eventOrderByVariable: api.resource("eventOrderByVariable"),
-    eventParticipantVariable: api.resource("eventParticipantVariable"),
+    eventOrderByProperty: api.resource("eventOrderByProperty"),
+    eventParticipantProperty: api.resource("eventParticipantProperty"),
     hierarchy: api.resource("hierarchy"),
     hierarchyRoot: api.resource("hierarchyRoot"),
-    isAuthor: api.resource("is_author"),
-    personOrderByVariable: api.resource("personOrderByVariable"),
-    textVariable: api.resource("textVariable"),
+    isAuthor: api.resource("isAuthor"),
+    personOrderByProperty: api.resource("personOrderByProperty"),
+    textProperty: api.resource("textProperty"),
     user: api.resource("user"),
   },
 
